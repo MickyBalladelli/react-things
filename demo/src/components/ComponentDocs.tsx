@@ -40,6 +40,8 @@ import {
 import type { DataCardGridMetric, InspectorPanelField } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
+declare const __REACT_THINGS_VERSION__: string
+
 type PropReference = {
   name: string
   type: string
@@ -2909,10 +2911,17 @@ export function ComponentDocs() {
               borderColor: 'divider'
             }}
           />
-          <Typography variant="h5" component="h1" fontWeight={800}>
+          <Typography variant="h6" component="h1" fontWeight={850} sx={{ whiteSpace: 'nowrap', fontSize: 18 }}>
             React Things
           </Typography>
         </Stack>
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ display: 'block', mt: -0.75, ml: '85px', mb: 1.25, whiteSpace: 'nowrap', fontSize: 11 }}
+        >
+          v{__REACT_THINGS_VERSION__}
+        </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, mb: 2 }}>
           Components
         </Typography>
