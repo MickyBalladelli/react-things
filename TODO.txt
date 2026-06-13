@@ -1,0 +1,28 @@
+Good ideas:
+MorphMenu: radial/context menu that morphs from clicked element, with keyboard nav.
+SpotlightSearch: search box with command results, previews, fuzzy groups, actions.
+SmartTooltip: tooltip that can hold actions, media, copy buttons, pin mode.
+FlowBuilder: better NodeCanvas for workflows: ports, typed edges, validation, auto-layout.
+TourGuide: product walkthrough with spotlight mask, steps, branching.
+DockTabs: browser-like draggable tabs with pin, close, reorder, overflow.
+InfiniteCanvas: pan/zoom canvas with minimap, grid, selection box.
+InspectorDrawer: beautiful property editor with sections, live validation, undo.
+DataLens: tiny table/card viewer with filters, sort, inline charts.
+ColorStudio: palette builder, contrast checker, gradients, export tokens.
+DropComposer: drag/drop upload zone with previews, reorder, metadata edit.
+CommandDock: persistent left command nav like Linear/Raycast sidebar.
+SelectionBox: drag-select items on canvas/list/grid.
+ResizableDashboard: draggable/resizable widget dashboard with saved layouts.
+ToastCenter: notification stack with history drawer and grouped toasts.
+FocusRing: animated focus/highlight wrapper for tutorials or validation.
+CompareStack: before/after but for many layers, with opacity sliders.
+GesturePad: trackpad-like component for zoom, pan, rotate gestures.
+KeyboardHintOverlay: hold key to show available shortcuts over UI.
+TimelineScrubber: slick time scrubber with markers, preview thumbnails.
+
+Best next ones, my vote:
+InfiniteCanvas
+TourGuide
+SmartTooltip
+DockTabs
+ColorStudio

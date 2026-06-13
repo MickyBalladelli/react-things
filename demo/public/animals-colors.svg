@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">Colorful animals</title>
+  <desc id="desc">Bright animal shapes on a colorful background</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ff4f8b"/>
+      <stop offset="0.34" stop-color="#ffc83d"/>
+      <stop offset="0.68" stop-color="#3bd6ff"/>
+      <stop offset="1" stop-color="#45e07f"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fff7ad"/>
+      <stop offset="1" stop-color="#ff7a45"/>
+    </radialGradient>
+  </defs>
+  <rect width="960" height="540" fill="url(#sky)"/>
+  <circle cx="780" cy="98" r="74" fill="url(#sun)"/>
+  <path d="M0 404 C130 330 238 438 376 366 C520 291 656 365 780 321 C858 293 910 294 960 313 L960 540 L0 540 Z" fill="#2650ff" opacity="0.5"/>
+  <path d="M0 441 C148 386 255 480 382 417 C531 343 678 428 811 375 C875 350 921 357 960 372 L960 540 L0 540 Z" fill="#111827" opacity="0.22"/>
+
+  <g transform="translate(92 208)">
+    <ellipse cx="118" cy="118" rx="112" ry="72" fill="#ff8a00"/>
+    <circle cx="42" cy="83" r="48" fill="#ffcf33"/>
+    <circle cx="27" cy="45" r="28" fill="#ffcf33"/>
+    <circle cx="58" cy="39" r="26" fill="#ffcf33"/>
+    <circle cx="23" cy="80" r="6" fill="#182033"/>
+    <path d="M0 99 L-30 109 L-1 120 Z" fill="#e04a1a"/>
+    <path d="M123 180 L94 224 L132 190 L162 224 Z" fill="#713f12"/>
+    <path d="M198 103 C248 70 264 130 211 139" fill="none" stroke="#ffcf33" stroke-width="18" stroke-linecap="round"/>
+    <circle cx="88" cy="104" r="11" fill="#7c2d12" opacity="0.55"/>
+    <circle cx="126" cy="87" r="9" fill="#7c2d12" opacity="0.5"/>
+    <circle cx="153" cy="124" r="13" fill="#7c2d12" opacity="0.45"/>
+  </g>
+
+  <g transform="translate(356 158)">
+    <ellipse cx="126" cy="151" rx="128" ry="78" fill="#7c3aed"/>
+    <circle cx="56" cy="113" r="58" fill="#a78bfa"/>
+    <path d="M40 64 L16 18 L71 45 Z" fill="#a78bfa"/>
+    <path d="M82 70 L123 29 L112 88 Z" fill="#a78bfa"/>
+    <circle cx="40" cy="106" r="7" fill="#111827"/>
+    <path d="M18 129 C41 147 65 147 88 129" fill="none" stroke="#111827" stroke-width="8" stroke-linecap="round"/>
+    <path d="M135 220 L102 266 L145 232 L188 266 Z" fill="#4c1d95"/>
+    <path d="M237 132 C302 89 318 192 249 190" fill="none" stroke="#a78bfa" stroke-width="20" stroke-linecap="round"/>
+    <circle cx="128" cy="126" r="10" fill="#f0abfc" opacity="0.82"/>
+    <circle cx="167" cy="150" r="13" fill="#f0abfc" opacity="0.72"/>
+    <circle cx="196" cy="113" r="9" fill="#f0abfc" opacity="0.75"/>
+  </g>
+
+  <g transform="translate(644 202)">
+    <ellipse cx="118" cy="121" rx="116" ry="68" fill="#14b8a6"/>
+    <circle cx="54" cy="86" r="52" fill="#5eead4"/>
+    <path d="M29 48 L12 10 L59 33 Z" fill="#5eead4"/>
+    <path d="M75 47 L112 12 L102 66 Z" fill="#5eead4"/>
+    <circle cx="39" cy="81" r="7" fill="#0f172a"/>
+    <path d="M8 109 C30 124 55 124 80 109" fill="none" stroke="#0f172a" stroke-width="7" stroke-linecap="round"/>
+    <path d="M108 178 L78 220 L119 190 L157 220 Z" fill="#115e59"/>
+    <path d="M206 94 C267 63 286 153 221 153" fill="none" stroke="#5eead4" stroke-width="18" stroke-linecap="round"/>
+    <circle cx="111" cy="102" r="9" fill="#ccfbf1" opacity="0.8"/>
+    <circle cx="149" cy="133" r="12" fill="#ccfbf1" opacity="0.76"/>
+    <circle cx="178" cy="95" r="8" fill="#ccfbf1" opacity="0.76"/>
+  </g>
+</svg>

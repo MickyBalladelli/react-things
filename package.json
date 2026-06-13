@@ -1,0 +1,21 @@
+{
+  "name": "react-things",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "demo"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w demo",
+    "build": "npm run build -w @react-things/ui && npm run build -w demo",
+    "build:ui": "npm run build -w @react-things/ui",
+    "build:demo": "npm run build -w demo"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.0.0"
+  }
+}
