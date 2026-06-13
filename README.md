@@ -60,6 +60,30 @@ npm run dev
 npm run build
 ```
 
+## Publishing
+
+The npm package publishes from GitHub Actions on every push to `main`.
+
+Add this repository secret in GitHub:
+
+```sh
+NPM_TOKEN
+```
+
+Create the token in npm with publish access for `@mickyballadelli/react-things`.
+
+Npm only accepts each version once. Bump `packages/ui/package.json` before a commit when you want a new publish.
+
+Use one of these scripts:
+
+```sh
+npm run bump:patch
+npm run bump:minor
+npm run bump:major
+```
+
+Then commit and push. The action publishes the new version.
+
 ## Vercel
 
 Deploy from repo root. `vercel.json` builds the library and demo, then serves `demo/dist`.
