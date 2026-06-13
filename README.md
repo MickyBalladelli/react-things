@@ -49,6 +49,7 @@ React and React DOM are peer dependencies.
 - SmartTooltip: rich tooltip for context, media, actions, copy, and pinning.
 - ResizableFrame: container resized from a corner handle.
 - InspectorPanel: compact settings form for editing structured props.
+- KanbanBoard: editable workflow board with columns, cards, drag and drop, and card editing.
 - ColorPicker: controlled color input with swatches and alpha.
 - TimelineScrubber: timeline input for seeking through time-based content.
 - FileDropZone: upload target for dragged or selected files.
