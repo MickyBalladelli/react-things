@@ -301,11 +301,20 @@ import { InspectorPanel } from '@mickyballadelli/react-things'
 
 export function Example() {
   const [fields, setFields] = useState([
-    { id: 'title', label: 'Title', type: 'text', value: 'Demo' },
-    { id: 'size', label: 'Size', type: 'number', value: 48, min: 12, max: 96 }
+    { id: 'title', label: 'Title', type: 'text', value: 'Launch card', defaultValue: 'Launch card', group: 'Content' },
+    { id: 'size', label: 'Size', type: 'number', value: 48, defaultValue: 48, min: 12, max: 96, unit: 'px', group: 'Layout' },
+    { id: 'tone', label: 'Tone', type: 'select', value: 'Calm', defaultValue: 'Calm', group: 'Style', options: [{ label: 'Calm', value: 'Calm' }, { label: 'Bold', value: 'Bold' }] },
+    { id: 'enabled', label: 'Enabled', type: 'boolean', value: true, defaultValue: true, group: 'State' }
   ])
 
-  return <InspectorPanel fields={fields} onChange={(id, value) => setFields(fields.map((field) => field.id === id ? { ...field, value } : field))} />
+  return (
+    <InspectorPanel
+      title="Card inspector"
+      description="Edit grouped props and reset changed values."
+      fields={fields}
+      onChange={(id, value) => setFields(fields.map((field) => field.id === id ? { ...field, value } : field))}
+    />
+  )
 }`
       },
       {
@@ -316,11 +325,20 @@ import { InspectorPanel, type InspectorPanelField } from '@mickyballadelli/react
 
 export function Example() {
   const [fields, setFields] = useState<InspectorPanelField[]>([
-    { id: 'title', label: 'Title', type: 'text', value: 'Demo' },
-    { id: 'size', label: 'Size', type: 'number', value: 48, min: 12, max: 96 }
+    { id: 'title', label: 'Title', type: 'text', value: 'Launch card', defaultValue: 'Launch card', group: 'Content' },
+    { id: 'size', label: 'Size', type: 'number', value: 48, defaultValue: 48, min: 12, max: 96, unit: 'px', group: 'Layout' },
+    { id: 'tone', label: 'Tone', type: 'select', value: 'Calm', defaultValue: 'Calm', group: 'Style', options: [{ label: 'Calm', value: 'Calm' }, { label: 'Bold', value: 'Bold' }] },
+    { id: 'enabled', label: 'Enabled', type: 'boolean', value: true, defaultValue: true, group: 'State' }
   ])
 
-  return <InspectorPanel fields={fields} onChange={(id, value) => setFields(fields.map((field) => field.id === id ? { ...field, value } : field))} />
+  return (
+    <InspectorPanel
+      title="Card inspector"
+      description="Edit grouped props and reset changed values."
+      fields={fields}
+      onChange={(id, value) => setFields(fields.map((field) => field.id === id ? { ...field, value } : field))}
+    />
+  )
 }`
       }
     ],
@@ -1773,8 +1791,8 @@ export function Example() {
   ),
   createBasicDoc(
     'InspectorPanel',
-    'Props/settings editor for demos.',
-    'InspectorPanel is a compact form for editing structured settings like text, numbers, booleans, and select values.'
+    'Schema-driven inspector with grouped controls, reset, color/select fields, and value summary.',
+    'InspectorPanel is a compact control surface for editing live component props, design tokens, tool settings, or selected-object attributes.'
   ),
   createBasicDoc(
     'ColorPicker',
@@ -2007,10 +2025,63 @@ export function ComponentDocs() {
   const [pickerAlpha, setPickerAlpha] = useState(0.8)
   const [splitSize, setSplitSize] = useState(34)
   const [splitCollapsed, setSplitCollapsed] = useState<'first' | 'second' | null>(null)
+  const [inspectorTextTitle, setInspectorTextTitle] = useState('Demo card')
+  const [inspectorNumberSize, setInspectorNumberSize] = useState(48)
   const [inspectorFields, setInspectorFields] = useState<InspectorPanelField[]>([
-    { id: 'title', label: 'Title', type: 'text' as const, value: 'Demo' },
-    { id: 'size', label: 'Size', type: 'number' as const, value: 48, min: 12, max: 96 },
-    { id: 'enabled', label: 'Enabled', type: 'boolean' as const, value: true }
+    {
+      id: 'title',
+      label: 'Title',
+      type: 'text',
+      value: 'Launch card',
+      defaultValue: 'Launch card',
+      description: 'Text shown on the preview card.',
+      group: 'Content'
+    },
+    {
+      id: 'accent',
+      label: 'Accent',
+      type: 'color',
+      value: '#2563eb',
+      defaultValue: '#2563eb',
+      description: 'Main preview color.',
+      group: 'Style'
+    },
+    {
+      id: 'tone',
+      label: 'Tone',
+      type: 'select',
+      value: 'Calm',
+      defaultValue: 'Calm',
+      description: 'Changes card personality.',
+      group: 'Style',
+      options: [
+        { label: 'Calm', value: 'Calm' },
+        { label: 'Bold', value: 'Bold' },
+        { label: 'Soft', value: 'Soft' }
+      ]
+    },
+    {
+      id: 'size',
+      label: 'Size',
+      type: 'number',
+      value: 48,
+      defaultValue: 48,
+      description: 'Preview card title size.',
+      group: 'Layout',
+      min: 24,
+      max: 72,
+      step: 2,
+      unit: 'px'
+    },
+    {
+      id: 'enabled',
+      label: 'Enabled',
+      type: 'boolean',
+      value: true,
+      defaultValue: true,
+      description: 'Toggles the active card treatment.',
+      group: 'State'
+    }
   ])
   const floatingToolbarContainerRef = useRef<HTMLDivElement | null>(null)
   const floatingToolbarButtonRef = useRef<HTMLButtonElement | null>(null)
@@ -2144,7 +2215,46 @@ export function ComponentDocs() {
     }
 
     if (selectedComponent.name === 'InspectorPanel') {
-      return <Box sx={{ p: 3, maxWidth: 420 }}><InspectorPanel fields={inspectorFields} onChange={(id, value) => setInspectorFields((fields) => fields.map((field) => field.id === id ? { ...field, value } : field))} /></Box>
+      const inspectorValue = (id: string) => inspectorFields.find((field) => field.id === id)?.value
+      const title = String(inspectorValue('title') ?? 'Launch card')
+      const accent = String(inspectorValue('accent') ?? '#2563eb')
+      const tone = String(inspectorValue('tone') ?? 'Calm')
+      const titleSize = Number(inspectorValue('size') ?? 48)
+      const enabled = Boolean(inspectorValue('enabled'))
+
+      return (
+        <Box sx={{ p: 3, minHeight: 420, bgcolor: '#f8fafc' }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '360px 1fr' }, gap: 3, alignItems: 'start' }}>
+            <InspectorPanel
+              title="Card inspector"
+              description="Change grouped props, reset overrides, and see values at a glance."
+              fields={inspectorFields}
+              onChange={(id, value) => setInspectorFields((fields) => fields.map((field) => field.id === id ? { ...field, value } : field))}
+            />
+            <Paper
+              variant="outlined"
+              sx={{
+                p: 3,
+                borderRadius: 1,
+                minHeight: 300,
+                display: 'grid',
+                alignContent: 'center',
+                color: enabled ? '#ffffff' : 'text.secondary',
+                bgcolor: enabled ? accent : '#e5e7eb',
+                boxShadow: enabled && tone === 'Bold' ? `0 20px 50px ${accent}55` : 'none',
+                opacity: tone === 'Soft' ? 0.78 : 1
+              }}
+            >
+              <Typography fontWeight={950} sx={{ fontSize: titleSize, lineHeight: 1 }}>
+                {title}
+              </Typography>
+              <Typography sx={{ mt: 2, maxWidth: 420, opacity: 0.86 }}>
+                {tone} mode is {enabled ? 'active' : 'disabled'}. The inspector edits actual preview props, not just form fields.
+              </Typography>
+            </Paper>
+          </Box>
+        </Box>
+      )
     }
 
     if (selectedComponent.name === 'ColorPicker') {
@@ -2600,8 +2710,8 @@ export function ComponentDocs() {
         renderVariantCard('Large Min', <ResizableFrame initialWidth={280} initialHeight={170} minWidth={220} minHeight={140}><Box sx={{ p: 2 }}>Min size</Box></ResizableFrame>)
       ],
       InspectorPanel: [
-        renderVariantCard('Text', <InspectorPanel fields={[{ id: 'title', label: 'Title', type: 'text', value: 'Demo' }]} />),
-        renderVariantCard('Number', <InspectorPanel fields={[{ id: 'size', label: 'Size', type: 'number', value: 48, min: 0, max: 100 }]} />),
+        renderVariantCard('Text', <Stack spacing={1.5}><InspectorPanel title="Text prop" density="compact" showValueSummary={false} fields={[{ id: 'title', label: 'Title', type: 'text', value: inspectorTextTitle, defaultValue: 'Demo card' }]} onChange={(_, value) => setInspectorTextTitle(String(value))} /><Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}><Typography fontWeight={900}>{inspectorTextTitle}</Typography></Paper></Stack>),
+        renderVariantCard('Number', <Stack spacing={1.5}><InspectorPanel title="Number prop" density="compact" showValueSummary={false} fields={[{ id: 'size', label: 'Size', type: 'number', value: inspectorNumberSize, defaultValue: 48, min: 24, max: 72, step: 2, unit: 'px' }]} onChange={(_, value) => setInspectorNumberSize(Number(value))} /><Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}><Typography fontWeight={900} sx={{ fontSize: inspectorNumberSize, lineHeight: 1 }}>Aa</Typography></Paper></Stack>),
         renderVariantCard('Mixed', <InspectorPanel fields={inspectorFields} onChange={(id, value) => setInspectorFields((fields) => fields.map((field) => field.id === id ? { ...field, value } : field))} />)
       ],
       ColorPicker: [
