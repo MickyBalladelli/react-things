@@ -29,6 +29,7 @@ export function Example() {
 - GlassBox
 - DraggableBox
 - CodeViewer
+- DataCardGrid
 - DockBar
 - CommandPalette
 - SplitPane

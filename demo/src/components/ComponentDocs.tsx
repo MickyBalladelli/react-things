@@ -21,6 +21,7 @@ import {
   CodeViewer,
   ColorPicker,
   CommandPalette,
+  DataCardGrid,
   DockBar,
   DraggableBox,
   FileDropZone,
@@ -36,7 +37,7 @@ import {
   SpotlightPanel,
   TimelineScrubber
 } from '@mickyballadelli/react-things'
-import type { InspectorPanelField } from '@mickyballadelli/react-things'
+import type { DataCardGridMetric, InspectorPanelField } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 type PropReference = {
@@ -564,6 +565,38 @@ export function Example() {
       <pre>{names.join('\\n')}</pre>
     </>
   )
+}`
+      }
+    ],
+    DataCardGrid: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { DataCardGrid } from '@mickyballadelli/react-things'
+
+const metrics = [
+  { id: 'revenue', label: 'Revenue', value: 128400, previousValue: 118000, unit: 'EUR', status: 'good', progress: 78, trend: [40, 46, 44, 58, 64, 72, 78] },
+  { id: 'orders', label: 'Orders', value: 842, previousValue: 910, status: 'danger', progress: 58, trend: [80, 76, 72, 70, 68, 62, 58] },
+  { id: 'conversion', label: 'Conversion', value: 6.8, previousValue: 6.1, unit: '%', status: 'good', progress: 68, trend: [4.8, 5.2, 5.1, 5.8, 6.2, 6.5, 6.8] }
+]
+
+export function Example() {
+  return <DataCardGrid title="Store pulse" subtitle="Live commercial metrics" metrics={metrics} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { DataCardGrid, type DataCardGridMetric } from '@mickyballadelli/react-things'
+
+const metrics: DataCardGridMetric[] = [
+  { id: 'revenue', label: 'Revenue', value: 128400, previousValue: 118000, formatter: (value) => \`€\${Number(value).toLocaleString()}\`, status: 'good', progress: 78, trend: [40, 46, 44, 58, 64, 72, 78] },
+  { id: 'orders', label: 'Orders', value: 842, previousValue: 910, status: 'danger', progress: 58, trend: [80, 76, 72, 70, 68, 62, 58] },
+  { id: 'conversion', label: 'Conversion', value: 6.8, previousValue: 6.1, unit: '%', status: 'good', progress: 68, trend: [4.8, 5.2, 5.1, 5.8, 6.2, 6.5, 6.8] }
+]
+
+export function Example() {
+  return <DataCardGrid title="Store pulse" subtitle="Live commercial metrics" metrics={metrics} columns={3} />
 }`
       }
     ]
@@ -1784,6 +1817,50 @@ export function Example() {
       }
     ]
   },
+  {
+    ...createBasicDoc(
+      'DataCardGrid',
+      'Metric dashboard cards with deltas, sparklines, progress, and status color.',
+      'DataCardGrid turns arrays of business, product, or system metrics into scan-friendly data cards for dashboards and reports.'
+    ),
+    props: [
+      {
+        name: 'metrics',
+        type: 'DataCardGridMetric[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, value, previousValue, delta, helper, unit, color, status, progress, trend, icon, formatter }.',
+        description: 'Metric cards rendered in the grid.'
+      },
+      {
+        name: 'title / subtitle',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any string.',
+        description: 'Optional heading text shown above the grid.'
+      },
+      {
+        name: 'columns',
+        type: 'number',
+        defaultValue: '3',
+        possibleValues: 'Any positive column count.',
+        description: 'Desktop column count. Mobile stays one column.'
+      },
+      {
+        name: 'density',
+        type: '"comfortable" | "compact"',
+        defaultValue: 'comfortable',
+        possibleValues: 'comfortable or compact.',
+        description: 'Controls card spacing and value size.'
+      },
+      {
+        name: 'showSparklines / showProgress',
+        type: 'boolean',
+        defaultValue: 'true / true',
+        possibleValues: 'true or false.',
+        description: 'Shows or hides trend charts and progress bars.'
+      }
+    ]
+  },
   createBasicDoc(
     'ResizableFrame',
     'Frame resized from bottom-right handle.',
@@ -1907,10 +1984,56 @@ const defaultGlassBoxConfig: GlassBoxConfig = {
   children: 'Liquid glass content'
 }
 
+const dataCardGridMetrics: DataCardGridMetric[] = [
+  {
+    id: 'revenue',
+    label: 'Revenue',
+    value: 128400,
+    previousValue: 118000,
+    formatter: (value) => `€${Number(value).toLocaleString()}`,
+    status: 'good',
+    progress: 78,
+    helper: 'Month to date',
+    trend: [40, 46, 44, 58, 64, 72, 78]
+  },
+  {
+    id: 'orders',
+    label: 'Orders',
+    value: 842,
+    previousValue: 910,
+    status: 'danger',
+    progress: 58,
+    helper: 'Needs attention',
+    trend: [80, 76, 72, 70, 68, 62, 58]
+  },
+  {
+    id: 'conversion',
+    label: 'Conversion',
+    value: 6.8,
+    previousValue: 6.1,
+    unit: '%',
+    status: 'good',
+    progress: 68,
+    helper: 'Checkout funnel',
+    trend: [4.8, 5.2, 5.1, 5.8, 6.2, 6.5, 6.8]
+  },
+  {
+    id: 'latency',
+    label: 'API latency',
+    value: 184,
+    previousValue: 142,
+    unit: 'ms',
+    status: 'warning',
+    progress: 42,
+    helper: 'p95 response',
+    trend: [120, 128, 136, 142, 151, 170, 184]
+  }
+]
+
 const sampleTabs = ['JavaScript', 'TypeScript']
 
 function getComponentGroup(name: string) {
-  if (['GlassBox', 'ColorPicker', 'CodeViewer', 'DockBar', 'TimelineScrubber'].includes(name)) {
+  if (['GlassBox', 'ColorPicker', 'CodeViewer', 'DataCardGrid', 'DockBar', 'TimelineScrubber'].includes(name)) {
     return 'Display'
   }
 
@@ -2338,6 +2461,19 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'DataCardGrid') {
+      return (
+        <Box sx={{ minHeight: 420, p: 3, bgcolor: '#f8fafc' }}>
+          <DataCardGrid
+            title="Store pulse"
+            subtitle="Revenue, demand, conversion, and system health in one glance."
+            metrics={dataCardGridMetrics}
+            columns={4}
+          />
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'FloatingToolbar') {
       function updateSelection() {
         const selection = window.getSelection()
@@ -2729,6 +2865,11 @@ export function ComponentDocs() {
         renderVariantCard('Default', <FileDropZone />),
         renderVariantCard('Callback', <FileDropZone onFiles={() => {}} />),
         renderVariantCard('Styled', <FileDropZone sx={{ bgcolor: '#eef2ff', borderColor: '#6366f1' }} />)
+      ],
+      DataCardGrid: [
+        renderVariantCard('Revenue', <DataCardGrid metrics={[dataCardGridMetrics[0]]} showProgress={false} />),
+        renderVariantCard('Compact', <DataCardGrid metrics={dataCardGridMetrics.slice(0, 2)} density="compact" columns={2} />),
+        renderVariantCard('No Charts', <DataCardGrid title="Snapshot" metrics={dataCardGridMetrics.slice(0, 3)} showSparklines={false} columns={3} />)
       ]
     }
 
