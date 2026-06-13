@@ -6,6 +6,26 @@ https://react-things-ten.vercel.app/?component=GlassBox
 
 Reusable React component library with a Vite demo app.
 
+## Package
+
+```sh
+npm install @mickyballadelli/react-things @mui/material @emotion/react @emotion/styled @mui/icons-material
+```
+
+```tsx
+import { GlassBox } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <GlassBox transparency={0.45} fill={0.62} liquidColor="#38d6a5">
+      Liquid glass content
+    </GlassBox>
+  )
+}
+```
+
+React and React DOM are peer dependencies.
+
 ## Workspaces
 
 - `packages/ui`: component library

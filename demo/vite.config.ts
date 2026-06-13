@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@react-things/ui': resolve(__dirname, '../packages/ui/src/index.ts')
+      '@mickyballadelli/react-things': resolve(__dirname, '../packages/ui/src/index.ts')
     }
   },
   server: {

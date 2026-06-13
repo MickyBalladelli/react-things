@@ -1,4 +1,4 @@
-import { ComponentExample, GlassBox } from '@react-things/ui'
+import { ComponentExample, GlassBox } from '@mickyballadelli/react-things'
 
 export function BasicJsExample() {
   return (

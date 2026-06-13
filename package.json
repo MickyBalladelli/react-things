@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "dev": "npm run dev -w demo",
-    "build": "npm run build -w @react-things/ui && npm run build -w demo",
-    "build:ui": "npm run build -w @react-things/ui",
+    "build": "npm run build -w @mickyballadelli/react-things && npm run build -w demo",
+    "build:ui": "npm run build -w @mickyballadelli/react-things",
     "build:demo": "npm run build -w demo"
   },
   "devDependencies": {

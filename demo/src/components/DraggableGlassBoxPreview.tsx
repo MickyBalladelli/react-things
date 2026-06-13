@@ -1,6 +1,6 @@
 import { useEffect, useState, type CSSProperties } from 'react'
 import { Typography } from '@mui/material'
-import { DraggableBox, GlassBox, type DraggableBoxMetrics } from '@react-things/ui'
+import { DraggableBox, GlassBox, type DraggableBoxMetrics } from '@mickyballadelli/react-things'
 
 type DraggableGlassBoxPreviewProps = {
   transparency: number

@@ -1,25 +1,43 @@
 {
-  "name": "@react-things/ui",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@mickyballadelli/react-things",
+  "version": "0.1.0",
+  "description": "Reusable React components from React Things.",
   "type": "module",
-  "main": "./dist/react-things-ui.umd.cjs",
+  "main": "./dist/react-things-ui.cjs",
   "module": "./dist/react-things-ui.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/react-things-ui.js",
-      "require": "./dist/react-things-ui.umd.cjs"
+      "require": "./dist/react-things-ui.cjs"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
-    "build": "vite build && tsc -p tsconfig.build.json"
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "ui",
+    "material-ui",
+    "vite"
+  ],
+  "author": "",
+  "license": "MIT",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
@@ -27,6 +45,7 @@
   "devDependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",

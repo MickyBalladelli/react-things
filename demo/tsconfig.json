@@ -4,7 +4,7 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@react-things/ui": ["../packages/ui/src/index.ts"]
+      "@mickyballadelli/react-things": ["../packages/ui/src/index.ts"]
     }
   },
   "include": ["src", "examples"]

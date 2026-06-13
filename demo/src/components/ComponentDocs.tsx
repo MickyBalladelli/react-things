@@ -35,8 +35,8 @@ import {
   SplitPane,
   SpotlightPanel,
   TimelineScrubber
-} from '@react-things/ui'
-import type { InspectorPanelField } from '@react-things/ui'
+} from '@mickyballadelli/react-things'
+import type { InspectorPanelField } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 type PropReference = {
@@ -80,7 +80,7 @@ function createBasicDoc(name: string, summary: string, description: string): Com
         type: 'component-specific',
         defaultValue: '-',
         possibleValues: 'See TypeScript exports for complete prop type.',
-        description: 'This component is available from @react-things/ui and has a live preview here.'
+        description: 'This component is available from @mickyballadelli/react-things and has a live preview here.'
       }
     ],
     samples: getBasicSamples(name)
@@ -93,7 +93,7 @@ function getBasicSamples(name: string): CodeSample[] {
       {
         label: 'JavaScript',
         language: 'javascript',
-        initialCode: `import { MagneticCard } from '@react-things/ui'
+        initialCode: `import { MagneticCard } from '@mickyballadelli/react-things'
 
 export function Example() {
   return (
@@ -112,7 +112,7 @@ export function Example() {
       {
         label: 'TypeScript',
         language: 'typescript',
-        initialCode: `import { MagneticCard, type MagneticCardProps } from '@react-things/ui'
+        initialCode: `import { MagneticCard, type MagneticCardProps } from '@mickyballadelli/react-things'
 
 const props: MagneticCardProps = {
   strength: 22,
@@ -132,7 +132,7 @@ export function Example() {
       {
         label: 'JavaScript',
         language: 'javascript',
-        initialCode: `import { SpotlightPanel } from '@react-things/ui'
+        initialCode: `import { SpotlightPanel } from '@mickyballadelli/react-things'
 
 export function Example() {
   return (
@@ -145,7 +145,7 @@ export function Example() {
       {
         label: 'TypeScript',
         language: 'typescript',
-        initialCode: `import { SpotlightPanel, type SpotlightPanelProps } from '@react-things/ui'
+        initialCode: `import { SpotlightPanel, type SpotlightPanelProps } from '@mickyballadelli/react-things'
 
 const props: SpotlightPanelProps = {
   radius: 180,
@@ -163,7 +163,7 @@ export function Example() {
         label: 'JavaScript',
         language: 'javascript',
         initialCode: `import { useState } from 'react'
-import { NodeCanvas } from '@react-things/ui'
+import { NodeCanvas } from '@mickyballadelli/react-things'
 
 const initialNodes = [
   { id: 'a', label: 'Start', x: 48, y: 72, color: '#dbeafe' },
@@ -196,7 +196,7 @@ export function Example() {
         label: 'TypeScript',
         language: 'typescript',
         initialCode: `import { useState } from 'react'
-import { NodeCanvas, type NodeCanvasConnection, type NodeCanvasNode } from '@react-things/ui'
+import { NodeCanvas, type NodeCanvasConnection, type NodeCanvasNode } from '@mickyballadelli/react-things'
 
 const initialNodes: NodeCanvasNode[] = [
   { id: 'a', label: 'Start', x: 48, y: 72, color: '#dbeafe' },
@@ -233,7 +233,7 @@ export function Example() {
       {
         label: 'JavaScript',
         language: 'javascript',
-        initialCode: `import { BeforeAfterSlider } from '@react-things/ui'
+        initialCode: `import { BeforeAfterSlider } from '@mickyballadelli/react-things'
 
 export function Example() {
   return (
@@ -248,7 +248,7 @@ export function Example() {
       {
         label: 'TypeScript',
         language: 'typescript',
-        initialCode: `import { BeforeAfterSlider, type BeforeAfterSliderProps } from '@react-things/ui'
+        initialCode: `import { BeforeAfterSlider, type BeforeAfterSliderProps } from '@mickyballadelli/react-things'
 
 const props: BeforeAfterSliderProps = {
   initialPosition: 35,
@@ -265,7 +265,7 @@ export function Example() {
       {
         label: 'JavaScript',
         language: 'javascript',
-        initialCode: `import { ResizableFrame } from '@react-things/ui'
+        initialCode: `import { ResizableFrame } from '@mickyballadelli/react-things'
 
 export function Example() {
   return (
@@ -278,7 +278,7 @@ export function Example() {
       {
         label: 'TypeScript',
         language: 'typescript',
-        initialCode: `import { ResizableFrame, type ResizableFrameProps } from '@react-things/ui'
+        initialCode: `import { ResizableFrame, type ResizableFrameProps } from '@mickyballadelli/react-things'
 
 const props: ResizableFrameProps = {
   initialWidth: 360,
@@ -297,7 +297,7 @@ export function Example() {
         label: 'JavaScript',
         language: 'javascript',
         initialCode: `import { useState } from 'react'
-import { InspectorPanel } from '@react-things/ui'
+import { InspectorPanel } from '@mickyballadelli/react-things'
 
 export function Example() {
   const [fields, setFields] = useState([
@@ -312,7 +312,7 @@ export function Example() {
         label: 'TypeScript',
         language: 'typescript',
         initialCode: `import { useState } from 'react'
-import { InspectorPanel, type InspectorPanelField } from '@react-things/ui'
+import { InspectorPanel, type InspectorPanelField } from '@mickyballadelli/react-things'
 
 export function Example() {
   const [fields, setFields] = useState<InspectorPanelField[]>([
@@ -330,7 +330,7 @@ export function Example() {
         language: 'javascript',
         initialCode: `import { useState } from 'react'
 import TextField from '@mui/material/TextField'
-import { ColorPicker } from '@react-things/ui'
+import { ColorPicker } from '@mickyballadelli/react-things'
 
 export function Example() {
   const [color, setColor] = useState('#2563eb')
@@ -349,7 +349,7 @@ export function Example() {
         language: 'typescript',
         initialCode: `import { useState } from 'react'
 import TextField from '@mui/material/TextField'
-import { ColorPicker } from '@react-things/ui'
+import { ColorPicker } from '@mickyballadelli/react-things'
 
 export function Example() {
   const [color, setColor] = useState('#2563eb')
@@ -369,7 +369,7 @@ export function Example() {
         label: 'JavaScript',
         language: 'javascript',
         initialCode: `import { useState } from 'react'
-import { TimelineScrubber } from '@react-things/ui'
+import { TimelineScrubber } from '@mickyballadelli/react-things'
 
 const markers = [
   { id: 'intro', time: 12, label: 'Intro', color: '#2563eb' },
@@ -394,7 +394,7 @@ export function Example() {
         label: 'TypeScript',
         language: 'typescript',
         initialCode: `import { useState } from 'react'
-import { TimelineScrubber, type TimelineScrubberMarker } from '@react-things/ui'
+import { TimelineScrubber, type TimelineScrubberMarker } from '@mickyballadelli/react-things'
 
 const markers: TimelineScrubberMarker[] = [
   { id: 'intro', time: 12, label: 'Intro', color: '#2563eb' },
@@ -422,7 +422,7 @@ export function Example() {
         label: 'JavaScript',
         language: 'javascript',
         initialCode: `import { useState } from 'react'
-import { InfiniteCanvas } from '@react-things/ui'
+import { InfiniteCanvas } from '@mickyballadelli/react-things'
 
 const items = [
   { id: 'a', label: 'Plan', x: 40, y: 80, color: '#dbeafe' },
@@ -446,7 +446,7 @@ export function Example() {
         label: 'TypeScript',
         language: 'typescript',
         initialCode: `import { useState } from 'react'
-import { InfiniteCanvas, type InfiniteCanvasItem } from '@react-things/ui'
+import { InfiniteCanvas, type InfiniteCanvasItem } from '@mickyballadelli/react-things'
 
 const items: InfiniteCanvasItem[] = [
   { id: 'a', label: 'Plan', x: 40, y: 80, color: '#dbeafe' },
@@ -473,7 +473,7 @@ export function Example() {
         label: 'JavaScript',
         language: 'javascript',
         initialCode: `import Button from '@mui/material/Button'
-import { SmartTooltip } from '@react-things/ui'
+import { SmartTooltip } from '@mickyballadelli/react-things'
 
 export function Example() {
   return (
@@ -492,7 +492,7 @@ export function Example() {
         label: 'TypeScript',
         language: 'typescript',
         initialCode: `import Button from '@mui/material/Button'
-import { SmartTooltip, type SmartTooltipAction } from '@react-things/ui'
+import { SmartTooltip, type SmartTooltipAction } from '@mickyballadelli/react-things'
 
 const actions: SmartTooltipAction[] = [
   { id: 'open', label: 'Open', onClick: () => console.log('open') }
@@ -518,7 +518,7 @@ export function Example() {
         label: 'JavaScript',
         language: 'javascript',
         initialCode: `import { useState } from 'react'
-import { FileDropZone } from '@react-things/ui'
+import { FileDropZone } from '@mickyballadelli/react-things'
 
 export function Example() {
   const [names, setNames] = useState([])
@@ -535,7 +535,7 @@ export function Example() {
         label: 'TypeScript',
         language: 'typescript',
         initialCode: `import { useState } from 'react'
-import { FileDropZone } from '@react-things/ui'
+import { FileDropZone } from '@mickyballadelli/react-things'
 
 export function Example() {
   const [names, setNames] = useState<string[]>([])
@@ -555,7 +555,7 @@ export function Example() {
     {
       label: 'JavaScript',
       language: 'javascript',
-      initialCode: `import { ${name} } from '@react-things/ui'
+      initialCode: `import { ${name} } from '@mickyballadelli/react-things'
 
 export function Example() {
   return <${name} />
@@ -564,7 +564,7 @@ export function Example() {
     {
       label: 'TypeScript',
       language: 'typescript',
-      initialCode: `import { ${name} } from '@react-things/ui'
+      initialCode: `import { ${name} } from '@mickyballadelli/react-things'
 
 export function Example() {
   return <${name} />
@@ -690,7 +690,7 @@ const componentDocs: ComponentDoc[] = [
       {
         label: 'JavaScript',
         language: 'javascript',
-        initialCode: `import { DraggableBox } from '@react-things/ui'
+        initialCode: `import { DraggableBox } from '@mickyballadelli/react-things'
 
 export function Example() {
   return (
@@ -707,7 +707,7 @@ export function Example() {
       {
         label: 'TypeScript',
         language: 'typescript',
-        initialCode: `import { DraggableBox, type DraggableBoxProps } from '@react-things/ui'
+        initialCode: `import { DraggableBox, type DraggableBoxProps } from '@mickyballadelli/react-things'
 
 const props: DraggableBoxProps = {
   initialPosition: { x: 50, y: 50 },
@@ -771,7 +771,7 @@ export function Example() {
         label: 'JavaScript',
         language: 'javascript',
         initialCode: `import { useState } from 'react'
-import { CodeViewer } from '@react-things/ui'
+import { CodeViewer } from '@mickyballadelli/react-things'
 
 export function Example() {
   const [code, setCode] = useState('const hello = "world"')
@@ -790,7 +790,7 @@ export function Example() {
         label: 'TypeScript',
         language: 'typescript',
         initialCode: `import { useState } from 'react'
-import { CodeViewer, type CodeViewerProps } from '@react-things/ui'
+import { CodeViewer, type CodeViewerProps } from '@mickyballadelli/react-things'
 
 export function Example() {
   const [code, setCode] = useState('const hello: string = "world"')
@@ -858,7 +858,7 @@ export function Example() {
       {
         label: 'JavaScript',
         language: 'javascript',
-        initialCode: `import { DockBar } from '@react-things/ui'
+        initialCode: `import { DockBar } from '@mickyballadelli/react-things'
 
 const items = [
   { id: 'finder', label: 'Finder', icon: '🗂️' },
@@ -874,7 +874,7 @@ export function Example() {
       {
         label: 'TypeScript',
         language: 'typescript',
-        initialCode: `import { DockBar, type DockBarItem } from '@react-things/ui'
+        initialCode: `import { DockBar, type DockBarItem } from '@mickyballadelli/react-things'
 
 const items: DockBarItem[] = [
   { id: 'finder', label: 'Finder', icon: '🗂️' },
@@ -984,7 +984,7 @@ export function Example() {
         label: 'JavaScript',
         language: 'javascript',
         initialCode: `import { useState } from 'react'
-import { CommandPalette } from '@react-things/ui'
+import { CommandPalette } from '@mickyballadelli/react-things'
 
 const items = [
   { id: 'components', label: 'Components', group: 'Docs' },
@@ -1008,7 +1008,7 @@ export function Example() {
         label: 'TypeScript',
         language: 'typescript',
         initialCode: `import { useState } from 'react'
-import { CommandPalette, type CommandPaletteItem } from '@react-things/ui'
+import { CommandPalette, type CommandPaletteItem } from '@mickyballadelli/react-things'
 
 const items: CommandPaletteItem[] = [
   { id: 'display', label: 'Display', group: 'Components' },
@@ -1197,7 +1197,7 @@ export function Example() {
         label: 'JavaScript',
         language: 'javascript',
         initialCode: `import { useState } from 'react'
-import { SplitPane } from '@react-things/ui'
+import { SplitPane } from '@mickyballadelli/react-things'
 
 export function Example() {
   const [size, setSize] = useState(34)
@@ -1224,7 +1224,7 @@ export function Example() {
         label: 'TypeScript',
         language: 'typescript',
         initialCode: `import { useState } from 'react'
-import { SplitPane, type SplitPaneCollapse, type SplitPaneProps } from '@react-things/ui'
+import { SplitPane, type SplitPaneCollapse, type SplitPaneProps } from '@mickyballadelli/react-things'
 
 export function Example() {
   const [size, setSize] = useState(34)
@@ -1337,7 +1337,7 @@ export function Example() {
         label: 'JavaScript',
         language: 'javascript',
         initialCode: `import { useRef, useState } from 'react'
-import { FloatingToolbar } from '@react-things/ui'
+import { FloatingToolbar } from '@mickyballadelli/react-things'
 
 export function Example() {
   const containerRef = useRef(null)
@@ -1369,7 +1369,7 @@ export function Example() {
         label: 'TypeScript',
         language: 'typescript',
         initialCode: `import { useRef, useState } from 'react'
-import { FloatingToolbar, type FloatingToolbarProps } from '@react-things/ui'
+import { FloatingToolbar, type FloatingToolbarProps } from '@mickyballadelli/react-things'
 
 export function Example() {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -1940,7 +1940,7 @@ function readGlassBoxConfig(code: string, currentConfig: GlassBoxConfig): GlassB
 }
 
 function createJavaScriptSample(config: GlassBoxConfig) {
-  return `import { GlassBox } from '@react-things/ui'
+  return `import { GlassBox } from '@mickyballadelli/react-things'
 
 export function Example() {
   return (
@@ -1958,7 +1958,7 @@ export function Example() {
 }
 
 function createTypeScriptSample(config: GlassBoxConfig) {
-  return `import { GlassBox, type GlassBoxProps } from '@react-things/ui'
+  return `import { GlassBox, type GlassBoxProps } from '@mickyballadelli/react-things'
 
 const glassBoxProps: GlassBoxProps = {
   transparency: ${config.transparency},
@@ -2217,7 +2217,7 @@ export function ComponentDocs() {
           <SmartTooltip
             title="SmartTooltip"
             content="Hover to preview, click to pin, copy the value, or trigger actions."
-            copyText="npm install @react-things/ui"
+            copyText="npm install @mickyballadelli/react-things"
             media={<Box sx={{ height: 120, backgroundImage: 'url(/animals-colors.svg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />}
             actions={[{ id: 'docs', label: 'Docs' }, { id: 'use', label: 'Use' }]}
             placement="bottom"
@@ -2563,7 +2563,7 @@ export function ComponentDocs() {
       ],
       SmartTooltip: [
         renderVariantCard('Text', <Box sx={{ minHeight: 120, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Helpful detail" content="Extra context without leaving the flow."><Button variant="outlined">Hover</Button></SmartTooltip></Box>),
-        renderVariantCard('Copy', <Box sx={{ minHeight: 120, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Install" content="Copy the package command." copyText="npm install @react-things/ui" placement="bottom"><Button variant="outlined">Copy tooltip</Button></SmartTooltip></Box>),
+        renderVariantCard('Copy', <Box sx={{ minHeight: 120, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Install" content="Copy the package command." copyText="npm install @mickyballadelli/react-things" placement="bottom"><Button variant="outlined">Copy tooltip</Button></SmartTooltip></Box>),
         renderVariantCard('Media Actions', <Box sx={{ minHeight: 140, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Preview card" content="Media, actions, and pin mode." media={<Box sx={{ height: 90, backgroundImage: 'url(/animals-colors.svg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />} actions={[{ id: 'open', label: 'Open' }]} defaultPinned><Button variant="contained">Pinned</Button></SmartTooltip></Box>)
       ],
       MagneticCard: [

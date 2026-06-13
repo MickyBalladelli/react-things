@@ -3,7 +3,7 @@ import {
   GlassBox,
   type ComponentExampleProps,
   type GlassBoxProps
-} from '@react-things/ui'
+} from '@mickyballadelli/react-things'
 
 const props: ComponentExampleProps = {
   title: 'TypeScript example'
