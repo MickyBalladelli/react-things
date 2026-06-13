@@ -36,6 +36,7 @@ React and React DOM are peer dependencies.
 - GlassBox: decorative wrapper that makes content look like it sits inside liquid glass.
 - DraggableBox: bounded stage where one child can be dragged around.
 - CodeViewer: editable code display with line numbers and simple syntax colors.
+- DataCardGrid: metric cards with deltas, sparklines, progress, and status color.
 - DockBar: icon launcher strip with animated magnify hover.
 - CommandPalette: searchable list or tree for commands, docs, and navigation.
 - SplitPane: two-panel layout with a draggable divider.
