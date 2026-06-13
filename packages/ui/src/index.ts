@@ -38,3 +38,5 @@ export type { SmartTooltipAction, SmartTooltipProps } from './components/SmartTo
 export { SmartTooltip } from './components/SmartTooltip'
 export type { DataCardGridMetric, DataCardGridProps, DataCardGridStatus } from './components/DataCardGrid'
 export { DataCardGrid } from './components/DataCardGrid'
+export type { KanbanBoardProps, KanbanCard, KanbanColumn } from './components/KanbanBoard'
+export { KanbanBoard } from './components/KanbanBoard'

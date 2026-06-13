@@ -42,6 +42,7 @@ export function Example() {
 - SmartTooltip
 - ResizableFrame
 - InspectorPanel
+- KanbanBoard
 - ColorPicker
 - TimelineScrubber
 - FileDropZone

@@ -29,6 +29,7 @@ import {
   GlassBox,
   InfiniteCanvas,
   InspectorPanel,
+  KanbanBoard,
   MagneticCard,
   NodeCanvas,
   ResizableFrame,
@@ -37,7 +38,7 @@ import {
   SpotlightPanel,
   TimelineScrubber
 } from '@mickyballadelli/react-things'
-import type { DataCardGridMetric, InspectorPanelField } from '@mickyballadelli/react-things'
+import type { DataCardGridMetric, InspectorPanelField, KanbanColumn } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -599,6 +600,66 @@ const metrics: DataCardGridMetric[] = [
 
 export function Example() {
   return <DataCardGrid title="Store pulse" subtitle="Live commercial metrics" metrics={metrics} columns={3} />
+}`
+      }
+    ],
+    KanbanBoard: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import { KanbanBoard } from '@mickyballadelli/react-things'
+
+const initialColumns = [
+  {
+    id: 'todo',
+    title: 'To do',
+    cards: [
+      { id: 'a', title: 'Write brief', description: 'Frame the work.', tags: ['Planning'] }
+    ]
+  },
+  {
+    id: 'doing',
+    title: 'Doing',
+    cards: [
+      { id: 'b', title: 'Build board', description: 'Drag, edit, and ship.', tags: ['UI'] }
+    ]
+  }
+]
+
+export function Example() {
+  const [columns, setColumns] = useState(initialColumns)
+
+  return <KanbanBoard title="Roadmap" columns={columns} onChange={setColumns} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import { KanbanBoard, type KanbanColumn } from '@mickyballadelli/react-things'
+
+const initialColumns: KanbanColumn[] = [
+  {
+    id: 'todo',
+    title: 'To do',
+    cards: [
+      { id: 'a', title: 'Write brief', description: 'Frame the work.', tags: ['Planning'] }
+    ]
+  },
+  {
+    id: 'doing',
+    title: 'Doing',
+    cards: [
+      { id: 'b', title: 'Build board', description: 'Drag, edit, and ship.', tags: ['UI'] }
+    ]
+  }
+]
+
+export function Example() {
+  const [columns, setColumns] = useState<KanbanColumn[]>(initialColumns)
+
+  return <KanbanBoard title="Roadmap" columns={columns} onChange={setColumns} />
 }`
       }
     ]
@@ -1863,6 +1924,64 @@ export function Example() {
       }
     ]
   },
+  {
+    ...createBasicDoc(
+      'KanbanBoard',
+      'Fully editable Kanban board with columns, cards, drag and drop, and card editing.',
+      'KanbanBoard is a project workflow surface where users can create columns, add cards, drag cards between stacks, reorder vertically, edit details, and delete work items.'
+    ),
+    props: [
+      {
+        name: 'columns',
+        type: 'KanbanColumn[]',
+        defaultValue: '-',
+        possibleValues: 'Controlled array of { id, title, cards, color }. Each card has { id, title, description, tags, color, data }.',
+        description: 'Controlled board state. Use with onChange.'
+      },
+      {
+        name: 'defaultColumns',
+        type: 'KanbanColumn[]',
+        defaultValue: 'Demo board',
+        possibleValues: 'Any KanbanColumn array.',
+        description: 'Initial board when uncontrolled.'
+      },
+      {
+        name: 'title / subtitle',
+        type: 'string',
+        defaultValue: 'Kanban / generated count text',
+        possibleValues: 'Any string.',
+        description: 'Heading shown above the board.'
+      },
+      {
+        name: 'density',
+        type: '"comfortable" | "compact"',
+        defaultValue: 'comfortable',
+        possibleValues: 'comfortable or compact.',
+        description: 'Controls column and card spacing.'
+      },
+      {
+        name: 'allowColumnDrag',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Allows columns to be reordered horizontally.'
+      },
+      {
+        name: 'onChange',
+        type: '(columns: KanbanColumn[]) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving next board state.',
+        description: 'Called when cards or columns are added, edited, moved, or deleted.'
+      },
+      {
+        name: 'onCardSelect',
+        type: '(card, column) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving clicked card and its column.',
+        description: 'Called when a card is selected.'
+      }
+    ]
+  },
   createBasicDoc(
     'ResizableFrame',
     'Frame resized from bottom-right handle.',
@@ -2032,6 +2151,34 @@ const dataCardGridMetrics: DataCardGridMetric[] = [
   }
 ]
 
+const defaultKanbanColumns: KanbanColumn[] = [
+  {
+    id: 'ideas',
+    title: 'Ideas',
+    color: '#2563eb',
+    cards: [
+      { id: 'k-1', title: 'Customer interviews', description: 'Talk to five active users.', tags: ['Research'], color: '#dbeafe' },
+      { id: 'k-2', title: 'Metric cards', description: 'Show data at a glance.', tags: ['Data'] }
+    ]
+  },
+  {
+    id: 'build',
+    title: 'Build',
+    color: '#d97706',
+    cards: [
+      { id: 'k-3', title: 'Kanban interactions', description: 'Create, drag, edit, and delete.', tags: ['UI'], color: '#fef3c7' }
+    ]
+  },
+  {
+    id: 'ship',
+    title: 'Ship',
+    color: '#059669',
+    cards: [
+      { id: 'k-4', title: 'Docs and examples', description: 'Make the component easy to try.', tags: ['Docs'], color: '#dcfce7' }
+    ]
+  }
+]
+
 const sampleTabs = ['JavaScript', 'TypeScript']
 
 function getComponentGroup(name: string) {
@@ -2043,7 +2190,7 @@ function getComponentGroup(name: string) {
     return 'Layout'
   }
 
-  if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorPanel', 'SmartTooltip'].includes(name)) {
+  if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip'].includes(name)) {
     return 'Input'
   }
 
@@ -2217,6 +2364,7 @@ export function ComponentDocs() {
   const [nodeCanvasSelectedId, setNodeCanvasSelectedId] = useState<string | null>('a')
   const [timelineTime, setTimelineTime] = useState(34)
   const [infiniteCanvasSelectedId, setInfiniteCanvasSelectedId] = useState<string | null>('idea')
+  const [kanbanColumns, setKanbanColumns] = useState<KanbanColumn[]>(defaultKanbanColumns)
 
   const selectedSamples = selectedComponent.name === 'GlassBox'
     ? [
@@ -2471,6 +2619,19 @@ export function ComponentDocs() {
             subtitle="Revenue, demand, conversion, and system health in one glance."
             metrics={dataCardGridMetrics}
             columns={4}
+          />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'KanbanBoard') {
+      return (
+        <Box sx={{ minHeight: 520, p: 3, bgcolor: '#f8fafc' }}>
+          <KanbanBoard
+            title="Launch board"
+            subtitle="Create columns, add cards, edit details, drag cards, and reorder columns."
+            columns={kanbanColumns}
+            onChange={setKanbanColumns}
           />
         </Box>
       )
@@ -2872,6 +3033,11 @@ export function ComponentDocs() {
         renderVariantCard('Revenue', <DataCardGrid metrics={[dataCardGridMetrics[0]]} showProgress={false} />),
         renderVariantCard('Compact', <DataCardGrid metrics={dataCardGridMetrics.slice(0, 2)} density="compact" columns={2} />),
         renderVariantCard('No Charts', <DataCardGrid title="Snapshot" metrics={dataCardGridMetrics.slice(0, 3)} showSparklines={false} columns={3} />)
+      ],
+      KanbanBoard: [
+        renderVariantCard('Compact', <KanbanBoard title="Sprint" columns={kanbanColumns.slice(0, 2)} onChange={(nextColumns) => setKanbanColumns([...nextColumns, ...kanbanColumns.slice(2)])} density="compact" />),
+        renderVariantCard('No Column Drag', <KanbanBoard title="Fixed lanes" defaultColumns={defaultKanbanColumns.slice(0, 2)} allowColumnDrag={false} />),
+        renderVariantCard('Full Board', <KanbanBoard title="Editable workflow" columns={kanbanColumns} onChange={setKanbanColumns} />)
       ]
     }
 
