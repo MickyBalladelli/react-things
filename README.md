@@ -1,5 +1,9 @@
 # React Things
 
+![React Things Vercel preview](images/react-things-vercel.png)
+
+https://react-things-ten.vercel.app/?component=GlassBox
+
 Reusable React component library with a Vite demo app.
 
 ## Workspaces
