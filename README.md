@@ -45,6 +45,7 @@ React and React DOM are peer dependencies.
 - CommandPalette: searchable list or tree for commands, docs, and navigation.
 - SpotlightSearch: grouped fuzzy search with previews and inline actions.
 - SmartBreadcrumbs: breadcrumbs with previews, command actions, and collapsible path search.
+- PeekPanel: hover or click preview panel like IDE peek definition.
 - SplitPane: two-panel layout with a draggable divider.
 - FloatingToolbar: contextual tool strip anchored to text selection or an element.
 - MagneticCard: cursor-reactive card with 3D tilt, lift, and glare.

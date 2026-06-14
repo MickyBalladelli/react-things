@@ -38,6 +38,7 @@ export function Example() {
 - CommandPalette
 - SpotlightSearch
 - SmartBreadcrumbs
+- PeekPanel
 - SplitPane
 - FloatingToolbar
 - MagneticCard

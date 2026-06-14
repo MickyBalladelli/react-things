@@ -50,6 +50,7 @@ import {
   MagneticCard,
   MorphMenu,
   NodeCanvas,
+  PeekPanel,
   PresenceCursors,
   ResizableDashboard,
   ResizableFrame,
@@ -2324,6 +2325,113 @@ export function Example() {
     ]
   },
   {
+    ...createBasicDoc(
+      'PeekPanel',
+      'Hover or click preview panel like IDE peek definition.',
+      'PeekPanel anchors a rich preview to any element so users can inspect definitions, files, records, or references without leaving context.'
+    ),
+    props: [
+      {
+        name: 'children',
+        type: 'ReactElement',
+        defaultValue: '-',
+        possibleValues: 'Any single focusable or inline React element.',
+        description: 'Element that opens the peek panel.'
+      },
+      {
+        name: 'title / subtitle',
+        type: 'ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Any renderable heading content.',
+        description: 'Header text for the panel.'
+      },
+      {
+        name: 'content / preview / footer',
+        type: 'ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Any renderable panel content.',
+        description: 'Body, preview region, and footer content.'
+      },
+      {
+        name: 'actions',
+        type: 'PeekPanelAction[]',
+        defaultValue: '[]',
+        possibleValues: 'Array of { id, label, icon, onClick }.',
+        description: 'Command buttons shown in the footer.'
+      },
+      {
+        name: 'trigger',
+        type: '"hover" | "click" | "both"',
+        defaultValue: 'both',
+        possibleValues: 'hover, click, or both.',
+        description: 'Controls how the panel opens.'
+      },
+      {
+        name: 'placement',
+        type: '"top" | "bottom" | "left" | "right"',
+        defaultValue: 'bottom',
+        possibleValues: 'top, bottom, left, or right.',
+        description: 'Preferred panel position.'
+      },
+      {
+        name: 'open / defaultOpen / onOpenChange',
+        type: 'boolean / function',
+        defaultValue: '-',
+        possibleValues: 'Controlled or uncontrolled open state.',
+        description: 'Lets parent code control the panel.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { Button, Typography } from '@mui/material'
+import { PeekPanel } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <PeekPanel
+      title="useProjectStatus"
+      subtitle="hooks/useProjectStatus.ts:18"
+      content="Peek into a symbol without navigating away."
+      preview={<pre>{'export function useProjectStatus(id) {\\n  return queryClient.getQueryData([\\'project\\', id])\\n}'}</pre>}
+      actions={[{ id: 'open', label: 'Open file' }]}
+    >
+      <Button variant="outlined">Peek definition</Button>
+    </PeekPanel>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { Button, Typography } from '@mui/material'
+import { PeekPanel, type PeekPanelAction } from '@mickyballadelli/react-things'
+
+const actions: PeekPanelAction[] = [
+  { id: 'open', label: 'Open file' },
+  { id: 'copy', label: 'Copy path' }
+]
+
+export function Example() {
+  return (
+    <PeekPanel
+      trigger="click"
+      placement="right"
+      title="StatusRail"
+      subtitle="components/StatusRail.tsx"
+      content={<Typography variant="body2">Operational health rail with live pulse.</Typography>}
+      preview={<pre>{'<StatusRail groups={groups} compact />'}</pre>}
+      actions={actions}
+    >
+      <Button variant="contained">Inspect component</Button>
+    </PeekPanel>
+  )
+}`
+      }
+    ]
+  },
+  {
     name: 'SplitPane',
     summary: 'Draggable resizable panels for horizontal or vertical layouts.',
     description: 'SplitPane is a two-panel layout with a draggable divider for dashboards, editors, inspectors, and side-by-side workspaces.',
@@ -4588,7 +4696,7 @@ function getComponentGroup(name: string) {
     return 'Input'
   }
 
-  if (['StatusRail'].includes(name)) {
+  if (['StatusRail', 'PeekPanel'].includes(name)) {
     return 'Display'
   }
 
@@ -5678,6 +5786,47 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'PeekPanel') {
+      return (
+        <Box sx={{ minHeight: 420, p: 3, bgcolor: '#f8fafc' }}>
+          <Paper variant="outlined" sx={{ p: 3, borderRadius: 1, maxWidth: 760 }}>
+            <Typography variant="overline" color="text.secondary" fontWeight={900}>
+              Editor preview
+            </Typography>
+            <Typography variant="h4" fontWeight={950}>
+              Inspect without leaving place
+            </Typography>
+            <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 620 }}>
+              Hover or click the symbol below to peek at a definition, then jump or copy path from actions.
+            </Typography>
+            <Box sx={{ mt: 3, fontFamily: 'monospace', fontSize: 15, color: '#0f172a' }}>
+              const rail ={' '}
+              <PeekPanel
+                title="StatusRail"
+                subtitle="packages/ui/src/components/StatusRail.tsx"
+                content="Vertical operational health rail with grouped incidents and live pulse."
+                preview={(
+                  <CodeViewer
+                    label="tsx"
+                    language="tsx"
+                    value={'export function StatusRail({ groups, compact }) {\\n  return <Box>{groups.map(renderGroup)}</Box>\\n}'}
+                    onChange={() => {}}
+                    minHeight={150}
+                  />
+                )}
+                footer={<Typography variant="caption" color="text.secondary">Definition preview</Typography>}
+                actions={[{ id: 'open', label: 'Open file' }, { id: 'copy', label: 'Copy path' }]}
+              >
+                <Button size="small" variant="text" sx={{ fontFamily: 'monospace', fontWeight: 900 }}>
+                  StatusRail
+                </Button>
+              </PeekPanel>
+            </Box>
+          </Paper>
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'DockBar') {
       const dockItems = [
         { id: 'finder', label: 'Finder', icon: '🗂️' },
@@ -5911,6 +6060,11 @@ export function ComponentDocs() {
         renderVariantCard('Collapsed', <SmartBreadcrumbs items={smartBreadcrumbItems} maxVisible={3} />),
         renderVariantCard('Full Path', <SmartBreadcrumbs items={smartBreadcrumbItems.slice(0, 4)} maxVisible={6} />),
         renderVariantCard('No Preview', <SmartBreadcrumbs items={smartBreadcrumbItems} maxVisible={3} showPreview={false} />)
+      ],
+      PeekPanel: [
+        renderVariantCard('Hover', <Box sx={{ minHeight: 170, display: 'grid', placeItems: 'center' }}><PeekPanel trigger="hover" title="Hover peek" content="Opens after a short delay." preview={<Box sx={{ p: 2, fontFamily: 'monospace' }}>const value = read()</Box>}><Button variant="outlined">Hover symbol</Button></PeekPanel></Box>),
+        renderVariantCard('Click', <Box sx={{ minHeight: 170, display: 'grid', placeItems: 'center' }}><PeekPanel trigger="click" title="Click peek" subtitle="Pinned until closed" content="Useful on touch and dense tools." actions={[{ id: 'open', label: 'Open' }]}><Button variant="contained">Click target</Button></PeekPanel></Box>),
+        renderVariantCard('Right Side', <Box sx={{ minHeight: 170, display: 'grid', placeItems: 'center' }}><PeekPanel placement="right" title="Side peek" preview={<Box sx={{ p: 2, fontFamily: 'monospace' }}>{'<PeekPanel placement="right" />'}</Box>}><Button variant="outlined">Right peek</Button></PeekPanel></Box>)
       ],
       SplitPane: [
         renderVariantCard('Simple', <SplitPane sx={{ minHeight: 150 }} first={<Box sx={{ p: 2 }}>Left</Box>} second={<Box sx={{ p: 2 }}>Right</Box>} />),

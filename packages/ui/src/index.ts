@@ -18,6 +18,8 @@ export type { SpotlightSearchAction, SpotlightSearchItem, SpotlightSearchProps }
 export { SpotlightSearch } from './components/SpotlightSearch'
 export type { SmartBreadcrumbAction, SmartBreadcrumbItem, SmartBreadcrumbsProps } from './components/SmartBreadcrumbs'
 export { SmartBreadcrumbs } from './components/SmartBreadcrumbs'
+export type { PeekPanelAction, PeekPanelProps, PeekPanelTrigger } from './components/PeekPanel'
+export { PeekPanel } from './components/PeekPanel'
 export type { SplitPaneCollapse, SplitPaneOrientation, SplitPaneProps } from './components/SplitPane'
 export { SplitPane } from './components/SplitPane'
 export type { FloatingToolbarPlacement, FloatingToolbarProps } from './components/FloatingToolbar'
