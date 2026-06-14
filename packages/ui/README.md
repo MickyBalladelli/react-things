@@ -45,6 +45,7 @@ export function Example() {
 - InspectorPanel
 - KanbanBoard
 - ColorPicker
+- ColorStudio
 - TimelineScrubber
 - FileDropZone
 

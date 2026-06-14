@@ -30,6 +30,8 @@ export type { InspectorPanelField, InspectorPanelProps } from './components/Insp
 export { InspectorPanel } from './components/InspectorPanel'
 export type { ColorPickerProps } from './components/ColorPicker'
 export { ColorPicker } from './components/ColorPicker'
+export type { ColorStudioColor, ColorStudioGradientStop, ColorStudioProps, ColorStudioTokenFormat } from './components/ColorStudio'
+export { ColorStudio } from './components/ColorStudio'
 export type { FileDropZoneProps } from './components/FileDropZone'
 export { FileDropZone } from './components/FileDropZone'
 export type { TimelineScrubberChangeReason, TimelineScrubberMarker, TimelineScrubberProps, TimelineScrubberThumbnail } from './components/TimelineScrubber'

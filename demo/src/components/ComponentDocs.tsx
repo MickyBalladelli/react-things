@@ -20,6 +20,7 @@ import {
   BeforeAfterSlider,
   CodeViewer,
   ColorPicker,
+  ColorStudio,
   CommandPalette,
   DataCardGrid,
   DockBar,
@@ -39,7 +40,7 @@ import {
   SpotlightPanel,
   TimelineScrubber
 } from '@mickyballadelli/react-things'
-import type { DataCardGridMetric, InspectorPanelField, KanbanColumn, ResizableDashboardWidget } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, DataCardGridMetric, InspectorPanelField, KanbanColumn, ResizableDashboardWidget } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -383,6 +384,50 @@ export function Example() {
       <ColorPicker value={color} alpha={alpha} onChange={setColor} onAlphaChange={setAlpha} showValue />
       <TextField label="Selected color" value={\`\${color}, alpha \${alpha.toFixed(2)}\`} />
     </>
+  )
+}`
+      }
+    ],
+    ColorStudio: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { ColorStudio } from '@mickyballadelli/react-things'
+
+const colors = [
+  { id: 'brand', name: 'Brand', value: '#2563eb' },
+  { id: 'accent', name: 'Accent', value: '#db2777' },
+  { id: 'surface', name: 'Surface', value: '#f8fafc' }
+]
+
+export function Example() {
+  return (
+    <ColorStudio
+      initialColors={colors}
+      tokenFormat="css"
+      onColorsChange={(nextColors) => console.log(nextColors)}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { ColorStudio, type ColorStudioColor } from '@mickyballadelli/react-things'
+
+const colors: ColorStudioColor[] = [
+  { id: 'brand', name: 'Brand', value: '#2563eb' },
+  { id: 'accent', name: 'Accent', value: '#db2777' },
+  { id: 'surface', name: 'Surface', value: '#f8fafc' }
+]
+
+export function Example() {
+  return (
+    <ColorStudio
+      initialColors={colors}
+      tokenFormat="json"
+      onColorsChange={(nextColors) => console.log(nextColors)}
+    />
   )
 }`
       }
@@ -2103,6 +2148,50 @@ export function Example() {
   ),
   {
     ...createBasicDoc(
+      'ColorStudio',
+      'Palette builder with contrast checks, gradients, and token export.',
+      'ColorStudio is a design-token workbench for building palettes, checking WCAG contrast, composing gradients, and exporting CSS, JSON, or MUI tokens.'
+    ),
+    props: [
+      {
+        name: 'initialColors',
+        type: 'ColorStudioColor[]',
+        defaultValue: 'Brand palette',
+        possibleValues: 'Array of { id, name, value }. value should be a 6-digit hex color.',
+        description: 'Initial editable palette.'
+      },
+      {
+        name: 'initialGradientStops',
+        type: 'ColorStudioGradientStop[]',
+        defaultValue: 'Two stops',
+        possibleValues: 'Array of { id, color, position }. position is 0 to 100.',
+        description: 'Initial gradient stops.'
+      },
+      {
+        name: 'tokenFormat',
+        type: '"css" | "json" | "mui"',
+        defaultValue: 'css',
+        possibleValues: 'css, json, or mui.',
+        description: 'Initial export token format.'
+      },
+      {
+        name: 'onColorsChange',
+        type: '(colors: ColorStudioColor[]) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving next palette.',
+        description: 'Called when palette colors change.'
+      },
+      {
+        name: 'onGradientChange',
+        type: '(stops, gradient) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving stops and CSS gradient.',
+        description: 'Called when gradient stops change.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
       'TimelineScrubber',
       'Slick time scrubber with markers, hover preview thumbnails, and keyboard control.',
       'TimelineScrubber is a timeline input for audio, video, animation, or any ordered sequence that needs precise seeking.'
@@ -2255,6 +2344,13 @@ const dataCardGridMetrics: DataCardGridMetric[] = [
   }
 ]
 
+const colorStudioColors: ColorStudioColor[] = [
+  { id: 'brand', name: 'Brand', value: '#2563eb' },
+  { id: 'accent', name: 'Accent', value: '#db2777' },
+  { id: 'success', name: 'Success', value: '#059669' },
+  { id: 'surface', name: 'Surface', value: '#f8fafc' }
+]
+
 const dashboardWidgets: ResizableDashboardWidget[] = [
   {
     id: 'revenue',
@@ -2357,7 +2453,7 @@ const defaultKanbanColumns: KanbanColumn[] = [
 const sampleTabs = ['JavaScript', 'TypeScript']
 
 function getComponentGroup(name: string) {
-  if (['GlassBox', 'ColorPicker', 'CodeViewer', 'DataCardGrid', 'DockBar', 'TimelineScrubber'].includes(name)) {
+  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DockBar', 'TimelineScrubber'].includes(name)) {
     return 'Display'
   }
 
@@ -2729,6 +2825,14 @@ export function ComponentDocs() {
               color: {pickerColor}, alpha: {pickerAlpha.toFixed(2)}
             </Typography>
           </Box>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'ColorStudio') {
+      return (
+        <Box sx={{ p: 3, bgcolor: '#f8fafc' }}>
+          <ColorStudio initialColors={colorStudioColors} sx={{ minHeight: 560 }} />
         </Box>
       )
     }
@@ -3209,6 +3313,11 @@ export function ComponentDocs() {
         renderVariantCard('Simple', <ColorPicker value={pickerColor} onChange={setPickerColor} showValue={false} />),
         renderVariantCard('Alpha', <ColorPicker value={pickerColor} alpha={pickerAlpha} onChange={setPickerColor} onAlphaChange={setPickerAlpha} />),
         renderVariantCard('Swatches', <ColorPicker value={pickerColor} alpha={pickerAlpha} swatches={['#111827', '#2563eb', '#f59e0b', '#10b981']} onChange={setPickerColor} onAlphaChange={setPickerAlpha} />)
+      ],
+      ColorStudio: [
+        renderVariantCard('CSS Tokens', <ColorStudio initialColors={colorStudioColors} tokenFormat="css" />),
+        renderVariantCard('JSON Tokens', <ColorStudio initialColors={colorStudioColors.slice(0, 3)} tokenFormat="json" />),
+        renderVariantCard('MUI Tokens', <ColorStudio initialColors={colorStudioColors} tokenFormat="mui" />)
       ],
       TimelineScrubber: [
         renderVariantCard('Simple', <TimelineScrubber duration={90} defaultValue={22} preview={false} />),
