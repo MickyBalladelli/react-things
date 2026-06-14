@@ -37,6 +37,7 @@ React and React DOM are peer dependencies.
 - DraggableBox: bounded stage where one child can be dragged around.
 - CodeViewer: editable code display with line numbers and simple syntax colors.
 - DataCardGrid: metric cards with deltas, sparklines, progress, and status color.
+- DataLens: tiny table and card viewer with filters, sorting, and inline charts.
 - DockBar: icon launcher strip with animated magnify hover.
 - DockTabs: browser-like tabs with drag reorder, left-side docking, overflow, and previews.
 - CommandDock: persistent left command navigation with icons, tree branches, search, collapse, and saved state.

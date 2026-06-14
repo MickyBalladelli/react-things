@@ -30,6 +30,7 @@ export function Example() {
 - DraggableBox
 - CodeViewer
 - DataCardGrid
+- DataLens
 - DockBar
 - DockTabs
 - CommandDock

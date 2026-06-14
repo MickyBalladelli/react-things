@@ -32,6 +32,7 @@ import {
   CommandDock,
   CommandPalette,
   DataCardGrid,
+  DataLens,
   DockBar,
   DockTabs,
   DraggableBox,
@@ -54,7 +55,7 @@ import {
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DockTab, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -1017,6 +1018,63 @@ const metrics: DataCardGridMetric[] = [
 
 export function Example() {
   return <DataCardGrid title="Store pulse" subtitle="Live commercial metrics" metrics={metrics} columns={3} />
+}`
+      }
+    ],
+    DataLens: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { DataLens } from '@mickyballadelli/react-things'
+
+const rows = [
+  { id: 'api', name: 'API', owner: 'Platform', status: 'Healthy', load: 72, trend: [40, 48, 55, 61, 72] },
+  { id: 'web', name: 'Web', owner: 'Growth', status: 'Watch', load: 58, trend: [64, 62, 61, 59, 58] },
+  { id: 'billing', name: 'Billing', owner: 'Core', status: 'Healthy', load: 81, trend: [55, 60, 68, 73, 81] }
+]
+
+const columns = [
+  { id: 'name', label: 'Service', sortable: true },
+  { id: 'owner', label: 'Owner', filterable: true, options: ['Platform', 'Growth', 'Core'] },
+  { id: 'status', label: 'Status', filterable: true, options: ['Healthy', 'Watch'] },
+  { id: 'load', label: 'Load', sortable: true, chart: 'bar' },
+  { id: 'trend', label: 'Trend', chart: 'sparkline' }
+]
+
+export function Example() {
+  return <DataLens title="Service health" rows={rows} columns={columns} initialSort={{ columnId: 'load', direction: 'desc' }} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { DataLens, type DataLensColumn } from '@mickyballadelli/react-things'
+
+type Service = {
+  id: string
+  name: string
+  owner: string
+  status: string
+  load: number
+  trend: number[]
+}
+
+const rows: Service[] = [
+  { id: 'api', name: 'API', owner: 'Platform', status: 'Healthy', load: 72, trend: [40, 48, 55, 61, 72] },
+  { id: 'web', name: 'Web', owner: 'Growth', status: 'Watch', load: 58, trend: [64, 62, 61, 59, 58] },
+  { id: 'billing', name: 'Billing', owner: 'Core', status: 'Healthy', load: 81, trend: [55, 60, 68, 73, 81] }
+]
+
+const columns: DataLensColumn<Service>[] = [
+  { id: 'name', label: 'Service', sortable: true },
+  { id: 'owner', label: 'Owner', filterable: true, options: ['Platform', 'Growth', 'Core'] },
+  { id: 'status', label: 'Status', filterable: true, options: ['Healthy', 'Watch'] },
+  { id: 'load', label: 'Load', sortable: true, chart: 'bar' },
+  { id: 'trend', label: 'Trend', chart: 'sparkline' }
+]
+
+export function Example() {
+  return <DataLens<Service> title="Service health" rows={rows} columns={columns} defaultView="cards" />
 }`
       }
     ],
@@ -2691,6 +2749,57 @@ export function Example() {
   },
   {
     ...createBasicDoc(
+      'DataLens',
+      'Tiny table and card viewer with filters, sorting, and inline charts.',
+      'DataLens turns small operational datasets into a searchable table or card grid with column filters, sortable headers, and tiny bar or sparkline cells.'
+    ),
+    props: [
+      {
+        name: 'rows',
+        type: 'Row[]',
+        defaultValue: '-',
+        possibleValues: 'Any array of objects.',
+        description: 'Data objects shown in table or cards.'
+      },
+      {
+        name: 'columns',
+        type: 'DataLensColumn<Row>[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, accessor, sortable, filterable, options, chart, render }.',
+        description: 'Column definitions, filters, sorting, rendering, and chart cells.'
+      },
+      {
+        name: 'defaultView',
+        type: '"table" | "cards"',
+        defaultValue: 'table',
+        possibleValues: 'table or cards.',
+        description: 'Initial display mode.'
+      },
+      {
+        name: 'initialSort',
+        type: 'DataLensSort',
+        defaultValue: '-',
+        possibleValues: '{ columnId, direction }.',
+        description: 'Initial sorted column and direction.'
+      },
+      {
+        name: 'dense',
+        type: 'boolean',
+        defaultValue: 'false',
+        possibleValues: 'true or false.',
+        description: 'Uses tighter spacing.'
+      },
+      {
+        name: 'onRowSelect',
+        type: '(row: Row) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving the clicked row.',
+        description: 'Called when a row or card is selected.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
       'KanbanBoard',
       'Fully editable Kanban board with columns, cards, drag and drop, and card editing.',
       'KanbanBoard is a project workflow surface where users can create columns, add cards, drag cards between stacks, reorder vertically, edit details, and delete work items.'
@@ -3018,6 +3127,45 @@ const dataCardGridMetrics: DataCardGridMetric[] = [
   }
 ]
 
+type DataLensService = {
+  id: string
+  name: string
+  owner: string
+  status: 'Healthy' | 'Watch' | 'Down'
+  load: number
+  requests: number
+  trend: number[]
+}
+
+const dataLensRows: DataLensService[] = [
+  { id: 'api', name: 'API Gateway', owner: 'Platform', status: 'Healthy', load: 72, requests: 128400, trend: [42, 46, 51, 58, 64, 72] },
+  { id: 'web', name: 'Web App', owner: 'Growth', status: 'Watch', load: 58, requests: 84200, trend: [68, 64, 62, 60, 59, 58] },
+  { id: 'billing', name: 'Billing', owner: 'Core', status: 'Healthy', load: 81, requests: 31200, trend: [55, 59, 63, 70, 76, 81] },
+  { id: 'search', name: 'Search', owner: 'Platform', status: 'Healthy', load: 64, requests: 56600, trend: [38, 44, 49, 55, 61, 64] },
+  { id: 'mailer', name: 'Mailer', owner: 'Core', status: 'Down', load: 18, requests: 9200, trend: [70, 62, 48, 35, 22, 18] }
+]
+
+const dataLensColumns: DataLensColumn<DataLensService>[] = [
+  { id: 'name', label: 'Service', sortable: true },
+  { id: 'owner', label: 'Owner', filterable: true, options: ['Platform', 'Growth', 'Core'] },
+  {
+    id: 'status',
+    label: 'Status',
+    filterable: true,
+    options: ['Healthy', 'Watch', 'Down'],
+    render: (value) => (
+      <Chip
+        size="small"
+        label={String(value)}
+        color={value === 'Healthy' ? 'success' : value === 'Watch' ? 'warning' : 'error'}
+      />
+    )
+  },
+  { id: 'load', label: 'Load', sortable: true, chart: 'bar' },
+  { id: 'requests', label: 'Requests', sortable: true, align: 'right', render: (value) => Number(value).toLocaleString() },
+  { id: 'trend', label: 'Trend', chart: 'sparkline' }
+]
+
 const colorStudioColors: ColorStudioColor[] = [
   { id: 'brand', name: 'Brand', value: '#2563eb' },
   { id: 'accent', name: 'Accent', value: '#db2777' },
@@ -3250,7 +3398,7 @@ const defaultKanbanColumns: KanbanColumn[] = [
 const sampleTabs = ['JavaScript', 'TypeScript']
 
 function getComponentGroup(name: string) {
-  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DockBar', 'TimelineScrubber'].includes(name)) {
+  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DataLens', 'DockBar', 'TimelineScrubber'].includes(name)) {
     return 'Display'
   }
 
@@ -3874,6 +4022,20 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'DataLens') {
+      return (
+        <Box sx={{ minHeight: 460, p: 3, bgcolor: '#f8fafc' }}>
+          <DataLens<DataLensService>
+            title="Service lens"
+            subtitle="Filter owners and status, sort load or requests, switch table/card view."
+            rows={dataLensRows}
+            columns={dataLensColumns}
+            initialSort={{ columnId: 'load', direction: 'desc' }}
+          />
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'KanbanBoard') {
       return (
         <Box sx={{ minHeight: 520, p: 3, bgcolor: '#f8fafc' }}>
@@ -4414,6 +4576,11 @@ export function ComponentDocs() {
         renderVariantCard('Revenue', <DataCardGrid metrics={[dataCardGridMetrics[0]]} showProgress={false} />),
         renderVariantCard('Compact', <DataCardGrid metrics={dataCardGridMetrics.slice(0, 2)} density="compact" columns={2} />),
         renderVariantCard('No Charts', <DataCardGrid title="Snapshot" metrics={dataCardGridMetrics.slice(0, 3)} showSparklines={false} columns={3} />)
+      ],
+      DataLens: [
+        renderVariantCard('Table', <DataLens<DataLensService> rows={dataLensRows.slice(0, 4)} columns={dataLensColumns} dense />),
+        renderVariantCard('Cards', <DataLens<DataLensService> rows={dataLensRows.slice(0, 4)} columns={dataLensColumns.slice(0, 4)} defaultView="cards" />),
+        renderVariantCard('Sorted', <DataLens<DataLensService> rows={dataLensRows} columns={dataLensColumns} initialSort={{ columnId: 'requests', direction: 'desc' }} />)
       ],
       KanbanBoard: [
         renderVariantCard('Compact', <KanbanBoard title="Sprint" columns={kanbanColumns.slice(0, 2)} onChange={(nextColumns) => setKanbanColumns([...nextColumns, ...kanbanColumns.slice(2)])} density="compact" />),

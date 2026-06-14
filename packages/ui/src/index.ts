@@ -54,5 +54,7 @@ export type { TourGuideBranch, TourGuidePlacement, TourGuideProps, TourGuideStep
 export { TourGuide } from './components/TourGuide'
 export type { DataCardGridMetric, DataCardGridProps, DataCardGridStatus } from './components/DataCardGrid'
 export { DataCardGrid } from './components/DataCardGrid'
+export type { DataLensChart, DataLensColumn, DataLensProps, DataLensSort, DataLensSortDirection, DataLensView } from './components/DataLens'
+export { DataLens } from './components/DataLens'
 export type { KanbanBoardProps, KanbanCard, KanbanColumn } from './components/KanbanBoard'
 export { KanbanBoard } from './components/KanbanBoard'
