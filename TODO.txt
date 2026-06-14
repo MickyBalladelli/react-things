@@ -1,7 +1,6 @@
 Good ideas:
 SpotlightSearch: search box with command results, previews, fuzzy groups, actions.
 FlowBuilder: better NodeCanvas for workflows: ports, typed edges, validation, auto-layout.
-DockTabs: browser-like draggable tabs with pin, close, reorder, overflow.
 InfiniteCanvas: pan/zoom canvas with minimap, grid, selection box.
 InspectorDrawer: beautiful property editor with sections, live validation, undo.
 DataLens: tiny table/card viewer with filters, sort, inline charts.
@@ -16,11 +15,10 @@ TimelineScrubber: slick time scrubber with markers, preview thumbnails.
 
 
 InfiniteCanvas
-DockTabs
 FocusRing
 
 
-## Current Components (26 total):
+## Current Components (27 total):
 1. BeforeAfterSlider
 2. CodeViewer
 3. ColorPicker
@@ -29,56 +27,50 @@ FocusRing
 6. ComponentExample
 7. DataCardGrid
 8. DockBar
-9. DraggableBox
-10. FileDropZone
-11. FloatingToolbar
-12. GlassBox
-13. InfiniteCanvas
-14. InspectorPanel
-15. KanbanBoard
-16. MagneticCard
-17. MorphMenu
-18. NodeCanvas
-19. ResizableFrame
-20. ResizableDashboard
-21. SmartTooltip
-22. SplitPane
-23. SpotlightPanel
-24. TimelineScrubber
-25. ToastCenter
-26. TourGuide
+9. DockTabs
+10. DraggableBox
+11. FileDropZone
+12. FloatingToolbar
+13. GlassBox
+14. InfiniteCanvas
+15. InspectorPanel
+16. KanbanBoard
+17. MagneticCard
+18. MorphMenu
+19. NodeCanvas
+20. ResizableFrame
+21. ResizableDashboard
+22. SmartTooltip
+23. SplitPane
+24. SpotlightPanel
+25. TimelineScrubber
+26. ToastCenter
+27. TourGuide
 
 ## New Component Suggestions:
 
-### 1. **DockTabs** - Browser-like Draggable Tabs
-- Draggable tab interface like browser tabs
-- Pin, close, reorder functionality
-- Overflow handling with dropdown
-- Tab preview on hover
-- Material-UI has Tabs but not draggable/browser-like
-
-### 2. **GesturePad** - Trackpad-like Gesture Component
+### 1. **GesturePad** - Trackpad-like Gesture Component
 - Multi-touch gesture recognition
 - Zoom, pan, rotate gestures
 - Customizable gesture thresholds
 - Visual feedback during gestures
 - Perfect for touch interfaces and creative apps
 
-### 3. **KeyboardHintOverlay** - Shortcut Discovery
+### 2. **KeyboardHintOverlay** - Shortcut Discovery
 - Hold key to reveal available shortcuts
 - Contextual hints based on current view
 - Animated overlay with keyboard icons
 - Customizable hotkey detection
 - Material-UI doesn't have built-in keyboard hint systems
 
-### 4. **SelectionBox** - Drag Selection Component
+### 3. **SelectionBox** - Drag Selection Component
 - Drag to select multiple items
 - Works with grids, lists, or canvases
 - Customizable selection visuals
 - Multi-selection with modifier keys
 - Useful for data tables, canvases, file managers
 
-### 5. **FocusRing** - Animated Focus Highlight
+### 4. **FocusRing** - Animated Focus Highlight
 - Animated focus rings for tutorials
 - Validation error highlighting
 - Customizable pulse animations

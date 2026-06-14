@@ -31,6 +31,7 @@ export function Example() {
 - CodeViewer
 - DataCardGrid
 - DockBar
+- DockTabs
 - CommandPalette
 - SplitPane
 - FloatingToolbar

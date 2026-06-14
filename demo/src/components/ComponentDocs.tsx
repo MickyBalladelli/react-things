@@ -24,6 +24,7 @@ import {
   CommandPalette,
   DataCardGrid,
   DockBar,
+  DockTabs,
   DraggableBox,
   FileDropZone,
   FloatingToolbar,
@@ -43,7 +44,7 @@ import {
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, DataCardGridMetric, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, DataCardGridMetric, DockTab, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -175,6 +176,60 @@ export function Example() {
     <MorphMenu items={items} radius={124} startAngle={-170} endAngle={-10}>
       <Button variant="contained">Open menu</Button>
     </MorphMenu>
+  )
+}`
+      }
+    ],
+    DockTabs: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import { DockTabs } from '@mickyballadelli/react-things'
+
+const initialTabs = [
+  { id: 'home', label: 'Home', icon: 'H' },
+  { id: 'docs', label: 'Docs', icon: 'D', preview: 'Documentation' },
+  { id: 'settings', label: 'Settings', icon: 'S', preview: 'App settings' }
+]
+
+export function Example() {
+  const [tabs, setTabs] = useState(initialTabs)
+  const [activeId, setActiveId] = useState('home')
+
+  return (
+    <DockTabs
+      tabs={tabs}
+      activeId={activeId}
+      onTabsChange={setTabs}
+      onActiveChange={(tab) => setActiveId(tab.id)}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import { DockTabs, type DockTab } from '@mickyballadelli/react-things'
+
+const initialTabs: DockTab[] = [
+  { id: 'home', label: 'Home', icon: 'H' },
+  { id: 'docs', label: 'Docs', icon: 'D', preview: 'Documentation' },
+  { id: 'settings', label: 'Settings', icon: 'S', preview: 'App settings' }
+]
+
+export function Example() {
+  const [tabs, setTabs] = useState<DockTab[]>(initialTabs)
+  const [activeId, setActiveId] = useState('home')
+
+  return (
+    <DockTabs
+      tabs={tabs}
+      activeId={activeId}
+      onTabsChange={setTabs}
+      onActiveChange={(tab) => setActiveId(tab.id)}
+    />
   )
 }`
       }
@@ -1236,6 +1291,57 @@ const items: DockBarItem[] = [
 export function Example() {
   return <DockBar items={items} iconSize={56} magnification={1.8} />
 }`
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'DockTabs',
+      'Browser-like tabs with drag reorder, left dock drop, overflow, and hover previews.',
+      'DockTabs is a compact workspace tab surface where users can drag to reorder in the top dock or drop tabs into a left vertical dock.'
+    ),
+    props: [
+      {
+        name: 'tabs',
+        type: 'DockTab[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, icon, preview, disabled, dock }.',
+        description: 'Tabs shown in the strip.'
+      },
+      {
+        name: 'activeId / defaultActiveId',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any tab id.',
+        description: 'Controlled or initial active tab.'
+      },
+      {
+        name: 'maxVisible',
+        type: 'number',
+        defaultValue: '7',
+        possibleValues: 'Any positive count.',
+        description: 'Visible tab count before tabs move to overflow menu.'
+      },
+      {
+        name: 'allowDrag',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Enables drag reorder.'
+      },
+      {
+        name: 'onTabsChange',
+        type: '(tabs: DockTab[]) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving reordered or re-docked tabs.',
+        description: 'Called when tab collection changes.'
+      },
+      {
+        name: 'onActiveChange / onDockChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks for tab activity.',
+        description: 'Called when users select or move tabs between docks.'
       }
     ]
   },
@@ -2684,6 +2790,18 @@ const morphMenuItems: MorphMenuItem[] = [
   { id: 'archive', label: 'Archive', icon: 'A' }
 ]
 
+const defaultDockTabs: DockTab[] = [
+  { id: 'home', label: 'Home', icon: 'H', preview: 'Home workspace' },
+  { id: 'docs', label: 'Docs', icon: 'D', preview: 'Documentation and examples' },
+  { id: 'search', label: 'Search', icon: 'F', preview: 'Search panel', dock: 'left' },
+  { id: 'theme', label: 'Theme', icon: 'T', preview: 'Design tokens and colors' },
+  { id: 'board', label: 'Board', icon: 'B', preview: 'Planning board' },
+  { id: 'console', label: 'Console', icon: 'C', preview: 'Runtime logs' },
+  { id: 'settings', label: 'Settings', icon: 'S', preview: 'Workspace settings' },
+  { id: 'deploys', label: 'Deploys', icon: 'P', preview: 'Deployment history' },
+  { id: 'profile', label: 'Profile', icon: 'U', preview: 'User profile' }
+]
+
 const defaultToastCenterToasts: ToastCenterToast[] = [
   {
     id: 'deploy-live',
@@ -2857,7 +2975,7 @@ function getComponentGroup(name: string) {
     return 'Input'
   }
 
-  if (['MorphMenu'].includes(name)) {
+  if (['DockTabs', 'MorphMenu'].includes(name)) {
     return 'Navigation'
   }
 
@@ -3032,6 +3150,8 @@ export function ComponentDocs() {
   const [timelineTime, setTimelineTime] = useState(34)
   const [infiniteCanvasSelectedId, setInfiniteCanvasSelectedId] = useState<string | null>('idea')
   const [kanbanColumns, setKanbanColumns] = useState<KanbanColumn[]>(defaultKanbanColumns)
+  const [dockTabs, setDockTabs] = useState<DockTab[]>(defaultDockTabs)
+  const [activeDockTabId, setActiveDockTabId] = useState('home')
   const [toastCenterToasts, setToastCenterToasts] = useState<ToastCenterToast[]>(defaultToastCenterToasts)
   const [tourGuideOpen, setTourGuideOpen] = useState(false)
   const [tourGuideDone, setTourGuideDone] = useState(false)
@@ -3617,6 +3737,38 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'DockTabs') {
+      const activeTab = dockTabs.find((tab) => tab.id === activeDockTabId) ?? dockTabs[0]
+
+      return (
+        <Box sx={{ minHeight: 380, bgcolor: '#f8fafc' }}>
+          <Box sx={{ minHeight: 360 }}>
+          <DockTabs
+            tabs={dockTabs}
+            activeId={activeDockTabId}
+            maxVisible={5}
+            onTabsChange={setDockTabs}
+            onActiveChange={(tab) => setActiveDockTabId(tab.id)}
+          />
+          <Box sx={{ p: 3 }}>
+            <Paper variant="outlined" sx={{ p: 3, borderRadius: 1, minHeight: 220 }}>
+              <Typography variant="h5" fontWeight={900}>{activeTab?.label}</Typography>
+              <Typography color="text.secondary" sx={{ mt: 1 }}>
+                Drag tabs along the top to reorder. Drag one to the left side to dock it vertically.
+              </Typography>
+              <Button variant="outlined" sx={{ mt: 2 }} onClick={() => {
+                setDockTabs(defaultDockTabs)
+                setActiveDockTabId('home')
+              }}>
+                Reset tabs
+              </Button>
+            </Paper>
+          </Box>
+          </Box>
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'DraggableBox') {
       return (
         <DraggableBox
@@ -3723,6 +3875,12 @@ export function ComponentDocs() {
         renderVariantCard('Small', <DockBar items={[{ id: 'a', label: 'A', icon: 'A' }, { id: 'b', label: 'B', icon: 'B' }]} iconSize={40} />),
         renderVariantCard('Default', <DockBar items={[{ id: 'mail', label: 'Mail', icon: '✉️' }, { id: 'music', label: 'Music', icon: '🎵' }, { id: 'photos', label: 'Photos', icon: '🌄' }]} />),
         renderVariantCard('Big', <DockBar items={[{ id: 'finder', label: 'Finder', icon: '🗂️' }, { id: 'terminal', label: 'Terminal', icon: '⌘' }, { id: 'settings', label: 'Settings', icon: '⚙️' }]} iconSize={62} magnification={2} />)
+      ],
+      DockTabs: [
+        renderVariantCard('Overflow', <DockTabs tabs={defaultDockTabs} maxVisible={4} />),
+        renderVariantCard('Left Dock', <DockTabs tabs={defaultDockTabs.map((tab, index) => index < 2 ? { ...tab, dock: 'left' } : tab)} activeId="home" />),
+        renderVariantCard('Drag Only', <DockTabs tabs={defaultDockTabs.slice(0, 5)} activeId="home" />),
+        renderVariantCard('Static', <DockTabs tabs={defaultDockTabs.slice(1, 5)} allowDrag={false} maxVisible={3} />)
       ],
       CommandPalette: [
         renderVariantCard('List', <CommandPalette items={commandItems} selectedId={commandPaletteSelectedId} onSelect={(item) => setCommandPaletteSelectedId(item.id)} sx={{ minHeight: 220 }} />),
