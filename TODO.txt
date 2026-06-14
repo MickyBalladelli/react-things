@@ -34,9 +34,6 @@ Beautiful text/object diff with inline comments and accept/reject.
 MiniMapNavigator
 Overview minimap for long pages, canvases, dashboards, docs.
 
-BulkActionBar
-Selection-aware action bar for tables/grids/cards.
-
 FieldComposer
 Schema form builder with drag fields, validation preview, generated JSON.
 

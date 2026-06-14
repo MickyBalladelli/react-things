@@ -53,6 +53,7 @@ React and React DOM are peer dependencies.
 - BeforeAfterSlider: comparison viewer with a draggable reveal handle.
 - InfiniteCanvas: pan-and-zoom workspace for draggable items.
 - SelectionBox: drag selection wrapper for grids, lists, and canvases.
+- BulkActionBar: selection-aware action bar for tables, grids, and cards.
 - PresenceCursors: collaborative cursors, selections, names, and idle states.
 - StatusRail: vertical operational health rail with grouped incidents and live pulse.
 - SmartTooltip: rich tooltip for context, media, actions, copy, and pinning.

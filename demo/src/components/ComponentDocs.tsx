@@ -26,6 +26,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import {
   BeforeAfterSlider,
+  BulkActionBar,
   CodeViewer,
   ColorPicker,
   ColorStudio,
@@ -61,7 +62,7 @@ import {
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, LayoutSwitcherItem, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { BulkActionBarAction, ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, LayoutSwitcherItem, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -926,6 +927,61 @@ export function Example() {
         </Box>
       ))}
     </SelectionBox>
+  )
+}`
+      }
+    ],
+    BulkActionBar: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import { Box } from '@mui/material'
+import { BulkActionBar, SelectionBox } from '@mickyballadelli/react-things'
+
+const items = ['Roadmap', 'Assets', 'Launch', 'Billing']
+
+export function Example() {
+  const [selectedIds, setSelectedIds] = useState(['Roadmap'])
+
+  return (
+    <Box>
+      <BulkActionBar
+        selectedIds={selectedIds}
+        totalCount={items.length}
+        onClear={() => setSelectedIds([])}
+        actions={[{ id: 'archive', label: 'Archive' }, { id: 'delete', label: 'Delete', tone: 'danger' }]}
+      />
+      <SelectionBox selectedIds={selectedIds} onSelectionChange={(change) => setSelectedIds(change.selectedIds)}>
+        {items.map((item) => <Box key={item} data-selection-id={item}>{item}</Box>)}
+      </SelectionBox>
+    </Box>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import { Box } from '@mui/material'
+import { BulkActionBar, SelectionBox, type BulkActionBarAction } from '@mickyballadelli/react-things'
+
+const items = ['Roadmap', 'Assets', 'Launch', 'Billing']
+
+export function Example() {
+  const [selectedIds, setSelectedIds] = useState<string[]>(['Roadmap'])
+  const actions: BulkActionBarAction[] = [
+    { id: 'archive', label: 'Archive' },
+    { id: 'delete', label: 'Delete', tone: 'danger' }
+  ]
+
+  return (
+    <Box>
+      <BulkActionBar selectedIds={selectedIds} totalCount={items.length} actions={actions} onClear={() => setSelectedIds([])} />
+      <SelectionBox selectedIds={selectedIds} onSelectionChange={(change) => setSelectedIds(change.selectedIds)}>
+        {items.map((item) => <Box key={item} data-selection-id={item}>{item}</Box>)}
+      </SelectionBox>
+    </Box>
   )
 }`
       }
@@ -2932,6 +2988,57 @@ export function Example() {
   },
   {
     ...createBasicDoc(
+      'BulkActionBar',
+      'Selection-aware action bar for tables, grids, and cards.',
+      'BulkActionBar appears when items are selected and gives users fast primary actions, overflow actions, selected counts, clear selection, and inline, sticky, or floating placement.'
+    ),
+    props: [
+      {
+        name: 'selectedIds',
+        type: 'string[]',
+        defaultValue: '-',
+        possibleValues: 'Selected item ids.',
+        description: 'Controls visibility and count.'
+      },
+      {
+        name: 'actions',
+        type: 'BulkActionBarAction[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, icon, tone, disabled, hidden, overflow, onClick }.',
+        description: 'Primary and overflow bulk actions.'
+      },
+      {
+        name: 'totalCount / label',
+        type: 'number / ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Any item count and label.',
+        description: 'Optional context next to selected count.'
+      },
+      {
+        name: 'position',
+        type: '"inline" | "sticky" | "floating"',
+        defaultValue: 'inline',
+        possibleValues: 'inline, sticky, or floating.',
+        description: 'Action bar placement.'
+      },
+      {
+        name: 'maxPrimaryActions',
+        type: 'number',
+        defaultValue: '3',
+        possibleValues: 'Any positive count.',
+        description: 'Actions beyond this move to the overflow menu.'
+      },
+      {
+        name: 'onClear',
+        type: '() => void',
+        defaultValue: '-',
+        possibleValues: 'Clear selection callback.',
+        description: 'Called by the clear selection button.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
       'PresenceCursors',
       'Collaborative cursors, selections, names, and idle states.',
       'PresenceCursors overlays multi-user cursor positions, labeled selections, participant chips, and active or idle states over any shared surface. It is the visual layer only: connect people through your realtime backend, such as WebSocket. Send each local user position and selection to that realtime layer, receive the remote users array, then pass it into users.'
@@ -4077,6 +4184,13 @@ const selectionBoxItems = [
   { id: 'metrics', label: 'Metrics', type: 'Chart', color: '#ffedd5' }
 ]
 
+const bulkActionBarActions: BulkActionBarAction[] = [
+  { id: 'archive', label: 'Archive' },
+  { id: 'assign', label: 'Assign', tone: 'primary' },
+  { id: 'export', label: 'Export', overflow: true },
+  { id: 'delete', label: 'Delete', tone: 'danger', overflow: true }
+]
+
 const presenceCursorUsers: PresenceCursorUser[] = [
   { id: 'ada', name: 'Ada', x: 22, y: 30, color: '#2563eb', selection: { x: 12, y: 18, width: 26, height: 18, label: 'Editing header' } },
   { id: 'lin', name: 'Lin', x: 68, y: 52, color: '#db2777', status: 'idle', selection: { x: 58, y: 44, width: 22, height: 24, label: 'Reviewing' } },
@@ -4159,6 +4273,10 @@ function getComponentGroup(name: string) {
 
   if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'ResizableDashboard', 'BeforeAfterSlider', 'InfiniteCanvas', 'SelectionBox', 'PresenceCursors'].includes(name)) {
     return 'Layout'
+  }
+
+  if (['BulkActionBar'].includes(name)) {
+    return 'Input'
   }
 
   if (['StatusRail'].includes(name)) {
@@ -4611,6 +4729,44 @@ export function ComponentDocs() {
                     alignContent: 'space-between'
                   }}
                 >
+                  <Typography fontWeight={950}>{item.label}</Typography>
+                  <Typography variant="caption" color="text.secondary">{item.type}</Typography>
+                </Paper>
+              ))}
+            </SelectionBox>
+          </Stack>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'BulkActionBar') {
+      return (
+        <Box sx={{ minHeight: 430, p: 3, bgcolor: '#f8fafc' }}>
+          <Stack spacing={1.5}>
+            <BulkActionBar
+              selectedIds={selectionBoxSelectedIds}
+              totalCount={selectionBoxItems.length}
+              actions={bulkActionBarActions}
+              onClear={() => setSelectionBoxSelectedIds([])}
+            />
+            <SelectionBox
+              selectedIds={selectionBoxSelectedIds}
+              onSelectionChange={(change) => setSelectionBoxSelectedIds(change.selectedIds)}
+              selectionColor="#2563eb"
+              sx={{
+                minHeight: 300,
+                display: 'grid',
+                gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: 'repeat(4, minmax(0, 1fr))' },
+                gap: 1.5,
+                p: 2,
+                border: 1,
+                borderColor: 'divider',
+                borderRadius: 1,
+                bgcolor: 'background.paper'
+              }}
+            >
+              {selectionBoxItems.map((item) => (
+                <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 2, borderRadius: 1, bgcolor: item.color, minHeight: 90 }}>
                   <Typography fontWeight={950}>{item.label}</Typography>
                   <Typography variant="caption" color="text.secondary">{item.type}</Typography>
                 </Paper>
@@ -5474,6 +5630,11 @@ export function ComponentDocs() {
         renderVariantCard('Grid', <SelectionBox defaultSelectedIds={['roadmap']} sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1, p: 1 }} selectionColor="#2563eb">{selectionBoxItems.slice(0, 4).map((item) => <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}>{item.label}</Paper>)}</SelectionBox>),
         renderVariantCard('List', <SelectionBox defaultSelectedIds={['support']} selectionColor="#059669" sx={{ display: 'grid', gap: 1, p: 1 }}>{selectionBoxItems.slice(4).map((item) => <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 1.25, borderRadius: 1 }}>{item.label}</Paper>)}</SelectionBox>),
         renderVariantCard('Custom Box', <SelectionBox selectionColor="#db2777" selectionRectSx={{ borderStyle: 'dashed', bgcolor: '#db277733' }} sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, p: 1 }}>{selectionBoxItems.slice(0, 6).map((item) => <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 1, borderRadius: 1 }}>{item.label}</Paper>)}</SelectionBox>)
+      ],
+      BulkActionBar: [
+        renderVariantCard('Inline', <BulkActionBar selectedIds={['a', 'b']} totalCount={8} actions={bulkActionBarActions} onClear={() => {}} />),
+        renderVariantCard('Sticky', <BulkActionBar selectedIds={['a', 'b', 'c']} position="sticky" actions={bulkActionBarActions} onClear={() => {}} />),
+        renderVariantCard('Overflow', <BulkActionBar selectedIds={['a']} maxPrimaryActions={1} actions={bulkActionBarActions} onClear={() => {}} />)
       ],
       PresenceCursors: [
         renderVariantCard('Canvas', <PresenceCursors users={presenceCursorUsers.slice(0, 2)} sx={{ minHeight: 170, bgcolor: '#f8fafc', borderRadius: 1 }}><Box sx={{ p: 2 }}>Canvas</Box></PresenceCursors>),

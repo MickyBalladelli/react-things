@@ -46,6 +46,7 @@ export function Example() {
 - BeforeAfterSlider
 - InfiniteCanvas
 - SelectionBox
+- BulkActionBar
 - PresenceCursors
 - StatusRail
 - SmartTooltip
