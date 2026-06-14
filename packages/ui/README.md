@@ -40,6 +40,7 @@ export function Example() {
 - BeforeAfterSlider
 - InfiniteCanvas
 - SmartTooltip
+- ToastCenter
 - ResizableFrame
 - ResizableDashboard
 - InspectorPanel

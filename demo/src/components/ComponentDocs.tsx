@@ -38,9 +38,10 @@ import {
   SmartTooltip,
   SplitPane,
   SpotlightPanel,
-  TimelineScrubber
+  TimelineScrubber,
+  ToastCenter
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, DataCardGridMetric, InspectorPanelField, KanbanColumn, ResizableDashboardWidget } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, DataCardGridMetric, InspectorPanelField, KanbanColumn, ResizableDashboardWidget, ToastCenterToast } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -577,6 +578,52 @@ export function Example() {
     >
       <Button variant="contained">Hover me</Button>
     </SmartTooltip>
+  )
+}`
+      }
+    ],
+    ToastCenter: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import Button from '@mui/material/Button'
+import { ToastCenter } from '@mickyballadelli/react-things'
+
+export function Example() {
+  const [toasts, setToasts] = useState([
+    { id: 'deploy', title: 'Deploy complete', message: 'Production is live.', tone: 'success', group: 'deploys' }
+  ])
+
+  return (
+    <>
+      <Button onClick={() => setToasts([{ id: crypto.randomUUID(), title: 'Build queued', tone: 'info', group: 'builds' }, ...toasts])}>
+        Add toast
+      </Button>
+      <ToastCenter toasts={toasts} onToastsChange={setToasts} />
+    </>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import Button from '@mui/material/Button'
+import { ToastCenter, type ToastCenterToast } from '@mickyballadelli/react-things'
+
+export function Example() {
+  const [toasts, setToasts] = useState<ToastCenterToast[]>([
+    { id: 'deploy', title: 'Deploy complete', message: 'Production is live.', tone: 'success', group: 'deploys' }
+  ])
+
+  return (
+    <>
+      <Button onClick={() => setToasts([{ id: crypto.randomUUID(), title: 'Build queued', tone: 'info', group: 'builds' }, ...toasts])}>
+        Add toast
+      </Button>
+      <ToastCenter toasts={toasts} onToastsChange={setToasts} />
+    </>
   )
 }`
       }
@@ -1973,6 +2020,64 @@ export function Example() {
   },
   {
     ...createBasicDoc(
+      'ToastCenter',
+      'Notification stack with grouped toasts and history drawer.',
+      'ToastCenter is a controlled or uncontrolled toast system for active notifications, grouped repeats, actions, auto-dismiss, and a right-side history drawer.'
+    ),
+    props: [
+      {
+        name: 'toasts',
+        type: 'ToastCenterToast[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, title, message, tone, group, timestamp, actions, autoHideDuration }.',
+        description: 'Controlled active notifications.'
+      },
+      {
+        name: 'defaultToasts',
+        type: 'ToastCenterToast[]',
+        defaultValue: '[]',
+        possibleValues: 'Any toast array.',
+        description: 'Initial notifications when uncontrolled.'
+      },
+      {
+        name: 'maxVisible',
+        type: 'number',
+        defaultValue: '4',
+        possibleValues: 'Any positive count.',
+        description: 'Maximum visible toast cards before showing more count.'
+      },
+      {
+        name: 'groupToasts',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Groups toasts by group key or title.'
+      },
+      {
+        name: 'historyTitle',
+        type: 'ReactNode',
+        defaultValue: 'Notification history',
+        possibleValues: 'Any React renderable.',
+        description: 'Drawer heading.'
+      },
+      {
+        name: 'onToastsChange',
+        type: '(toasts: ToastCenterToast[]) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving active notifications.',
+        description: 'Called when a toast or group is dismissed.'
+      },
+      {
+        name: 'onDismiss',
+        type: '(toast: ToastCenterToast) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving dismissed toast.',
+        description: 'Called for every dismissed notification.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
       'DataCardGrid',
       'Metric dashboard cards with deltas, sparklines, progress, and status color.',
       'DataCardGrid turns arrays of business, product, or system metrics into scan-friendly data cards for dashboards and reports.'
@@ -2351,6 +2456,30 @@ const colorStudioColors: ColorStudioColor[] = [
   { id: 'surface', name: 'Surface', value: '#f8fafc' }
 ]
 
+const defaultToastCenterToasts: ToastCenterToast[] = [
+  {
+    id: 'deploy-live',
+    title: 'Deploy complete',
+    message: 'Production is live.',
+    tone: 'success',
+    group: 'deploys'
+  },
+  {
+    id: 'queue-live',
+    title: 'Build queued',
+    message: 'Runner starts soon.',
+    tone: 'info',
+    group: 'builds'
+  },
+  {
+    id: 'queue-live-2',
+    title: 'Build queued',
+    message: 'Docs job added.',
+    tone: 'info',
+    group: 'builds'
+  }
+]
+
 const dashboardWidgets: ResizableDashboardWidget[] = [
   {
     id: 'revenue',
@@ -2461,7 +2590,7 @@ function getComponentGroup(name: string) {
     return 'Layout'
   }
 
-  if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip'].includes(name)) {
+  if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter'].includes(name)) {
     return 'Input'
   }
 
@@ -2636,6 +2765,7 @@ export function ComponentDocs() {
   const [timelineTime, setTimelineTime] = useState(34)
   const [infiniteCanvasSelectedId, setInfiniteCanvasSelectedId] = useState<string | null>('idea')
   const [kanbanColumns, setKanbanColumns] = useState<KanbanColumn[]>(defaultKanbanColumns)
+  const [toastCenterToasts, setToastCenterToasts] = useState<ToastCenterToast[]>(defaultToastCenterToasts)
 
   const selectedSamples = selectedComponent.name === 'GlassBox'
     ? [
@@ -2898,6 +3028,44 @@ export function ComponentDocs() {
           >
             <Button variant="contained">Hover or click</Button>
           </SmartTooltip>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'ToastCenter') {
+      function addToast(tone: ToastCenterToast['tone'], group: string, title: string) {
+        setToastCenterToasts((currentToasts) => [
+          {
+            id: `${group}-${Date.now()}`,
+            title,
+            message: group === 'builds' ? 'Grouped with related build notifications.' : 'Stored in history when dismissed.',
+            tone,
+            group,
+            actions: [{ id: 'view', label: 'View' }]
+          },
+          ...currentToasts
+        ])
+      }
+
+      return (
+        <Box sx={{ position: 'relative', minHeight: 520, p: 3, bgcolor: '#f8fafc', overflow: 'hidden' }}>
+          <Stack spacing={2} sx={{ maxWidth: 520 }}>
+            <Typography variant="h5" fontWeight={900}>ToastCenter</Typography>
+            <Typography color="text.secondary">
+              Add repeated build messages to see grouping. Dismiss toasts, then open history.
+            </Typography>
+            <Stack direction="row" spacing={1} flexWrap="wrap">
+              <Button variant="contained" onClick={() => addToast('info', 'builds', 'Build queued')}>Build</Button>
+              <Button variant="contained" color="success" onClick={() => addToast('success', 'deploys', 'Deploy complete')}>Deploy</Button>
+              <Button variant="contained" color="warning" onClick={() => addToast('warning', 'alerts', 'Usage spike')}>Warn</Button>
+              <Button variant="outlined" onClick={() => setToastCenterToasts(defaultToastCenterToasts)}>Reset</Button>
+            </Stack>
+          </Stack>
+          <ToastCenter
+            toasts={toastCenterToasts}
+            onToastsChange={setToastCenterToasts}
+            sx={{ position: 'absolute', right: 16, bottom: 16 }}
+          />
         </Box>
       )
     }
@@ -3265,6 +3433,11 @@ export function ComponentDocs() {
         renderVariantCard('Text', <Box sx={{ minHeight: 120, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Helpful detail" content="Extra context without leaving the flow."><Button variant="outlined">Hover</Button></SmartTooltip></Box>),
         renderVariantCard('Copy', <Box sx={{ minHeight: 120, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Install" content="Copy the package command." copyText="npm install @mickyballadelli/react-things" placement="bottom"><Button variant="outlined">Copy tooltip</Button></SmartTooltip></Box>),
         renderVariantCard('Media Actions', <Box sx={{ minHeight: 140, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Preview card" content="Media, actions, and pin mode." media={<Box sx={{ height: 90, backgroundImage: 'url(/animals-colors.svg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />} actions={[{ id: 'open', label: 'Open' }]}><Button variant="contained">Preview</Button></SmartTooltip></Box>)
+      ],
+      ToastCenter: [
+        renderVariantCard('Grouped', <Box sx={{ position: 'relative', minHeight: 280, overflow: 'hidden' }}><ToastCenter defaultToasts={defaultToastCenterToasts} sx={{ position: 'absolute', right: 12, bottom: 12 }} /></Box>),
+        renderVariantCard('Ungrouped', <Box sx={{ position: 'relative', minHeight: 280, overflow: 'hidden' }}><ToastCenter defaultToasts={defaultToastCenterToasts} groupToasts={false} sx={{ position: 'absolute', right: 12, bottom: 12 }} /></Box>),
+        renderVariantCard('Limited', <Box sx={{ position: 'relative', minHeight: 260, overflow: 'hidden' }}><ToastCenter defaultToasts={defaultToastCenterToasts} maxVisible={2} sx={{ position: 'absolute', right: 12, bottom: 12 }} /></Box>)
       ],
       MagneticCard: [
         renderVariantCard('Soft', <MagneticCard strength={10} tilt={4} sx={{ p: 2, border: 1, borderColor: 'divider', borderRadius: 1 }}>Soft pull</MagneticCard>),

@@ -10,7 +10,6 @@ DataLens: tiny table/card viewer with filters, sort, inline charts.
 DropComposer: drag/drop upload zone with previews, reorder, metadata edit.
 CommandDock: persistent left command nav like Linear/Raycast sidebar.
 SelectionBox: drag-select items on canvas/list/grid.
-ToastCenter: notification stack with history drawer and grouped toasts.
 FocusRing: animated focus/highlight wrapper for tutorials or validation.
 CompareStack: before/after but for many layers, with opacity sliders.
 GesturePad: trackpad-like component for zoom, pan, rotate gestures.
@@ -21,10 +20,10 @@ TimelineScrubber: slick time scrubber with markers, preview thumbnails.
 InfiniteCanvas
 TourGuide
 DockTabs
-ToastCenter
+FocusRing
 
 
-## Current Components (23 total):
+## Current Components (24 total):
 1. BeforeAfterSlider
 2. CodeViewer
 3. ColorPicker
@@ -48,6 +47,7 @@ ToastCenter
 21. SplitPane
 22. SpotlightPanel
 23. TimelineScrubber
+24. ToastCenter
 
 ## New Component Suggestions:
 
@@ -92,14 +92,7 @@ ToastCenter
 - Multi-selection with modifier keys
 - Useful for data tables, canvases, file managers
 
-### 7. **ToastCenter** - Advanced Notification System
-- Notification stack with history drawer
-- Grouped toasts by type/source
-- Interactive toast actions
-- Rich media support in toasts
-- Material-UI has Snackbar but not this comprehensive
-
-### 8. **FocusRing** - Animated Focus Highlight
+### 7. **FocusRing** - Animated Focus Highlight
 - Animated focus rings for tutorials
 - Validation error highlighting
 - Customizable pulse animations
