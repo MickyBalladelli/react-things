@@ -52,6 +52,8 @@ export type { InfiniteCanvasItem, InfiniteCanvasProps, InfiniteCanvasViewport } 
 export { InfiniteCanvas } from './components/InfiniteCanvas'
 export type { SelectionBoxChange, SelectionBoxChangeReason, SelectionBoxProps, SelectionBoxRect } from './components/SelectionBox'
 export { SelectionBox } from './components/SelectionBox'
+export type { PresenceCursorSelection, PresenceCursorStatus, PresenceCursorUser, PresenceCursorsProps } from './components/PresenceCursors'
+export { PresenceCursors } from './components/PresenceCursors'
 export type { SmartTooltipAction, SmartTooltipProps } from './components/SmartTooltip'
 export { SmartTooltip } from './components/SmartTooltip'
 export type { ToastCenterAction, ToastCenterProps, ToastCenterToast, ToastCenterTone } from './components/ToastCenter'

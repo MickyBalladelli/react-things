@@ -48,6 +48,7 @@ import {
   MagneticCard,
   MorphMenu,
   NodeCanvas,
+  PresenceCursors,
   ResizableDashboard,
   ResizableFrame,
   SelectionBox,
@@ -58,7 +59,7 @@ import {
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -923,6 +924,46 @@ export function Example() {
         </Box>
       ))}
     </SelectionBox>
+  )
+}`
+      }
+    ],
+    PresenceCursors: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { Box } from '@mui/material'
+import { PresenceCursors } from '@mickyballadelli/react-things'
+
+const users = [
+  { id: 'ada', name: 'Ada', x: 24, y: 34, color: '#2563eb', selection: { x: 16, y: 24, width: 28, height: 22, label: 'Editing' } },
+  { id: 'lin', name: 'Lin', x: 68, y: 58, color: '#db2777', status: 'idle' }
+]
+
+export function Example() {
+  return (
+    <PresenceCursors users={users} sx={{ minHeight: 280, bgcolor: '#f8fafc' }}>
+      <Box sx={{ p: 3 }}>Shared canvas content</Box>
+    </PresenceCursors>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { Box } from '@mui/material'
+import { PresenceCursors, type PresenceCursorUser } from '@mickyballadelli/react-things'
+
+const users: PresenceCursorUser[] = [
+  { id: 'ada', name: 'Ada', x: 24, y: 34, color: '#2563eb', selection: { x: 16, y: 24, width: 28, height: 22, label: 'Editing' } },
+  { id: 'lin', name: 'Lin', x: 68, y: 58, color: '#db2777', status: 'idle' }
+]
+
+export function Example() {
+  return (
+    <PresenceCursors users={users} sx={{ minHeight: 280, bgcolor: '#f8fafc' }}>
+      <Box sx={{ p: 3 }}>Shared canvas content</Box>
+    </PresenceCursors>
   )
 }`
       }
@@ -2813,6 +2854,50 @@ export function Example() {
   },
   {
     ...createBasicDoc(
+      'PresenceCursors',
+      'Collaborative cursors, selections, names, and idle states.',
+      'PresenceCursors overlays multi-user cursor positions, labeled selections, participant chips, and active or idle states over any shared surface. It is the visual layer only: connect people through your realtime backend, such as WebSocket. Send each local user position and selection to that realtime layer, receive the remote users array, then pass it into users.'
+    ),
+    props: [
+      {
+        name: 'users',
+        type: 'PresenceCursorUser[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, name, x, y, color, status, selection, updatedAt }.',
+        description: 'Remote collaborator positions and selections.'
+      },
+      {
+        name: 'coordinateMode',
+        type: '"percent" | "pixel"',
+        defaultValue: 'percent',
+        possibleValues: 'percent or pixel.',
+        description: 'Interprets cursor and selection coordinates.'
+      },
+      {
+        name: 'showNames / showSelections / showPresenceList',
+        type: 'boolean',
+        defaultValue: 'true / true / true',
+        possibleValues: 'true or false.',
+        description: 'Controls cursor labels, selection boxes, and participant list.'
+      },
+      {
+        name: 'idleAfterMs',
+        type: 'number',
+        defaultValue: '30000',
+        possibleValues: 'Any millisecond delay.',
+        description: 'Marks users idle when updatedAt gets stale.'
+      },
+      {
+        name: 'renderCursor',
+        type: '(user, status) => ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Function returning custom cursor visuals.',
+        description: 'Overrides default pointer shape.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
       'SmartTooltip',
       'Tooltip that can hold actions, media, copy buttons, and pin mode.',
       'SmartTooltip is a rich hover or click popover for extra context, previews, quick actions, and copyable values.'
@@ -3803,6 +3888,12 @@ const selectionBoxItems = [
   { id: 'metrics', label: 'Metrics', type: 'Chart', color: '#ffedd5' }
 ]
 
+const presenceCursorUsers: PresenceCursorUser[] = [
+  { id: 'ada', name: 'Ada', x: 22, y: 30, color: '#2563eb', selection: { x: 12, y: 18, width: 26, height: 18, label: 'Editing header' } },
+  { id: 'lin', name: 'Lin', x: 68, y: 52, color: '#db2777', status: 'idle', selection: { x: 58, y: 44, width: 22, height: 24, label: 'Reviewing' } },
+  { id: 'mika', name: 'Mika', x: 44, y: 76, color: '#059669', status: 'active' }
+]
+
 const defaultInspectorDrawerSections: InspectorDrawerSection[] = [
   {
     id: 'content',
@@ -3851,7 +3942,7 @@ function getComponentGroup(name: string) {
     return 'Display'
   }
 
-  if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'ResizableDashboard', 'BeforeAfterSlider', 'InfiniteCanvas', 'SelectionBox'].includes(name)) {
+  if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'ResizableDashboard', 'BeforeAfterSlider', 'InfiniteCanvas', 'SelectionBox', 'PresenceCursors'].includes(name)) {
     return 'Layout'
   }
 
@@ -4307,6 +4398,34 @@ export function ComponentDocs() {
               ))}
             </SelectionBox>
           </Stack>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'PresenceCursors') {
+      return (
+        <Box sx={{ minHeight: 430, p: 3, bgcolor: '#f8fafc' }}>
+          <PresenceCursors
+            users={presenceCursorUsers}
+            sx={{
+              minHeight: 360,
+              border: 1,
+              borderColor: 'divider',
+              borderRadius: 1,
+              bgcolor: 'background.paper',
+              backgroundImage: 'linear-gradient(rgba(148,163,184,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.18) 1px, transparent 1px)',
+              backgroundSize: '32px 32px'
+            }}
+          >
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 2, p: 4, pt: 7 }}>
+              {['Overview', 'Metrics', 'Roadmap', 'Feedback', 'Launch', 'Settings'].map((item) => (
+                <Paper key={item} variant="outlined" sx={{ p: 2, borderRadius: 1, minHeight: 86 }}>
+                  <Typography fontWeight={950}>{item}</Typography>
+                  <Typography variant="body2" color="text.secondary">Shared workspace</Typography>
+                </Paper>
+              ))}
+            </Box>
+          </PresenceCursors>
         </Box>
       )
     }
@@ -5110,6 +5229,11 @@ export function ComponentDocs() {
         renderVariantCard('Grid', <SelectionBox defaultSelectedIds={['roadmap']} sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1, p: 1 }} selectionColor="#2563eb">{selectionBoxItems.slice(0, 4).map((item) => <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}>{item.label}</Paper>)}</SelectionBox>),
         renderVariantCard('List', <SelectionBox defaultSelectedIds={['support']} selectionColor="#059669" sx={{ display: 'grid', gap: 1, p: 1 }}>{selectionBoxItems.slice(4).map((item) => <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 1.25, borderRadius: 1 }}>{item.label}</Paper>)}</SelectionBox>),
         renderVariantCard('Custom Box', <SelectionBox selectionColor="#db2777" selectionRectSx={{ borderStyle: 'dashed', bgcolor: '#db277733' }} sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, p: 1 }}>{selectionBoxItems.slice(0, 6).map((item) => <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 1, borderRadius: 1 }}>{item.label}</Paper>)}</SelectionBox>)
+      ],
+      PresenceCursors: [
+        renderVariantCard('Canvas', <PresenceCursors users={presenceCursorUsers.slice(0, 2)} sx={{ minHeight: 170, bgcolor: '#f8fafc', borderRadius: 1 }}><Box sx={{ p: 2 }}>Canvas</Box></PresenceCursors>),
+        renderVariantCard('No Names', <PresenceCursors users={presenceCursorUsers} showNames={false} sx={{ minHeight: 170, bgcolor: '#f8fafc', borderRadius: 1 }} />),
+        renderVariantCard('Pixels', <PresenceCursors coordinateMode="pixel" users={[{ id: 'px', name: 'Pixel', x: 80, y: 64, color: '#7c3aed', selection: { x: 42, y: 90, width: 130, height: 46, label: 'Pixel rect' } }]} sx={{ minHeight: 170, bgcolor: '#f8fafc', borderRadius: 1 }} />)
       ],
       ResizableFrame: [
         renderVariantCard('Small', <ResizableFrame initialWidth={180} initialHeight={120}>Small</ResizableFrame>),

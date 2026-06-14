@@ -52,6 +52,7 @@ React and React DOM are peer dependencies.
 - BeforeAfterSlider: comparison viewer with a draggable reveal handle.
 - InfiniteCanvas: pan-and-zoom workspace for draggable items.
 - SelectionBox: drag selection wrapper for grids, lists, and canvases.
+- PresenceCursors: collaborative cursors, selections, names, and idle states.
 - SmartTooltip: rich tooltip for context, media, actions, copy, and pinning.
 - ToastCenter: notification stack with grouped toasts and history drawer.
 - TourGuide: product walkthrough with spotlight mask, branches, progress, and completion.

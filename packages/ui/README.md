@@ -45,6 +45,7 @@ export function Example() {
 - BeforeAfterSlider
 - InfiniteCanvas
 - SelectionBox
+- PresenceCursors
 - SmartTooltip
 - ToastCenter
 - TourGuide

@@ -13,9 +13,6 @@ Multi-layer before/after viewer with opacity sliders.
 DropComposer
 Upload dropzone with previews, reorder, metadata edit, progress.
 
-PresenceCursors
-Collaborative cursors, selections, names, idle states.
-
 CommandTimeline
 Undo/redo history as visual timeline with jump-to-state.
 
