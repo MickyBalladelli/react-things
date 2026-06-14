@@ -37,9 +37,6 @@ Overview minimap for long pages, canvases, dashboards, docs.
 BulkActionBar
 Selection-aware action bar for tables/grids/cards.
 
-LayoutSwitcher
-Animated view switcher: table/cards/kanban/calendar/list.
-
 FieldComposer
 Schema form builder with drag fields, validation preview, generated JSON.
 

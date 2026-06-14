@@ -31,6 +31,7 @@ export function Example() {
 - CodeViewer
 - DataCardGrid
 - DataLens
+- LayoutSwitcher
 - DockBar
 - DockTabs
 - CommandDock

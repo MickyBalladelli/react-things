@@ -45,6 +45,7 @@ import {
   InspectorDrawer,
   InspectorPanel,
   KanbanBoard,
+  LayoutSwitcher,
   MagneticCard,
   MorphMenu,
   NodeCanvas,
@@ -60,7 +61,7 @@ import {
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, LayoutSwitcherItem, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -1362,6 +1363,38 @@ const columns: DataLensColumn<Service>[] = [
 
 export function Example() {
   return <DataLens<Service> title="Service health" rows={rows} columns={columns} defaultView="cards" />
+}`
+      }
+    ],
+    LayoutSwitcher: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { LayoutSwitcher } from '@mickyballadelli/react-things'
+
+const items = [
+  { id: 'brief', title: 'Write brief', status: 'Todo', group: 'Todo', date: new Date(), color: '#dbeafe' },
+  { id: 'design', title: 'Design flow', status: 'Doing', group: 'Doing', date: new Date(), color: '#fef3c7' },
+  { id: 'ship', title: 'Ship demo', status: 'Done', group: 'Done', date: new Date(), color: '#dcfce7' }
+]
+
+export function Example() {
+  return <LayoutSwitcher title="Roadmap" items={items} defaultView="cards" />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { LayoutSwitcher, type LayoutSwitcherItem } from '@mickyballadelli/react-things'
+
+const items: LayoutSwitcherItem[] = [
+  { id: 'brief', title: 'Write brief', status: 'Todo', group: 'Todo', date: new Date(), color: '#dbeafe' },
+  { id: 'design', title: 'Design flow', status: 'Doing', group: 'Doing', date: new Date(), color: '#fef3c7' },
+  { id: 'ship', title: 'Ship demo', status: 'Done', group: 'Done', date: new Date(), color: '#dcfce7' }
+]
+
+export function Example() {
+  return <LayoutSwitcher items={items} views={['table', 'cards', 'kanban', 'calendar', 'list']} />
 }`
       }
     ],
@@ -3284,6 +3317,57 @@ export function Example() {
   },
   {
     ...createBasicDoc(
+      'LayoutSwitcher',
+      'Animated view switcher for table, cards, kanban, calendar, and list layouts.',
+      'LayoutSwitcher lets one collection move between multiple task and data views with a segmented control, animated transitions, grouping, calendar bucketing, and custom item rendering.'
+    ),
+    props: [
+      {
+        name: 'items',
+        type: 'LayoutSwitcherItem[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, title, subtitle, description, status, group, date, color, data }.',
+        description: 'Items rendered across every layout.'
+      },
+      {
+        name: 'views',
+        type: 'LayoutSwitcherView[]',
+        defaultValue: 'table/cards/kanban/calendar/list',
+        possibleValues: 'Any subset of table, cards, kanban, calendar, list.',
+        description: 'Views available in the switcher.'
+      },
+      {
+        name: 'view / defaultView',
+        type: 'LayoutSwitcherView',
+        defaultValue: '- / cards',
+        possibleValues: 'table, cards, kanban, calendar, or list.',
+        description: 'Controlled or initial active view.'
+      },
+      {
+        name: 'columns',
+        type: 'LayoutSwitcherColumn[]',
+        defaultValue: 'generated',
+        possibleValues: 'Array of { id, label, render }.',
+        description: 'Table columns.'
+      },
+      {
+        name: 'groupOrder / calendarDays',
+        type: 'string[] / number',
+        defaultValue: '- / 7',
+        possibleValues: 'Group labels and any day count.',
+        description: 'Kanban group ordering and calendar range.'
+      },
+      {
+        name: 'renderItem',
+        type: '(item, view) => ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Custom item renderer.',
+        description: 'Overrides card rendering in cards, kanban, and calendar views.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
       'KanbanBoard',
       'Fully editable Kanban board with columns, cards, drag and drop, and card editing.',
       'KanbanBoard is a project workflow surface where users can create columns, add cards, drag cards between stacks, reorder vertically, edit details, and delete work items.'
@@ -3701,6 +3785,15 @@ const dataLensColumns: DataLensColumn<DataLensService>[] = [
   { id: 'trend', label: 'Trend', chart: 'sparkline' }
 ]
 
+const layoutSwitcherItems: LayoutSwitcherItem[] = [
+  { id: 'brief', title: 'Write brief', subtitle: 'Frame launch story', status: 'Todo', group: 'Todo', date: new Date(), color: '#dbeafe' },
+  { id: 'design', title: 'Design flow', subtitle: 'Polish key screens', status: 'Doing', group: 'Doing', date: new Date(Date.now() + 86400000), color: '#fef3c7' },
+  { id: 'prototype', title: 'Prototype demo', subtitle: 'Clickable path', status: 'Doing', group: 'Doing', date: new Date(Date.now() + 86400000 * 2), color: '#e0e7ff' },
+  { id: 'review', title: 'Stakeholder review', subtitle: 'Collect notes', status: 'Review', group: 'Review', date: new Date(Date.now() + 86400000 * 3), color: '#fce7f3' },
+  { id: 'ship', title: 'Ship demo', subtitle: 'Publish release', status: 'Done', group: 'Done', date: new Date(Date.now() + 86400000 * 4), color: '#dcfce7' },
+  { id: 'retro', title: 'Retro notes', subtitle: 'Close the loop', status: 'Done', group: 'Done', date: new Date(Date.now() + 86400000 * 5), color: '#ccfbf1' }
+]
+
 const colorStudioColors: ColorStudioColor[] = [
   { id: 'brand', name: 'Brand', value: '#2563eb' },
   { id: 'accent', name: 'Accent', value: '#db2777' },
@@ -4060,7 +4153,7 @@ function getInspectorDrawerValue(sections: InspectorDrawerSection[], fieldId: st
 }
 
 function getComponentGroup(name: string) {
-  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DataLens', 'DockBar', 'TimelineScrubber'].includes(name)) {
+  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DataLens', 'LayoutSwitcher', 'DockBar', 'TimelineScrubber'].includes(name)) {
     return 'Display'
   }
 
@@ -4858,6 +4951,20 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'LayoutSwitcher') {
+      return (
+        <Box sx={{ minHeight: 520, p: 3, bgcolor: '#f8fafc' }}>
+          <LayoutSwitcher
+            title="Launch work"
+            subtitle="Same items, animated through table, cards, kanban, calendar, and list."
+            items={layoutSwitcherItems}
+            groupOrder={['Todo', 'Doing', 'Review', 'Done']}
+            defaultView="cards"
+          />
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'KanbanBoard') {
       return (
         <Box sx={{ minHeight: 520, p: 3, bgcolor: '#f8fafc' }}>
@@ -5428,6 +5535,11 @@ export function ComponentDocs() {
         renderVariantCard('Table', <DataLens<DataLensService> rows={dataLensRows.slice(0, 4)} columns={dataLensColumns} dense />),
         renderVariantCard('Cards', <DataLens<DataLensService> rows={dataLensRows.slice(0, 4)} columns={dataLensColumns.slice(0, 4)} defaultView="cards" />),
         renderVariantCard('Sorted', <DataLens<DataLensService> rows={dataLensRows} columns={dataLensColumns} initialSort={{ columnId: 'requests', direction: 'desc' }} />)
+      ],
+      LayoutSwitcher: [
+        renderVariantCard('Cards', <LayoutSwitcher items={layoutSwitcherItems.slice(0, 4)} defaultView="cards" views={['cards', 'list']} dense />),
+        renderVariantCard('Kanban', <LayoutSwitcher items={layoutSwitcherItems} defaultView="kanban" views={['kanban', 'table']} groupOrder={['Todo', 'Doing', 'Review', 'Done']} dense />),
+        renderVariantCard('Calendar', <LayoutSwitcher items={layoutSwitcherItems} defaultView="calendar" views={['calendar', 'list']} calendarDays={6} dense />)
       ],
       KanbanBoard: [
         renderVariantCard('Compact', <KanbanBoard title="Sprint" columns={kanbanColumns.slice(0, 2)} onChange={(nextColumns) => setKanbanColumns([...nextColumns, ...kanbanColumns.slice(2)])} density="compact" />),
