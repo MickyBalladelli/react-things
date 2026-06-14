@@ -42,6 +42,7 @@ export function Example() {
 - InfiniteCanvas
 - SmartTooltip
 - ToastCenter
+- TourGuide
 - ResizableFrame
 - ResizableDashboard
 - InspectorPanel

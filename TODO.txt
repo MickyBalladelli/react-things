@@ -1,7 +1,6 @@
 Good ideas:
 SpotlightSearch: search box with command results, previews, fuzzy groups, actions.
 FlowBuilder: better NodeCanvas for workflows: ports, typed edges, validation, auto-layout.
-TourGuide: product walkthrough with spotlight mask, steps, branching.
 DockTabs: browser-like draggable tabs with pin, close, reorder, overflow.
 InfiniteCanvas: pan/zoom canvas with minimap, grid, selection box.
 InspectorDrawer: beautiful property editor with sections, live validation, undo.
@@ -17,12 +16,11 @@ TimelineScrubber: slick time scrubber with markers, preview thumbnails.
 
 
 InfiniteCanvas
-TourGuide
 DockTabs
 FocusRing
 
 
-## Current Components (25 total):
+## Current Components (26 total):
 1. BeforeAfterSlider
 2. CodeViewer
 3. ColorPicker
@@ -48,45 +46,39 @@ FocusRing
 23. SpotlightPanel
 24. TimelineScrubber
 25. ToastCenter
+26. TourGuide
 
 ## New Component Suggestions:
 
-### 1. **TourGuide** - Interactive Product Walkthrough
-- Spotlight mask to focus attention
-- Step-by-step guided tours
-- Branching logic based on user actions
-- Progress tracking and completion states
-- Material-UI doesn't have a dedicated tour component
-
-### 2. **DockTabs** - Browser-like Draggable Tabs
+### 1. **DockTabs** - Browser-like Draggable Tabs
 - Draggable tab interface like browser tabs
 - Pin, close, reorder functionality
 - Overflow handling with dropdown
 - Tab preview on hover
 - Material-UI has Tabs but not draggable/browser-like
 
-### 3. **GesturePad** - Trackpad-like Gesture Component
+### 2. **GesturePad** - Trackpad-like Gesture Component
 - Multi-touch gesture recognition
 - Zoom, pan, rotate gestures
 - Customizable gesture thresholds
 - Visual feedback during gestures
 - Perfect for touch interfaces and creative apps
 
-### 4. **KeyboardHintOverlay** - Shortcut Discovery
+### 3. **KeyboardHintOverlay** - Shortcut Discovery
 - Hold key to reveal available shortcuts
 - Contextual hints based on current view
 - Animated overlay with keyboard icons
 - Customizable hotkey detection
 - Material-UI doesn't have built-in keyboard hint systems
 
-### 5. **SelectionBox** - Drag Selection Component
+### 4. **SelectionBox** - Drag Selection Component
 - Drag to select multiple items
 - Works with grids, lists, or canvases
 - Customizable selection visuals
 - Multi-selection with modifier keys
 - Useful for data tables, canvases, file managers
 
-### 6. **FocusRing** - Animated Focus Highlight
+### 5. **FocusRing** - Animated Focus Highlight
 - Animated focus rings for tutorials
 - Validation error highlighting
 - Customizable pulse animations

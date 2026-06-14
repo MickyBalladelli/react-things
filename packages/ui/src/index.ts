@@ -44,6 +44,8 @@ export type { SmartTooltipAction, SmartTooltipProps } from './components/SmartTo
 export { SmartTooltip } from './components/SmartTooltip'
 export type { ToastCenterAction, ToastCenterProps, ToastCenterToast, ToastCenterTone } from './components/ToastCenter'
 export { ToastCenter } from './components/ToastCenter'
+export type { TourGuideBranch, TourGuidePlacement, TourGuideProps, TourGuideStep } from './components/TourGuide'
+export { TourGuide } from './components/TourGuide'
 export type { DataCardGridMetric, DataCardGridProps, DataCardGridStatus } from './components/DataCardGrid'
 export { DataCardGrid } from './components/DataCardGrid'
 export type { KanbanBoardProps, KanbanCard, KanbanColumn } from './components/KanbanBoard'

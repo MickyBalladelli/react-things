@@ -40,9 +40,10 @@ import {
   SplitPane,
   SpotlightPanel,
   TimelineScrubber,
-  ToastCenter
+  ToastCenter,
+  TourGuide
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, DataCardGridMetric, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, DataCardGridMetric, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -666,6 +667,60 @@ export function Example() {
         Add toast
       </Button>
       <ToastCenter toasts={toasts} onToastsChange={setToasts} />
+    </>
+  )
+}`
+      }
+    ],
+    TourGuide: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import Button from '@mui/material/Button'
+import { TourGuide } from '@mickyballadelli/react-things'
+
+const steps = [
+  { id: 'start', title: 'Start here', content: 'This is the first action.', target: '#tour-start' },
+  { id: 'branch', title: 'Choose path', content: 'Branch to the next useful step.', target: '#tour-branch', branches: [{ label: 'Settings', stepId: 'settings' }] },
+  { id: 'settings', title: 'Settings', content: 'Tune the experience here.', target: '#tour-settings' }
+]
+
+export function Example() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Button id="tour-start" onClick={() => setOpen(true)}>Start tour</Button>
+      <Button id="tour-branch">Branch target</Button>
+      <Button id="tour-settings">Settings</Button>
+      <TourGuide steps={steps} open={open} onOpenChange={setOpen} onComplete={() => setOpen(false)} />
+    </>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import Button from '@mui/material/Button'
+import { TourGuide, type TourGuideStep } from '@mickyballadelli/react-things'
+
+const steps: TourGuideStep[] = [
+  { id: 'start', title: 'Start here', content: 'This is the first action.', target: '#tour-start' },
+  { id: 'branch', title: 'Choose path', content: 'Branch to the next useful step.', target: '#tour-branch', branches: [{ label: 'Settings', stepId: 'settings' }] },
+  { id: 'settings', title: 'Settings', content: 'Tune the experience here.', target: '#tour-settings' }
+]
+
+export function Example() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Button id="tour-start" onClick={() => setOpen(true)}>Start tour</Button>
+      <Button id="tour-branch">Branch target</Button>
+      <Button id="tour-settings">Settings</Button>
+      <TourGuide steps={steps} open={open} onOpenChange={setOpen} onComplete={() => setOpen(false)} />
     </>
   )
 }`
@@ -2186,6 +2241,64 @@ export function Example() {
   },
   {
     ...createBasicDoc(
+      'TourGuide',
+      'Interactive walkthrough with spotlight mask, branching steps, and progress.',
+      'TourGuide walks users through an interface by highlighting targets, showing step cards, supporting branching choices, tracking progress, and reporting completion.'
+    ),
+    props: [
+      {
+        name: 'steps',
+        type: 'TourGuideStep[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, title, content, target, placement, branches, nextStepId }.',
+        description: 'Ordered walkthrough steps.'
+      },
+      {
+        name: 'open / defaultOpen',
+        type: 'boolean',
+        defaultValue: '- / false',
+        possibleValues: 'true or false.',
+        description: 'Controlled or uncontrolled tour visibility.'
+      },
+      {
+        name: 'stepId / initialStepId',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any step id.',
+        description: 'Controlled or initial active step.'
+      },
+      {
+        name: 'spotlightPadding / spotlightRadius',
+        type: 'number',
+        defaultValue: '10 / 12',
+        possibleValues: 'Any positive pixel values.',
+        description: 'Spotlight size and corner shape around target.'
+      },
+      {
+        name: 'scrollIntoView',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Scrolls target into view when the step changes.'
+      },
+      {
+        name: 'completed',
+        type: 'boolean',
+        defaultValue: 'false',
+        possibleValues: 'true or false.',
+        description: 'Hides the tour after external completion state is set.'
+      },
+      {
+        name: 'onStepChange / onComplete / onSkip',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks for progress, completion, and skip.',
+        description: 'Lifecycle callbacks for tour state.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
       'DataCardGrid',
       'Metric dashboard cards with deltas, sparklines, progress, and status color.',
       'DataCardGrid turns arrays of business, product, or system metrics into scan-friendly data cards for dashboards and reports.'
@@ -2595,6 +2708,41 @@ const defaultToastCenterToasts: ToastCenterToast[] = [
   }
 ]
 
+const tourGuideSteps: TourGuideStep[] = [
+  {
+    id: 'start',
+    title: 'Start the work',
+    content: 'This button begins the main workflow. The spotlight follows its target.',
+    target: '#tour-guide-start',
+    placement: 'bottom'
+  },
+  {
+    id: 'branch',
+    title: 'Pick a path',
+    content: 'Branches can send users to different steps based on what they need.',
+    target: '#tour-guide-branch',
+    placement: 'right',
+    branches: [
+      { label: 'Settings', stepId: 'settings' },
+      { label: 'Report', stepId: 'report' }
+    ]
+  },
+  {
+    id: 'settings',
+    title: 'Tune settings',
+    content: 'This branch highlights controls for configuration.',
+    target: '#tour-guide-settings',
+    placement: 'top'
+  },
+  {
+    id: 'report',
+    title: 'Review report',
+    content: 'This branch points to the output users should inspect.',
+    target: '#tour-guide-report',
+    placement: 'left'
+  }
+]
+
 const dashboardWidgets: ResizableDashboardWidget[] = [
   {
     id: 'revenue',
@@ -2705,7 +2853,7 @@ function getComponentGroup(name: string) {
     return 'Layout'
   }
 
-  if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter'].includes(name)) {
+  if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
     return 'Input'
   }
 
@@ -2885,6 +3033,8 @@ export function ComponentDocs() {
   const [infiniteCanvasSelectedId, setInfiniteCanvasSelectedId] = useState<string | null>('idea')
   const [kanbanColumns, setKanbanColumns] = useState<KanbanColumn[]>(defaultKanbanColumns)
   const [toastCenterToasts, setToastCenterToasts] = useState<ToastCenterToast[]>(defaultToastCenterToasts)
+  const [tourGuideOpen, setTourGuideOpen] = useState(false)
+  const [tourGuideDone, setTourGuideDone] = useState(false)
 
   const selectedSamples = selectedComponent.name === 'GlassBox'
     ? [
@@ -3194,6 +3344,40 @@ export function ComponentDocs() {
             toasts={toastCenterToasts}
             onToastsChange={setToastCenterToasts}
             sx={{ position: 'absolute', right: 16, bottom: 16 }}
+          />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'TourGuide') {
+      return (
+        <Box sx={{ position: 'relative', minHeight: 520, p: 3, bgcolor: '#f8fafc', overflow: 'hidden' }}>
+          <Stack spacing={2} sx={{ maxWidth: 680 }}>
+            <Typography variant="h5" fontWeight={900}>TourGuide</Typography>
+            <Typography color="text.secondary">
+              Start a walkthrough, branch to a path, and finish to mark completion.
+            </Typography>
+            <Stack direction="row" spacing={1} flexWrap="wrap">
+              <Button id="tour-guide-start" variant="contained" onClick={() => {
+                setTourGuideDone(false)
+                setTourGuideOpen(true)
+              }}>Start tour</Button>
+              <Button id="tour-guide-branch" variant="outlined">Branch choice</Button>
+              <Button id="tour-guide-settings" variant="outlined">Settings</Button>
+              <Button id="tour-guide-report" variant="outlined">Report</Button>
+              <Chip label={tourGuideDone ? 'complete' : 'not complete'} color={tourGuideDone ? 'success' : 'default'} />
+            </Stack>
+          </Stack>
+          <TourGuide
+            steps={tourGuideSteps}
+            open={tourGuideOpen}
+            completed={tourGuideDone}
+            onOpenChange={setTourGuideOpen}
+            onComplete={() => {
+              setTourGuideDone(true)
+              setTourGuideOpen(false)
+            }}
+            onSkip={() => setTourGuideOpen(false)}
           />
         </Box>
       )
@@ -3567,6 +3751,11 @@ export function ComponentDocs() {
         renderVariantCard('Grouped', <Box sx={{ position: 'relative', minHeight: 280, overflow: 'hidden' }}><ToastCenter defaultToasts={defaultToastCenterToasts} sx={{ position: 'absolute', right: 12, bottom: 12 }} /></Box>),
         renderVariantCard('Ungrouped', <Box sx={{ position: 'relative', minHeight: 280, overflow: 'hidden' }}><ToastCenter defaultToasts={defaultToastCenterToasts} groupToasts={false} sx={{ position: 'absolute', right: 12, bottom: 12 }} /></Box>),
         renderVariantCard('Limited', <Box sx={{ position: 'relative', minHeight: 260, overflow: 'hidden' }}><ToastCenter defaultToasts={defaultToastCenterToasts} maxVisible={2} sx={{ position: 'absolute', right: 12, bottom: 12 }} /></Box>)
+      ],
+      TourGuide: [
+        renderVariantCard('Closed', <Box sx={{ minHeight: 170, display: 'grid', placeItems: 'center' }}><Button variant="contained">Tour target</Button></Box>),
+        renderVariantCard('Branch Steps', <Box sx={{ minHeight: 170, display: 'grid', placeItems: 'center' }}><Chip label={`${tourGuideSteps.length} steps with branches`} /></Box>),
+        renderVariantCard('Completed', <Box sx={{ minHeight: 170, display: 'grid', placeItems: 'center' }}><TourGuide defaultOpen completed steps={tourGuideSteps} /><Chip label="Tour complete" color="success" /></Box>)
       ],
       MagneticCard: [
         renderVariantCard('Soft', <MagneticCard strength={10} tilt={4} sx={{ p: 2, border: 1, borderColor: 'divider', borderRadius: 1 }}>Soft pull</MagneticCard>),

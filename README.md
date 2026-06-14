@@ -49,6 +49,7 @@ React and React DOM are peer dependencies.
 - InfiniteCanvas: pan-and-zoom workspace for draggable items.
 - SmartTooltip: rich tooltip for context, media, actions, copy, and pinning.
 - ToastCenter: notification stack with grouped toasts and history drawer.
+- TourGuide: product walkthrough with spotlight mask, branches, progress, and completion.
 - ResizableFrame: container resized from a corner handle.
 - ResizableDashboard: widget dashboard with draggable, resizable, persistent grid layouts.
 - InspectorPanel: compact settings form for editing structured props.
