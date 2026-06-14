@@ -32,6 +32,7 @@ export function Example() {
 - DataCardGrid
 - DockBar
 - DockTabs
+- CommandDock
 - CommandPalette
 - SplitPane
 - FloatingToolbar

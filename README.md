@@ -39,6 +39,7 @@ React and React DOM are peer dependencies.
 - DataCardGrid: metric cards with deltas, sparklines, progress, and status color.
 - DockBar: icon launcher strip with animated magnify hover.
 - DockTabs: browser-like tabs with drag reorder, left-side docking, overflow, and previews.
+- CommandDock: persistent left command navigation with icons, tree branches, search, collapse, and saved state.
 - CommandPalette: searchable list or tree for commands, docs, and navigation.
 - SplitPane: two-panel layout with a draggable divider.
 - FloatingToolbar: contextual tool strip anchored to text selection or an element.

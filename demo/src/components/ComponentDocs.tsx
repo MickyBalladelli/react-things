@@ -16,11 +16,20 @@ import {
   Tabs,
   Typography
 } from '@mui/material'
+import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined'
+import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined'
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined'
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined'
+import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined'
+import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined'
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import {
   BeforeAfterSlider,
   CodeViewer,
   ColorPicker,
   ColorStudio,
+  CommandDock,
   CommandPalette,
   DataCardGrid,
   DockBar,
@@ -45,7 +54,7 @@ import {
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, DataCardGridMetric, DockTab, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DockTab, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -234,6 +243,81 @@ export function Example() {
       activeId={activeId}
       onTabsChange={setTabs}
       onActiveChange={(tab) => setActiveId(tab.id)}
+    />
+  )
+}`
+      }
+    ],
+    CommandDock: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined'
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined'
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
+import { CommandDock } from '@mickyballadelli/react-things'
+
+const items = [
+  { id: 'inbox', label: 'Inbox', group: 'Workspace', icon: <InboxOutlinedIcon /> },
+  {
+    id: 'projects',
+    label: 'Projects',
+    group: 'Workspace',
+    icon: <FolderOutlinedIcon />,
+    children: [
+      { id: 'roadmap', label: 'Roadmap', icon: <FolderOutlinedIcon /> },
+      { id: 'launch', label: 'Launch', icon: <FolderOutlinedIcon /> }
+    ]
+  },
+  { id: 'settings', label: 'Settings', group: 'System', icon: <SettingsOutlinedIcon /> }
+]
+
+export function Example() {
+  const [selectedId, setSelectedId] = useState('inbox')
+
+  return (
+    <CommandDock
+      items={items}
+      selectedId={selectedId}
+      onSelect={(item) => setSelectedId(item.id)}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined'
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined'
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
+import { CommandDock, type CommandDockItem } from '@mickyballadelli/react-things'
+
+const items: CommandDockItem[] = [
+  { id: 'inbox', label: 'Inbox', group: 'Workspace', icon: <InboxOutlinedIcon /> },
+  {
+    id: 'projects',
+    label: 'Projects',
+    group: 'Workspace',
+    icon: <FolderOutlinedIcon />,
+    children: [
+      { id: 'roadmap', label: 'Roadmap', icon: <FolderOutlinedIcon /> },
+      { id: 'launch', label: 'Launch', icon: <FolderOutlinedIcon /> }
+    ]
+  },
+  { id: 'settings', label: 'Settings', group: 'System', icon: <SettingsOutlinedIcon /> }
+]
+
+export function Example() {
+  const [selectedId, setSelectedId] = useState('inbox')
+
+  return (
+    <CommandDock
+      items={items}
+      selectedId={selectedId}
+      persistKey="app-command-dock"
+      onSelect={(item) => setSelectedId(item.id)}
     />
   )
 }`
@@ -1384,6 +1468,71 @@ export function Example() {
         defaultValue: '-',
         possibleValues: 'Callbacks for tab activity.',
         description: 'Called when users select or move tabs between docks.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'CommandDock',
+      'Persistent left command navigation like Linear or Raycast.',
+      'CommandDock is a grouped command sidebar with search, tree branches, collapse, active item state, badges, optional footer, and persisted collapse state.'
+    ),
+    props: [
+      {
+        name: 'items',
+        type: 'CommandDockItem[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, description, group, icon, badge, keywords, children, onSelect }.',
+        description: 'Navigation commands shown in the dock.'
+      },
+      {
+        name: 'selectedId',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any item id.',
+        description: 'Marks the active command.'
+      },
+      {
+        name: 'title / logo / footer',
+        type: 'ReactNode',
+        defaultValue: 'CommandDock / C / -',
+        possibleValues: 'Any React renderable.',
+        description: 'Header title, app icon, and optional footer content.'
+      },
+      {
+        name: 'expandedIds / defaultExpandedIds',
+        type: 'string[]',
+        defaultValue: '- / all parents',
+        possibleValues: 'Any item ids with children.',
+        description: 'Controls open tree branches.'
+      },
+      {
+        name: 'collapsed / defaultCollapsed',
+        type: 'boolean',
+        defaultValue: '- / false',
+        possibleValues: 'true or false.',
+        description: 'Controlled or initial collapsed state.'
+      },
+      {
+        name: 'width / collapsedWidth',
+        type: 'number',
+        defaultValue: '280 / 64',
+        possibleValues: 'Any positive pixel widths.',
+        description: 'Expanded and collapsed sidebar width.'
+      },
+      {
+        name: 'persistKey',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any localStorage key.',
+        description: 'Saves collapsed state.'
+      },
+      {
+        name: 'onSelect / onCollapsedChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks for selection and collapse.',
+        description: 'Called when users select commands or toggle the dock.'
       }
     ]
   },
@@ -2895,6 +3044,51 @@ const defaultDockTabs: DockTab[] = [
   { id: 'profile', label: 'Profile', icon: 'U', preview: 'User profile' }
 ]
 
+const commandDockItems: CommandDockItem[] = [
+  { id: 'inbox', label: 'Inbox', description: 'Messages and updates', group: 'Workspace', icon: <InboxOutlinedIcon fontSize="small" />, badge: <Chip label="4" size="small" /> },
+  { id: 'search', label: 'Search', description: 'Find anything', group: 'Workspace', icon: <SearchOutlinedIcon fontSize="small" /> },
+  {
+    id: 'projects',
+    label: 'Projects',
+    description: 'Active work',
+    group: 'Workspace',
+    icon: <FolderOutlinedIcon fontSize="small" />,
+    children: [
+      { id: 'roadmap', label: 'Roadmap', description: 'Milestones and bets', icon: <AccountTreeOutlinedIcon fontSize="small" /> },
+      { id: 'launch', label: 'Launch', description: 'Release checklist', icon: <RocketLaunchOutlinedIcon fontSize="small" /> }
+    ]
+  },
+  {
+    id: 'automations',
+    label: 'Automations',
+    description: 'Rules and triggers',
+    group: 'Tools',
+    icon: <BoltOutlinedIcon fontSize="small" />,
+    children: [
+      { id: 'rules', label: 'Rules', description: 'Routing logic', icon: <BoltOutlinedIcon fontSize="small" /> },
+      { id: 'webhooks', label: 'Webhooks', description: 'External events', icon: <AccountTreeOutlinedIcon fontSize="small" /> }
+    ]
+  },
+  { id: 'tokens', label: 'Tokens', description: 'Design system values', group: 'Tools', icon: <PaletteOutlinedIcon fontSize="small" /> },
+  { id: 'settings', label: 'Settings', description: 'Account and app prefs', group: 'System', icon: <SettingsOutlinedIcon fontSize="small" /> }
+]
+
+function findCommandDockItem(items: CommandDockItem[], itemId: string): CommandDockItem | undefined {
+  for (const item of items) {
+    if (item.id === itemId) {
+      return item
+    }
+
+    const child = findCommandDockItem(item.children ?? [], itemId)
+
+    if (child) {
+      return child
+    }
+  }
+
+  return undefined
+}
+
 const defaultToastCenterToasts: ToastCenterToast[] = [
   {
     id: 'deploy-live',
@@ -3068,7 +3262,7 @@ function getComponentGroup(name: string) {
     return 'Input'
   }
 
-  if (['DockTabs', 'MorphMenu'].includes(name)) {
+  if (['CommandDock', 'DockTabs', 'MorphMenu'].includes(name)) {
     return 'Navigation'
   }
 
@@ -3222,6 +3416,7 @@ export function ComponentDocs() {
   const [focusRingConfig, setFocusRingConfig] = useState<FocusRingConfig>({ pulseSize: 34 })
   const [sampleCode, setSampleCode] = useState<Record<string, string>>(createInitialSampleCode(defaultGlassBoxConfig, { pulseSize: 34 }))
   const [selectedSampleLabel, setSelectedSampleLabel] = useState(sampleTabs[0])
+  const [commandDockSelectedId, setCommandDockSelectedId] = useState('inbox')
   const [commandPaletteSelectedId, setCommandPaletteSelectedId] = useState('components')
   const [pickerColor, setPickerColor] = useState('#2563eb')
   const [pickerAlpha, setPickerAlpha] = useState(0.8)
@@ -3916,6 +4111,48 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'CommandDock') {
+      const activeItem = findCommandDockItem(commandDockItems, commandDockSelectedId) ?? commandDockItems[0]
+
+      return (
+        <Box sx={{ minHeight: 420, display: 'flex', bgcolor: '#f8fafc' }}>
+          <CommandDock
+            items={commandDockItems}
+            selectedId={commandDockSelectedId}
+            title="Launch"
+            persistKey="react-things-command-dock-preview"
+            onSelect={(item) => setCommandDockSelectedId(item.id)}
+            footer={(
+              <Typography variant="caption" color="text.secondary">
+                Persistent command rail
+              </Typography>
+            )}
+          />
+          <Box sx={{ flex: 1, minWidth: 0, p: 3 }}>
+            <Paper variant="outlined" sx={{ p: 3, borderRadius: 1, minHeight: 300 }}>
+              <Typography variant="overline" color="text.secondary" fontWeight={900}>
+                {activeItem?.group}
+              </Typography>
+              <Typography variant="h4" fontWeight={950}>
+                {activeItem?.label}
+              </Typography>
+              <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 520 }}>
+                {activeItem?.description}. Use the dock to jump between command areas. Collapse state saves in the browser.
+              </Typography>
+              <Box sx={{ mt: 3, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 1.5 }}>
+                {['Recent', 'Pinned', 'Shared'].map((label) => (
+                  <Paper key={label} variant="outlined" sx={{ p: 2, borderRadius: 1 }}>
+                    <Typography fontWeight={850}>{label}</Typography>
+                    <Typography variant="body2" color="text.secondary">Workspace item</Typography>
+                  </Paper>
+                ))}
+              </Box>
+            </Paper>
+          </Box>
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'DockTabs') {
       const activeTab = dockTabs.find((tab) => tab.id === activeDockTabId) ?? dockTabs[0]
 
@@ -4060,6 +4297,11 @@ export function ComponentDocs() {
         renderVariantCard('Left Dock', <DockTabs tabs={defaultDockTabs.map((tab, index) => index < 2 ? { ...tab, dock: 'left' } : tab)} activeId="home" />),
         renderVariantCard('Drag Only', <DockTabs tabs={defaultDockTabs.slice(0, 5)} activeId="home" />),
         renderVariantCard('Static', <DockTabs tabs={defaultDockTabs.slice(1, 5)} allowDrag={false} maxVisible={3} />)
+      ],
+      CommandDock: [
+        renderVariantCard('Expanded', <Box sx={{ height: 300, display: 'flex' }}><CommandDock items={commandDockItems} selectedId={commandDockSelectedId} onSelect={(item) => setCommandDockSelectedId(item.id)} /></Box>),
+        renderVariantCard('Collapsed', <Box sx={{ height: 300, display: 'flex' }}><CommandDock items={commandDockItems} selectedId={commandDockSelectedId} defaultCollapsed onSelect={(item) => setCommandDockSelectedId(item.id)} /></Box>),
+        renderVariantCard('Narrow', <Box sx={{ height: 300, display: 'flex' }}><CommandDock items={commandDockItems.slice(0, 4)} selectedId="projects" width={220} title="Ops" /></Box>)
       ],
       CommandPalette: [
         renderVariantCard('List', <CommandPalette items={commandItems} selectedId={commandPaletteSelectedId} onSelect={(item) => setCommandPaletteSelectedId(item.id)} sx={{ minHeight: 220 }} />),
