@@ -18,6 +18,8 @@ export type { CommandDockItem, CommandDockProps } from './components/CommandDock
 export { CommandDock } from './components/CommandDock'
 export type { CommandPaletteDescriptionDisplay, CommandPaletteItem, CommandPaletteProps, CommandPaletteVariant } from './components/CommandPalette'
 export { CommandPalette } from './components/CommandPalette'
+export type { CommandTimelineChangeReason, CommandTimelineEntry, CommandTimelineProps, CommandTimelineStatus } from './components/CommandTimeline'
+export { CommandTimeline } from './components/CommandTimeline'
 export type { SpotlightSearchAction, SpotlightSearchItem, SpotlightSearchProps } from './components/SpotlightSearch'
 export { SpotlightSearch } from './components/SpotlightSearch'
 export type { SmartBreadcrumbAction, SmartBreadcrumbItem, SmartBreadcrumbsProps } from './components/SmartBreadcrumbs'

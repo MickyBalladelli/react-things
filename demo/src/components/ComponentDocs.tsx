@@ -32,6 +32,7 @@ import {
   ColorStudio,
   CommandDock,
   CommandPalette,
+  CommandTimeline,
   DataCardGrid,
   DataLens,
   DensityController,
@@ -2372,6 +2373,79 @@ export function Example() {
     ]
   },
   {
+    name: 'CommandTimeline',
+    summary: 'Undo and redo history as a visual timeline with jump-to-state.',
+    description: 'CommandTimeline shows past, current, and future command states so users can undo, redo, or jump directly to any saved point in history.',
+    props: [
+      {
+        name: 'entries',
+        type: 'CommandTimelineEntry[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, description, timestamp, actor, group, icon, color, data }.',
+        description: 'History states shown in the timeline.'
+      },
+      {
+        name: 'currentId / defaultCurrentId',
+        type: 'string',
+        defaultValue: 'last entry',
+        possibleValues: 'Any entry id.',
+        description: 'Controlled or initial current state.'
+      },
+      {
+        name: 'orientation',
+        type: '"vertical" | "horizontal"',
+        defaultValue: '"vertical"',
+        possibleValues: 'vertical or horizontal.',
+        description: 'Timeline layout direction.'
+      },
+      {
+        name: 'showControls / showMetadata',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Shows undo/redo controls and actor/time metadata.'
+      },
+      {
+        name: 'onChange',
+        type: '(entry, reason) => void',
+        defaultValue: '-',
+        possibleValues: 'Reason is undo, redo, jump, or reset.',
+        description: 'Called when the current state changes.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { CommandTimeline } from '@mickyballadelli/react-things'
+
+const entries = [
+  { id: 'start', label: 'Created board' },
+  { id: 'rename', label: 'Renamed column' },
+  { id: 'move', label: 'Moved card' }
+]
+
+export function Example() {
+  return <CommandTimeline entries={entries} defaultCurrentId="rename" />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { CommandTimeline, type CommandTimelineEntry } from '@mickyballadelli/react-things'
+
+const entries: CommandTimelineEntry[] = [
+  { id: 'one', label: 'Import file', group: 'Setup' },
+  { id: 'two', label: 'Map columns', group: 'Setup' }
+]
+
+export function Example() {
+  return <CommandTimeline entries={entries} orientation="horizontal" />
+}`
+      }
+    ]
+  },
+  {
     ...createBasicDoc(
       'SpotlightSearch',
       'Search box with grouped results, previews, fuzzy matching, and inline actions.',
@@ -4640,6 +4714,54 @@ const entityPickerEntities = [
   }
 ]
 
+const commandTimelineEntries = [
+  {
+    id: 'created',
+    label: 'Created workspace',
+    description: 'Started from the default launch template.',
+    group: 'Setup',
+    actor: 'Micky',
+    timestamp: Date.now() - 1000 * 60 * 38,
+    color: '#2563eb'
+  },
+  {
+    id: 'imported',
+    label: 'Imported assets',
+    description: 'Added hero image, release notes, and design tokens.',
+    group: 'Setup',
+    actor: 'Ada',
+    timestamp: Date.now() - 1000 * 60 * 32,
+    color: '#059669'
+  },
+  {
+    id: 'assigned',
+    label: 'Assigned owners',
+    description: 'Mapped owners to launch checklist sections.',
+    group: 'Planning',
+    actor: 'Micky',
+    timestamp: Date.now() - 1000 * 60 * 20,
+    color: '#7c3aed'
+  },
+  {
+    id: 'moved',
+    label: 'Moved launch card',
+    description: 'Card moved from Review to Ready.',
+    group: 'Planning',
+    actor: 'Ada',
+    timestamp: Date.now() - 1000 * 60 * 12,
+    color: '#f59e0b'
+  },
+  {
+    id: 'published',
+    label: 'Published draft',
+    description: 'Shared current draft with stakeholders.',
+    group: 'Release',
+    actor: 'Micky',
+    timestamp: Date.now() - 1000 * 60 * 4,
+    color: '#db2777'
+  }
+]
+
 const dataCardGridMetrics: DataCardGridMetric[] = [
   {
     id: 'revenue',
@@ -5219,7 +5341,7 @@ function getComponentGroup(name: string) {
     return 'Input'
   }
 
-  if (['CommandPalette', 'SpotlightSearch', 'FloatingToolbar', 'FileDropZone', 'DropComposer', 'EntityPicker', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
+  if (['CommandPalette', 'CommandTimeline', 'SpotlightSearch', 'FloatingToolbar', 'FileDropZone', 'DropComposer', 'EntityPicker', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
     return 'Input'
   }
 
@@ -6293,6 +6415,21 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'CommandTimeline') {
+      return (
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+          <Box sx={{ maxWidth: 820, mx: 'auto' }}>
+            <CommandTimeline
+              title="Editor history"
+              subtitle="Undo, redo, or jump straight to a previous command state."
+              entries={commandTimelineEntries}
+              defaultCurrentId="moved"
+            />
+          </Box>
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'SpotlightSearch') {
       return (
         <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
@@ -6758,6 +6895,11 @@ export function ComponentDocs() {
         renderVariantCard('List', <CommandPalette items={commandItems} selectedId={commandPaletteSelectedId} onSelect={(item) => setCommandPaletteSelectedId(item.id)} sx={{ minHeight: 220 }} />),
         renderVariantCard('Dense List', <CommandPalette dense items={commandItems} selectedId={commandPaletteSelectedId} onSelect={(item) => setCommandPaletteSelectedId(item.id)} sx={{ minHeight: 220 }} />),
         renderVariantCard('Tree', <CommandPalette variant="tree" items={commandItems} selectedId={commandPaletteSelectedId} defaultExpandedGroups={['Docs', 'Components']} onSelect={(item) => setCommandPaletteSelectedId(item.id)} sx={{ minHeight: 220 }} />)
+      ],
+      CommandTimeline: [
+        renderVariantCard('Vertical', <CommandTimeline entries={commandTimelineEntries.slice(0, 4)} defaultCurrentId="assigned" />),
+        renderVariantCard('Horizontal', <CommandTimeline entries={commandTimelineEntries.slice(0, 4)} defaultCurrentId="moved" orientation="horizontal" />),
+        renderVariantCard('No Controls', <CommandTimeline entries={commandTimelineEntries.slice(0, 3)} showControls={false} showMetadata={false} />)
       ],
       SpotlightSearch: [
         renderVariantCard('Grouped', <SpotlightSearch items={spotlightSearchItems} maxResults={4} sx={{ minHeight: 260 }} />),
