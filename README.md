@@ -43,6 +43,7 @@ React and React DOM are peer dependencies.
 - DockTabs: browser-like tabs with drag reorder, left-side docking, overflow, and previews.
 - CommandDock: persistent left command navigation with icons, tree branches, search, collapse, and saved state.
 - CommandPalette: searchable list or tree for commands, docs, and navigation.
+- SpotlightSearch: grouped fuzzy search with previews and inline actions.
 - SplitPane: two-panel layout with a draggable divider.
 - FloatingToolbar: contextual tool strip anchored to text selection or an element.
 - MagneticCard: cursor-reactive card with 3D tilt, lift, and glare.

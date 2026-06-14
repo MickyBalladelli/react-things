@@ -36,6 +36,7 @@ export function Example() {
 - DockTabs
 - CommandDock
 - CommandPalette
+- SpotlightSearch
 - SplitPane
 - FloatingToolbar
 - MagneticCard

@@ -56,13 +56,14 @@ import {
   SelectionBox,
   SmartTooltip,
   SplitPane,
+  SpotlightSearch,
   StatusRail,
   SpotlightPanel,
   TimelineScrubber,
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { BulkActionBarAction, ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, LayoutSwitcherItem, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { BulkActionBarAction, ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, LayoutSwitcherItem, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, SpotlightSearchItem, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -2109,6 +2110,89 @@ export function Example() {
       onSelect={(item) => setSelectedId(item.id)}
     />
   )
+}`
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'SpotlightSearch',
+      'Search box with grouped results, previews, fuzzy matching, and inline actions.',
+      'SpotlightSearch is a command-search surface with fuzzy scoring, grouped results, keyboard navigation, a preview pane, and inline item actions for fast navigation or operations.'
+    ),
+    props: [
+      {
+        name: 'items',
+        type: 'SpotlightSearchItem[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, description, group, icon, keywords, preview, actions, data }.',
+        description: 'Searchable results.'
+      },
+      {
+        name: 'selectedId',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any item id.',
+        description: 'Controlled active result.'
+      },
+      {
+        name: 'placeholder / emptyText',
+        type: 'ReactNode',
+        defaultValue: 'Search anything / No results',
+        possibleValues: 'Any text or renderable empty state.',
+        description: 'Search input placeholder and empty state.'
+      },
+      {
+        name: 'maxResults',
+        type: 'number',
+        defaultValue: '8',
+        possibleValues: 'Any positive result count.',
+        description: 'Limits shown results.'
+      },
+      {
+        name: 'fuzzy',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Enables fuzzy character matching.'
+      },
+      {
+        name: 'onSelect / onQueryChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks receiving selected item or query.',
+        description: 'Reports selection and query changes.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { SpotlightSearch } from '@mickyballadelli/react-things'
+
+const items = [
+  { id: 'dashboard', label: 'Dashboard', group: 'Navigation', description: 'Open team dashboard', keywords: ['home', 'metrics'] },
+  { id: 'deploy', label: 'Deploy production', group: 'Actions', description: 'Ship latest build', keywords: ['release'] },
+  { id: 'docs', label: 'Docs', group: 'Resources', description: 'Read component docs' }
+]
+
+export function Example() {
+  return <SpotlightSearch items={items} placeholder="Search commands" />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { SpotlightSearch, type SpotlightSearchItem } from '@mickyballadelli/react-things'
+
+const items: SpotlightSearchItem[] = [
+  { id: 'dashboard', label: 'Dashboard', group: 'Navigation', description: 'Open team dashboard', keywords: ['home', 'metrics'] },
+  { id: 'deploy', label: 'Deploy production', group: 'Actions', description: 'Ship latest build', actions: [{ id: 'run', label: 'Run' }] },
+  { id: 'docs', label: 'Docs', group: 'Resources', description: 'Read component docs' }
+]
+
+export function Example() {
+  return <SpotlightSearch items={items} maxResults={6} />
 }`
       }
     ]
@@ -4223,6 +4307,44 @@ const statusRailGroups: StatusRailGroup[] = [
   { id: 'deploys', label: 'Deploys', status: 'maintenance', uptime: 99.9, latency: 188, incidents: [{ id: 'window', title: 'Maintenance window', message: 'Deploy lock active', severity: 'maintenance' }] }
 ]
 
+const spotlightSearchItems: SpotlightSearchItem[] = [
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    description: 'Open live product metrics',
+    group: 'Navigation',
+    keywords: ['home', 'metrics', 'overview'],
+    preview: <DataCardGrid metrics={dataCardGridMetrics.slice(0, 3)} columns={3} density="compact" />,
+    actions: [{ id: 'open', label: 'Open' }, { id: 'pin', label: 'Pin' }]
+  },
+  {
+    id: 'deploy',
+    label: 'Deploy production',
+    description: 'Release the latest build',
+    group: 'Actions',
+    keywords: ['ship', 'release'],
+    preview: <StatusRail groups={statusRailGroups.slice(0, 3)} title="Deploy health" compact />,
+    actions: [{ id: 'run', label: 'Run deploy' }, { id: 'dry', label: 'Dry run' }]
+  },
+  {
+    id: 'workflow',
+    label: 'Workflow builder',
+    description: 'Edit automation graph',
+    group: 'Components',
+    keywords: ['flow', 'automation'],
+    preview: <FlowBuilder nodes={defaultFlowBuilderNodes.slice(0, 3)} connections={defaultFlowBuilderConnections.slice(0, 2)} sx={{ minHeight: 220 }} />
+  },
+  {
+    id: 'docs',
+    label: 'Docs',
+    description: 'Read component reference',
+    group: 'Resources',
+    keywords: ['help', 'guide'],
+    preview: <Typography color="text.secondary">Jump into API docs, examples, and props.</Typography>,
+    actions: [{ id: 'copy', label: 'Copy link' }]
+  }
+]
+
 const defaultInspectorDrawerSections: InspectorDrawerSection[] = [
   {
     id: 'content',
@@ -4287,7 +4409,7 @@ function getComponentGroup(name: string) {
     return 'Input'
   }
 
-  if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
+  if (['CommandPalette', 'SpotlightSearch', 'FloatingToolbar', 'FileDropZone', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
     return 'Input'
   }
 
@@ -5331,6 +5453,19 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'SpotlightSearch') {
+      return (
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+          <SpotlightSearch
+            items={spotlightSearchItems}
+            placeholder="Search commands, components, docs"
+            previewTitle="Live preview"
+            sx={{ maxWidth: 920, mx: 'auto' }}
+          />
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'DockBar') {
       const dockItems = [
         { id: 'finder', label: 'Finder', icon: '🗂️' },
@@ -5554,6 +5689,11 @@ export function ComponentDocs() {
         renderVariantCard('List', <CommandPalette items={commandItems} selectedId={commandPaletteSelectedId} onSelect={(item) => setCommandPaletteSelectedId(item.id)} sx={{ minHeight: 220 }} />),
         renderVariantCard('Dense List', <CommandPalette dense items={commandItems} selectedId={commandPaletteSelectedId} onSelect={(item) => setCommandPaletteSelectedId(item.id)} sx={{ minHeight: 220 }} />),
         renderVariantCard('Tree', <CommandPalette variant="tree" items={commandItems} selectedId={commandPaletteSelectedId} defaultExpandedGroups={['Docs', 'Components']} onSelect={(item) => setCommandPaletteSelectedId(item.id)} sx={{ minHeight: 220 }} />)
+      ],
+      SpotlightSearch: [
+        renderVariantCard('Grouped', <SpotlightSearch items={spotlightSearchItems} maxResults={4} sx={{ minHeight: 260 }} />),
+        renderVariantCard('Exact', <SpotlightSearch items={spotlightSearchItems} fuzzy={false} sx={{ minHeight: 260 }} />),
+        renderVariantCard('Actions', <SpotlightSearch items={spotlightSearchItems.slice(0, 2)} previewTitle="Action preview" sx={{ minHeight: 260 }} />)
       ],
       SplitPane: [
         renderVariantCard('Simple', <SplitPane sx={{ minHeight: 150 }} first={<Box sx={{ p: 2 }}>Left</Box>} second={<Box sx={{ p: 2 }}>Right</Box>} />),

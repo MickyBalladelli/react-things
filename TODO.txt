@@ -1,6 +1,3 @@
-SpotlightSearch
-Search box with grouped results, previews, fuzzy matching, inline actions.
-
 KeyboardHintOverlay
 Hold a key to reveal contextual shortcuts over UI.
 

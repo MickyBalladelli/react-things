@@ -14,6 +14,8 @@ export type { CommandDockItem, CommandDockProps } from './components/CommandDock
 export { CommandDock } from './components/CommandDock'
 export type { CommandPaletteItem, CommandPaletteProps, CommandPaletteVariant } from './components/CommandPalette'
 export { CommandPalette } from './components/CommandPalette'
+export type { SpotlightSearchAction, SpotlightSearchItem, SpotlightSearchProps } from './components/SpotlightSearch'
+export { SpotlightSearch } from './components/SpotlightSearch'
 export type { SplitPaneCollapse, SplitPaneOrientation, SplitPaneProps } from './components/SplitPane'
 export { SplitPane } from './components/SplitPane'
 export type { FloatingToolbarPlacement, FloatingToolbarProps } from './components/FloatingToolbar'
