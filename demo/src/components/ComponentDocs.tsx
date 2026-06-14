@@ -34,6 +34,7 @@ import {
   CommandPalette,
   DataCardGrid,
   DataLens,
+  DiffViewer,
   DockBar,
   DockTabs,
   DropComposer,
@@ -1771,6 +1772,89 @@ export function Example() {
   }
 
   return <CodeViewer {...props} />
+}`
+      }
+    ]
+  },
+  {
+    name: 'DiffViewer',
+    summary: 'Beautiful text and object diff with inline comments and accept/reject.',
+    description: 'DiffViewer compares plain text or sorted object JSON, groups changes into hunks, supports inline comments, and lets reviewers accept or reject each hunk.',
+    props: [
+      {
+        name: 'before',
+        type: 'string | unknown',
+        defaultValue: '-',
+        possibleValues: 'Text for text mode, any JSON-like value for object mode.',
+        description: 'Original value.'
+      },
+      {
+        name: 'after',
+        type: 'string | unknown',
+        defaultValue: '-',
+        possibleValues: 'Text for text mode, any JSON-like value for object mode.',
+        description: 'Next value.'
+      },
+      {
+        name: 'mode',
+        type: '"text" | "object"',
+        defaultValue: '"text"',
+        possibleValues: 'text or object.',
+        description: 'Chooses raw text diff or stable sorted JSON diff.'
+      },
+      {
+        name: 'comments / defaultComments',
+        type: 'DiffViewerComment[]',
+        defaultValue: '[]',
+        possibleValues: 'Array of { id, hunkId, author, body }.',
+        description: 'Controlled or uncontrolled inline comments.'
+      },
+      {
+        name: 'decisions / defaultDecisions',
+        type: 'Record<string, DiffViewerDecision>',
+        defaultValue: '{}',
+        possibleValues: 'Map hunk id to accepted or rejected.',
+        description: 'Controlled or uncontrolled hunk decisions.'
+      },
+      {
+        name: 'onCommentAdd / onDecisionChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks for reviewer actions.',
+        description: 'Receive inline comments and accept/reject actions.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { DiffViewer } from '@mickyballadelli/react-things'
+
+const before = 'export const status = "draft"\\nexport const retries = 2'
+const after = 'export const status = "ready"\\nexport const retries = 3'
+
+export function Example() {
+  return <DiffViewer before={before} after={after} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { DiffViewer, type DiffViewerComment } from '@mickyballadelli/react-things'
+
+const comments: DiffViewerComment[] = [
+  { id: 'c1', hunkId: 'hunk-1-2-2', author: 'Micky', body: 'Check retry change.' }
+]
+
+export function Example() {
+  return (
+    <DiffViewer
+      mode="object"
+      before={{ status: 'draft', retries: 2 }}
+      after={{ status: 'ready', retries: 3 }}
+      defaultComments={comments}
+    />
+  )
 }`
       }
     ]
@@ -6109,6 +6193,54 @@ export function ComponentDocs() {
               }))
             }}
             minHeight={300}
+          />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'DiffViewer') {
+      return (
+        <Box sx={{ p: 2, bgcolor: '#f8fafc' }}>
+          <DiffViewer
+            mode="object"
+            title="Plan review"
+            subtitle="Object keys are sorted, changes are grouped, and reviewers can leave notes."
+            beforeLabel="Current"
+            afterLabel="Proposed"
+            before={{
+              project: 'Atlas',
+              status: 'draft',
+              owners: ['Micky', 'Design'],
+              limits: {
+                retries: 2,
+                timeout: 800
+              },
+              flags: {
+                comments: false,
+                approvals: false
+              }
+            }}
+            after={{
+              project: 'Atlas',
+              status: 'ready',
+              owners: ['Micky', 'Design', 'QA'],
+              limits: {
+                retries: 3,
+                timeout: 1200
+              },
+              flags: {
+                comments: true,
+                approvals: true
+              }
+            }}
+            defaultComments={[
+              {
+                id: 'diff-comment-1',
+                hunkId: 'hunk-1-3-3',
+                author: 'Reviewer',
+                body: 'Timeout and approval flag move together.'
+              }
+            ]}
           />
         </Box>
       )
