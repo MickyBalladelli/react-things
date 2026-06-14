@@ -54,12 +54,13 @@ import {
   SelectionBox,
   SmartTooltip,
   SplitPane,
+  StatusRail,
   SpotlightPanel,
   TimelineScrubber,
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -965,6 +966,50 @@ export function Example() {
       <Box sx={{ p: 3 }}>Shared canvas content</Box>
     </PresenceCursors>
   )
+}`
+      }
+    ],
+    StatusRail: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { StatusRail } from '@mickyballadelli/react-things'
+
+const groups = [
+  { id: 'api', label: 'API', status: 'operational', uptime: 99.99, latency: 142 },
+  {
+    id: 'jobs',
+    label: 'Workers',
+    status: 'incident',
+    uptime: 98.72,
+    latency: 410,
+    incidents: [{ id: 'queue', title: 'Queue delay', message: 'Backlog above threshold' }]
+  }
+]
+
+export function Example() {
+  return <StatusRail title="Production" groups={groups} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { StatusRail, type StatusRailGroup } from '@mickyballadelli/react-things'
+
+const groups: StatusRailGroup[] = [
+  { id: 'api', label: 'API', status: 'operational', uptime: 99.99, latency: 142 },
+  {
+    id: 'jobs',
+    label: 'Workers',
+    status: 'incident',
+    uptime: 98.72,
+    latency: 410,
+    incidents: [{ id: 'queue', title: 'Queue delay', message: 'Backlog above threshold' }]
+  }
+]
+
+export function Example() {
+  return <StatusRail title="Production" groups={groups} compact />
 }`
       }
     ],
@@ -2898,6 +2943,57 @@ export function Example() {
   },
   {
     ...createBasicDoc(
+      'StatusRail',
+      'Vertical operational health rail with grouped incidents and live pulse.',
+      'StatusRail shows service groups, health tones, grouped incident cards, uptime and latency metrics, and pulsing live alerts for operational dashboards.'
+    ),
+    props: [
+      {
+        name: 'groups',
+        type: 'StatusRailGroup[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, status, uptime, latency, incidents }.',
+        description: 'Operational groups shown in the rail.'
+      },
+      {
+        name: 'title / subtitle',
+        type: 'ReactNode',
+        defaultValue: 'Status / generated summary',
+        possibleValues: 'Any React renderable.',
+        description: 'Header content.'
+      },
+      {
+        name: 'pulse',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Animates non-operational status dots.'
+      },
+      {
+        name: 'compact',
+        type: 'boolean',
+        defaultValue: 'false',
+        possibleValues: 'true or false.',
+        description: 'Uses narrower width and tighter spacing.'
+      },
+      {
+        name: 'maxIncidents / showMetrics',
+        type: 'number / boolean',
+        defaultValue: '3 / true',
+        possibleValues: 'Any count, true or false.',
+        description: 'Controls visible incident count and metric blocks.'
+      },
+      {
+        name: 'onGroupSelect / onIncidentSelect',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks receiving selected group or incident.',
+        description: 'Called when users pick groups or incidents.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
       'SmartTooltip',
       'Tooltip that can hold actions, media, copy buttons, and pin mode.',
       'SmartTooltip is a rich hover or click popover for extra context, previews, quick actions, and copyable values.'
@@ -3894,6 +3990,32 @@ const presenceCursorUsers: PresenceCursorUser[] = [
   { id: 'mika', name: 'Mika', x: 44, y: 76, color: '#059669', status: 'active' }
 ]
 
+const statusRailGroups: StatusRailGroup[] = [
+  { id: 'api', label: 'API Gateway', status: 'operational', uptime: 99.99, latency: 142 },
+  {
+    id: 'jobs',
+    label: 'Workers',
+    status: 'incident',
+    uptime: 98.72,
+    latency: 410,
+    incidents: [
+      { id: 'queue', title: 'Queue delay', message: 'Backlog above threshold', severity: 'incident', timestamp: Date.now() - 1000 * 60 * 7 },
+      { id: 'retry', title: 'Retry spike', message: 'Payment retries elevated', severity: 'degraded', timestamp: Date.now() - 1000 * 60 * 18 }
+    ]
+  },
+  {
+    id: 'search',
+    label: 'Search',
+    status: 'degraded',
+    uptime: 99.31,
+    latency: 260,
+    incidents: [
+      { id: 'index', title: 'Index lag', message: 'Fresh results delayed', severity: 'degraded', timestamp: Date.now() - 1000 * 60 * 24 }
+    ]
+  },
+  { id: 'deploys', label: 'Deploys', status: 'maintenance', uptime: 99.9, latency: 188, incidents: [{ id: 'window', title: 'Maintenance window', message: 'Deploy lock active', severity: 'maintenance' }] }
+]
+
 const defaultInspectorDrawerSections: InspectorDrawerSection[] = [
   {
     id: 'content',
@@ -3944,6 +4066,10 @@ function getComponentGroup(name: string) {
 
   if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'ResizableDashboard', 'BeforeAfterSlider', 'InfiniteCanvas', 'SelectionBox', 'PresenceCursors'].includes(name)) {
     return 'Layout'
+  }
+
+  if (['StatusRail'].includes(name)) {
+    return 'Display'
   }
 
   if (['FlowBuilder'].includes(name)) {
@@ -4426,6 +4552,18 @@ export function ComponentDocs() {
               ))}
             </Box>
           </PresenceCursors>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'StatusRail') {
+      return (
+        <Box sx={{ minHeight: 500, p: 3, bgcolor: '#f8fafc', display: 'grid', placeItems: 'start center' }}>
+          <StatusRail
+            title="Production health"
+            subtitle="Live operational pulse"
+            groups={statusRailGroups}
+          />
         </Box>
       )
     }
@@ -5234,6 +5372,11 @@ export function ComponentDocs() {
         renderVariantCard('Canvas', <PresenceCursors users={presenceCursorUsers.slice(0, 2)} sx={{ minHeight: 170, bgcolor: '#f8fafc', borderRadius: 1 }}><Box sx={{ p: 2 }}>Canvas</Box></PresenceCursors>),
         renderVariantCard('No Names', <PresenceCursors users={presenceCursorUsers} showNames={false} sx={{ minHeight: 170, bgcolor: '#f8fafc', borderRadius: 1 }} />),
         renderVariantCard('Pixels', <PresenceCursors coordinateMode="pixel" users={[{ id: 'px', name: 'Pixel', x: 80, y: 64, color: '#7c3aed', selection: { x: 42, y: 90, width: 130, height: 46, label: 'Pixel rect' } }]} sx={{ minHeight: 170, bgcolor: '#f8fafc', borderRadius: 1 }} />)
+      ],
+      StatusRail: [
+        renderVariantCard('Live Pulse', <StatusRail groups={statusRailGroups} title="Ops" compact />),
+        renderVariantCard('No Pulse', <StatusRail groups={statusRailGroups.slice(0, 3)} pulse={false} title="Quiet" compact />),
+        renderVariantCard('Metrics Off', <StatusRail groups={statusRailGroups} showMetrics={false} title="Incidents" compact />)
       ],
       ResizableFrame: [
         renderVariantCard('Small', <ResizableFrame initialWidth={180} initialHeight={120}>Small</ResizableFrame>),

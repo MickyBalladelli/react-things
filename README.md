@@ -53,6 +53,7 @@ React and React DOM are peer dependencies.
 - InfiniteCanvas: pan-and-zoom workspace for draggable items.
 - SelectionBox: drag selection wrapper for grids, lists, and canvases.
 - PresenceCursors: collaborative cursors, selections, names, and idle states.
+- StatusRail: vertical operational health rail with grouped incidents and live pulse.
 - SmartTooltip: rich tooltip for context, media, actions, copy, and pinning.
 - ToastCenter: notification stack with grouped toasts and history drawer.
 - TourGuide: product walkthrough with spotlight mask, branches, progress, and completion.

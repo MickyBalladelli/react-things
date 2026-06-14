@@ -46,6 +46,7 @@ export function Example() {
 - InfiniteCanvas
 - SelectionBox
 - PresenceCursors
+- StatusRail
 - SmartTooltip
 - ToastCenter
 - TourGuide

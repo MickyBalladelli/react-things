@@ -54,6 +54,8 @@ export type { SelectionBoxChange, SelectionBoxChangeReason, SelectionBoxProps, S
 export { SelectionBox } from './components/SelectionBox'
 export type { PresenceCursorSelection, PresenceCursorStatus, PresenceCursorUser, PresenceCursorsProps } from './components/PresenceCursors'
 export { PresenceCursors } from './components/PresenceCursors'
+export type { StatusRailGroup, StatusRailIncident, StatusRailProps, StatusRailTone } from './components/StatusRail'
+export { StatusRail } from './components/StatusRail'
 export type { SmartTooltipAction, SmartTooltipProps } from './components/SmartTooltip'
 export { SmartTooltip } from './components/SmartTooltip'
 export type { ToastCenterAction, ToastCenterProps, ToastCenterToast, ToastCenterTone } from './components/ToastCenter'
