@@ -30,22 +30,31 @@ export function Example() {
 - DraggableBox
 - CodeViewer
 - DataCardGrid
+- DataLens
 - DockBar
+- DockTabs
+- CommandDock
 - CommandPalette
 - SplitPane
 - FloatingToolbar
 - MagneticCard
+- MorphMenu
 - SpotlightPanel
 - NodeCanvas
 - BeforeAfterSlider
 - InfiniteCanvas
 - SmartTooltip
+- ToastCenter
+- TourGuide
 - ResizableFrame
+- ResizableDashboard
 - InspectorPanel
 - KanbanBoard
 - ColorPicker
+- ColorStudio
 - TimelineScrubber
 - FileDropZone
+- FocusRing
 
 ## Publish
 

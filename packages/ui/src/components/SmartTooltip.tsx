@@ -43,13 +43,13 @@ export function SmartTooltip({
   placement = 'top',
   pinMode = true,
   defaultPinned = false,
-  openDelay = 120,
+  openDelay = 500,
   sx,
   ...props
 }: SmartTooltipProps) {
-  const anchorRef = useRef<HTMLElement | null>(null)
   const closeTimerRef = useRef<number | null>(null)
   const openTimerRef = useRef<number | null>(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [open, setOpen] = useState(defaultPinned)
   const [pinned, setPinned] = useState(defaultPinned)
   const [copied, setCopied] = useState(false)
@@ -108,7 +108,7 @@ export function SmartTooltip({
     <>
       <Box
         component="span"
-        ref={anchorRef}
+        ref={setAnchorEl}
         onMouseEnter={show}
         onMouseLeave={hide}
         onFocus={show}
@@ -125,8 +125,8 @@ export function SmartTooltip({
       </Box>
 
       <Popper
-        open={open}
-        anchorEl={anchorRef.current}
+        open={open && Boolean(anchorEl)}
+        anchorEl={anchorEl}
         placement={placement}
         modifiers={[
           { name: 'offset', options: { offset: [0, 10] } },

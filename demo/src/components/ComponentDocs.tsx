@@ -16,29 +16,46 @@ import {
   Tabs,
   Typography
 } from '@mui/material'
+import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined'
+import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined'
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined'
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined'
+import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined'
+import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined'
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import {
   BeforeAfterSlider,
   CodeViewer,
   ColorPicker,
+  ColorStudio,
+  CommandDock,
   CommandPalette,
   DataCardGrid,
+  DataLens,
   DockBar,
+  DockTabs,
   DraggableBox,
   FileDropZone,
+  FocusRing,
   FloatingToolbar,
   GlassBox,
   InfiniteCanvas,
   InspectorPanel,
   KanbanBoard,
   MagneticCard,
+  MorphMenu,
   NodeCanvas,
+  ResizableDashboard,
   ResizableFrame,
   SmartTooltip,
   SplitPane,
   SpotlightPanel,
-  TimelineScrubber
+  TimelineScrubber,
+  ToastCenter,
+  TourGuide
 } from '@mickyballadelli/react-things'
-import type { DataCardGridMetric, InspectorPanelField, KanbanColumn } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -71,6 +88,10 @@ type GlassBoxConfig = {
   liquidColor: string
   glassColor: string
   children: string
+}
+
+type FocusRingConfig = {
+  pulseSize: number
 }
 
 function createBasicDoc(name: string, summary: string, description: string): ComponentDoc {
@@ -129,6 +150,177 @@ const props: MagneticCardProps = {
 
 export function Example() {
   return <MagneticCard {...props}>Hover me</MagneticCard>
+}`
+      }
+    ],
+    MorphMenu: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import Button from '@mui/material/Button'
+import { MorphMenu } from '@mickyballadelli/react-things'
+
+const items = [
+  { id: 'copy', label: 'Copy', icon: 'C', onClick: () => console.log('copy') },
+  { id: 'share', label: 'Share', icon: 'S', onClick: () => console.log('share') },
+  { id: 'archive', label: 'Archive', icon: 'A', onClick: () => console.log('archive') }
+]
+
+export function Example() {
+  return (
+    <MorphMenu items={items}>
+      <Button variant="contained">Open menu</Button>
+    </MorphMenu>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import Button from '@mui/material/Button'
+import { MorphMenu, type MorphMenuItem } from '@mickyballadelli/react-things'
+
+const items: MorphMenuItem[] = [
+  { id: 'copy', label: 'Copy', icon: 'C', onClick: () => console.log('copy') },
+  { id: 'share', label: 'Share', icon: 'S', onClick: () => console.log('share') },
+  { id: 'archive', label: 'Archive', icon: 'A', onClick: () => console.log('archive') }
+]
+
+export function Example() {
+  return (
+    <MorphMenu items={items} radius={124} startAngle={-170} endAngle={-10}>
+      <Button variant="contained">Open menu</Button>
+    </MorphMenu>
+  )
+}`
+      }
+    ],
+    DockTabs: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import { DockTabs } from '@mickyballadelli/react-things'
+
+const initialTabs = [
+  { id: 'home', label: 'Home', icon: 'H' },
+  { id: 'docs', label: 'Docs', icon: 'D', preview: 'Documentation' },
+  { id: 'settings', label: 'Settings', icon: 'S', preview: 'App settings' }
+]
+
+export function Example() {
+  const [tabs, setTabs] = useState(initialTabs)
+  const [activeId, setActiveId] = useState('home')
+
+  return (
+    <DockTabs
+      tabs={tabs}
+      activeId={activeId}
+      onTabsChange={setTabs}
+      onActiveChange={(tab) => setActiveId(tab.id)}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import { DockTabs, type DockTab } from '@mickyballadelli/react-things'
+
+const initialTabs: DockTab[] = [
+  { id: 'home', label: 'Home', icon: 'H' },
+  { id: 'docs', label: 'Docs', icon: 'D', preview: 'Documentation' },
+  { id: 'settings', label: 'Settings', icon: 'S', preview: 'App settings' }
+]
+
+export function Example() {
+  const [tabs, setTabs] = useState<DockTab[]>(initialTabs)
+  const [activeId, setActiveId] = useState('home')
+
+  return (
+    <DockTabs
+      tabs={tabs}
+      activeId={activeId}
+      onTabsChange={setTabs}
+      onActiveChange={(tab) => setActiveId(tab.id)}
+    />
+  )
+}`
+      }
+    ],
+    CommandDock: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined'
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined'
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
+import { CommandDock } from '@mickyballadelli/react-things'
+
+const items = [
+  { id: 'inbox', label: 'Inbox', group: 'Workspace', icon: <InboxOutlinedIcon /> },
+  {
+    id: 'projects',
+    label: 'Projects',
+    group: 'Workspace',
+    icon: <FolderOutlinedIcon />,
+    children: [
+      { id: 'roadmap', label: 'Roadmap', icon: <FolderOutlinedIcon /> },
+      { id: 'launch', label: 'Launch', icon: <FolderOutlinedIcon /> }
+    ]
+  },
+  { id: 'settings', label: 'Settings', group: 'System', icon: <SettingsOutlinedIcon /> }
+]
+
+export function Example() {
+  const [selectedId, setSelectedId] = useState('inbox')
+
+  return (
+    <CommandDock
+      items={items}
+      selectedId={selectedId}
+      onSelect={(item) => setSelectedId(item.id)}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined'
+import InboxOutlinedIcon from '@mui/icons-material/InboxOutlined'
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
+import { CommandDock, type CommandDockItem } from '@mickyballadelli/react-things'
+
+const items: CommandDockItem[] = [
+  { id: 'inbox', label: 'Inbox', group: 'Workspace', icon: <InboxOutlinedIcon /> },
+  {
+    id: 'projects',
+    label: 'Projects',
+    group: 'Workspace',
+    icon: <FolderOutlinedIcon />,
+    children: [
+      { id: 'roadmap', label: 'Roadmap', icon: <FolderOutlinedIcon /> },
+      { id: 'launch', label: 'Launch', icon: <FolderOutlinedIcon /> }
+    ]
+  },
+  { id: 'settings', label: 'Settings', group: 'System', icon: <SettingsOutlinedIcon /> }
+]
+
+export function Example() {
+  const [selectedId, setSelectedId] = useState('inbox')
+
+  return (
+    <CommandDock
+      items={items}
+      selectedId={selectedId}
+      persistKey="app-command-dock"
+      onSelect={(item) => setSelectedId(item.id)}
+    />
+  )
 }`
       }
     ],
@@ -386,6 +578,50 @@ export function Example() {
 }`
       }
     ],
+    ColorStudio: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { ColorStudio } from '@mickyballadelli/react-things'
+
+const colors = [
+  { id: 'brand', name: 'Brand', value: '#2563eb' },
+  { id: 'accent', name: 'Accent', value: '#db2777' },
+  { id: 'surface', name: 'Surface', value: '#f8fafc' }
+]
+
+export function Example() {
+  return (
+    <ColorStudio
+      initialColors={colors}
+      tokenFormat="css"
+      onColorsChange={(nextColors) => console.log(nextColors)}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { ColorStudio, type ColorStudioColor } from '@mickyballadelli/react-things'
+
+const colors: ColorStudioColor[] = [
+  { id: 'brand', name: 'Brand', value: '#2563eb' },
+  { id: 'accent', name: 'Accent', value: '#db2777' },
+  { id: 'surface', name: 'Surface', value: '#f8fafc' }
+]
+
+export function Example() {
+  return (
+    <ColorStudio
+      initialColors={colors}
+      tokenFormat="json"
+      onColorsChange={(nextColors) => console.log(nextColors)}
+    />
+  )
+}`
+      }
+    ],
     TimelineScrubber: [
       {
         label: 'JavaScript',
@@ -535,6 +771,143 @@ export function Example() {
 }`
       }
     ],
+    ToastCenter: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import Button from '@mui/material/Button'
+import { ToastCenter } from '@mickyballadelli/react-things'
+
+export function Example() {
+  const [toasts, setToasts] = useState([
+    { id: 'deploy', title: 'Deploy complete', message: 'Production is live.', tone: 'success', group: 'deploys' }
+  ])
+
+  return (
+    <>
+      <Button onClick={() => setToasts([{ id: crypto.randomUUID(), title: 'Build queued', tone: 'info', group: 'builds' }, ...toasts])}>
+        Add toast
+      </Button>
+      <ToastCenter toasts={toasts} onToastsChange={setToasts} />
+    </>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import Button from '@mui/material/Button'
+import { ToastCenter, type ToastCenterToast } from '@mickyballadelli/react-things'
+
+export function Example() {
+  const [toasts, setToasts] = useState<ToastCenterToast[]>([
+    { id: 'deploy', title: 'Deploy complete', message: 'Production is live.', tone: 'success', group: 'deploys' }
+  ])
+
+  return (
+    <>
+      <Button onClick={() => setToasts([{ id: crypto.randomUUID(), title: 'Build queued', tone: 'info', group: 'builds' }, ...toasts])}>
+        Add toast
+      </Button>
+      <ToastCenter toasts={toasts} onToastsChange={setToasts} />
+    </>
+  )
+}`
+      }
+    ],
+    TourGuide: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import Button from '@mui/material/Button'
+import { TourGuide } from '@mickyballadelli/react-things'
+
+const steps = [
+  { id: 'start', title: 'Start here', content: 'This is the first action.', target: '#tour-start' },
+  { id: 'branch', title: 'Choose path', content: 'Branch to the next useful step.', target: '#tour-branch', branches: [{ label: 'Settings', stepId: 'settings' }] },
+  { id: 'settings', title: 'Settings', content: 'Tune the experience here.', target: '#tour-settings' }
+]
+
+export function Example() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Button id="tour-start" onClick={() => setOpen(true)}>Start tour</Button>
+      <Button id="tour-branch">Branch target</Button>
+      <Button id="tour-settings">Settings</Button>
+      <TourGuide steps={steps} open={open} onOpenChange={setOpen} onComplete={() => setOpen(false)} />
+    </>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import Button from '@mui/material/Button'
+import { TourGuide, type TourGuideStep } from '@mickyballadelli/react-things'
+
+const steps: TourGuideStep[] = [
+  { id: 'start', title: 'Start here', content: 'This is the first action.', target: '#tour-start' },
+  { id: 'branch', title: 'Choose path', content: 'Branch to the next useful step.', target: '#tour-branch', branches: [{ label: 'Settings', stepId: 'settings' }] },
+  { id: 'settings', title: 'Settings', content: 'Tune the experience here.', target: '#tour-settings' }
+]
+
+export function Example() {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <Button id="tour-start" onClick={() => setOpen(true)}>Start tour</Button>
+      <Button id="tour-branch">Branch target</Button>
+      <Button id="tour-settings">Settings</Button>
+      <TourGuide steps={steps} open={open} onOpenChange={setOpen} onComplete={() => setOpen(false)} />
+    </>
+  )
+}`
+      }
+    ],
+    FocusRing: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import Button from '@mui/material/Button'
+import { FocusRing } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+      <FocusRing tone="error" active pulseSize={22}>
+      <Button variant="outlined">Needs attention</Button>
+    </FocusRing>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import Button from '@mui/material/Button'
+import { FocusRing, type FocusRingProps } from '@mickyballadelli/react-things'
+
+const ringProps: FocusRingProps = {
+  tone: 'warning',
+  pulse: true,
+  pulseSize: 22,
+  active: true
+}
+
+export function Example() {
+  return (
+    <FocusRing {...ringProps}>
+      <Button variant="outlined">Check this</Button>
+    </FocusRing>
+  )
+}`
+      }
+    ],
     FileDropZone: [
       {
         label: 'JavaScript',
@@ -571,6 +944,51 @@ export function Example() {
 }`
       }
     ],
+    ResizableDashboard: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { ResizableDashboard } from '@mickyballadelli/react-things'
+
+const widgets = [
+  { id: 'revenue', title: 'Revenue', layout: { x: 0, y: 0, w: 4, h: 2 }, children: <strong>€128K</strong> },
+  { id: 'traffic', title: 'Traffic', layout: { x: 4, y: 0, w: 4, h: 3 }, children: <div>Live visits</div> },
+  { id: 'tasks', title: 'Tasks', layout: { x: 8, y: 0, w: 4, h: 3 }, children: <div>9 open</div> }
+]
+
+export function Example() {
+  return (
+    <ResizableDashboard
+      widgets={widgets}
+      persistKey="my-dashboard"
+      sx={{ minHeight: 420 }}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { ResizableDashboard, type ResizableDashboardWidget } from '@mickyballadelli/react-things'
+
+const widgets: ResizableDashboardWidget[] = [
+  { id: 'revenue', title: 'Revenue', layout: { x: 0, y: 0, w: 4, h: 2 }, children: <strong>€128K</strong> },
+  { id: 'traffic', title: 'Traffic', layout: { x: 4, y: 0, w: 4, h: 3 }, children: <div>Live visits</div> },
+  { id: 'tasks', title: 'Tasks', layout: { x: 8, y: 0, w: 4, h: 3 }, children: <div>9 open</div> }
+]
+
+export function Example() {
+  return (
+    <ResizableDashboard
+      widgets={widgets}
+      persistKey="my-dashboard"
+      onLayoutsChange={(layouts, breakpoint) => console.log(breakpoint, layouts)}
+      sx={{ minHeight: 420 }}
+    />
+  )
+}`
+      }
+    ],
     DataCardGrid: [
       {
         label: 'JavaScript',
@@ -600,6 +1018,63 @@ const metrics: DataCardGridMetric[] = [
 
 export function Example() {
   return <DataCardGrid title="Store pulse" subtitle="Live commercial metrics" metrics={metrics} columns={3} />
+}`
+      }
+    ],
+    DataLens: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { DataLens } from '@mickyballadelli/react-things'
+
+const rows = [
+  { id: 'api', name: 'API', owner: 'Platform', status: 'Healthy', load: 72, trend: [40, 48, 55, 61, 72] },
+  { id: 'web', name: 'Web', owner: 'Growth', status: 'Watch', load: 58, trend: [64, 62, 61, 59, 58] },
+  { id: 'billing', name: 'Billing', owner: 'Core', status: 'Healthy', load: 81, trend: [55, 60, 68, 73, 81] }
+]
+
+const columns = [
+  { id: 'name', label: 'Service', sortable: true },
+  { id: 'owner', label: 'Owner', filterable: true, options: ['Platform', 'Growth', 'Core'] },
+  { id: 'status', label: 'Status', filterable: true, options: ['Healthy', 'Watch'] },
+  { id: 'load', label: 'Load', sortable: true, chart: 'bar' },
+  { id: 'trend', label: 'Trend', chart: 'sparkline' }
+]
+
+export function Example() {
+  return <DataLens title="Service health" rows={rows} columns={columns} initialSort={{ columnId: 'load', direction: 'desc' }} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { DataLens, type DataLensColumn } from '@mickyballadelli/react-things'
+
+type Service = {
+  id: string
+  name: string
+  owner: string
+  status: string
+  load: number
+  trend: number[]
+}
+
+const rows: Service[] = [
+  { id: 'api', name: 'API', owner: 'Platform', status: 'Healthy', load: 72, trend: [40, 48, 55, 61, 72] },
+  { id: 'web', name: 'Web', owner: 'Growth', status: 'Watch', load: 58, trend: [64, 62, 61, 59, 58] },
+  { id: 'billing', name: 'Billing', owner: 'Core', status: 'Healthy', load: 81, trend: [55, 60, 68, 73, 81] }
+]
+
+const columns: DataLensColumn<Service>[] = [
+  { id: 'name', label: 'Service', sortable: true },
+  { id: 'owner', label: 'Owner', filterable: true, options: ['Platform', 'Growth', 'Core'] },
+  { id: 'status', label: 'Status', filterable: true, options: ['Healthy', 'Watch'] },
+  { id: 'load', label: 'Load', sortable: true, chart: 'bar' },
+  { id: 'trend', label: 'Trend', chart: 'sparkline' }
+]
+
+export function Example() {
+  return <DataLens<Service> title="Service health" rows={rows} columns={columns} defaultView="cards" />
 }`
       }
     ],
@@ -1000,6 +1475,122 @@ const items: DockBarItem[] = [
 export function Example() {
   return <DockBar items={items} iconSize={56} magnification={1.8} />
 }`
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'DockTabs',
+      'Browser-like tabs with drag reorder, left dock drop, overflow, and hover previews.',
+      'DockTabs is a compact workspace tab surface where users can drag to reorder in the top dock or drop tabs into a left vertical dock.'
+    ),
+    props: [
+      {
+        name: 'tabs',
+        type: 'DockTab[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, icon, preview, disabled, dock }.',
+        description: 'Tabs shown in the strip.'
+      },
+      {
+        name: 'activeId / defaultActiveId',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any tab id.',
+        description: 'Controlled or initial active tab.'
+      },
+      {
+        name: 'maxVisible',
+        type: 'number',
+        defaultValue: '7',
+        possibleValues: 'Any positive count.',
+        description: 'Visible tab count before tabs move to overflow menu.'
+      },
+      {
+        name: 'allowDrag',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Enables drag reorder.'
+      },
+      {
+        name: 'onTabsChange',
+        type: '(tabs: DockTab[]) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving reordered or re-docked tabs.',
+        description: 'Called when tab collection changes.'
+      },
+      {
+        name: 'onActiveChange / onDockChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks for tab activity.',
+        description: 'Called when users select or move tabs between docks.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'CommandDock',
+      'Persistent left command navigation like Linear or Raycast.',
+      'CommandDock is a grouped command sidebar with search, tree branches, collapse, active item state, badges, optional footer, and persisted collapse state.'
+    ),
+    props: [
+      {
+        name: 'items',
+        type: 'CommandDockItem[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, description, group, icon, badge, keywords, children, onSelect }.',
+        description: 'Navigation commands shown in the dock.'
+      },
+      {
+        name: 'selectedId',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any item id.',
+        description: 'Marks the active command.'
+      },
+      {
+        name: 'title / logo / footer',
+        type: 'ReactNode',
+        defaultValue: 'CommandDock / C / -',
+        possibleValues: 'Any React renderable.',
+        description: 'Header title, app icon, and optional footer content.'
+      },
+      {
+        name: 'expandedIds / defaultExpandedIds',
+        type: 'string[]',
+        defaultValue: '- / all parents',
+        possibleValues: 'Any item ids with children.',
+        description: 'Controls open tree branches.'
+      },
+      {
+        name: 'collapsed / defaultCollapsed',
+        type: 'boolean',
+        defaultValue: '- / false',
+        possibleValues: 'true or false.',
+        description: 'Controlled or initial collapsed state.'
+      },
+      {
+        name: 'width / collapsedWidth',
+        type: 'number',
+        defaultValue: '280 / 64',
+        possibleValues: 'Any positive pixel widths.',
+        description: 'Expanded and collapsed sidebar width.'
+      },
+      {
+        name: 'persistKey',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any localStorage key.',
+        description: 'Saves collapsed state.'
+      },
+      {
+        name: 'onSelect / onCollapsedChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks for selection and collapse.',
+        description: 'Called when users select commands or toggle the dock.'
       }
     ]
   },
@@ -1521,6 +2112,57 @@ export function Example() {
   },
   {
     ...createBasicDoc(
+      'FocusRing',
+      'Animated focus and validation highlight for any target.',
+      'FocusRing gives focused, guided, or invalid elements a stronger visual highlight than the browser outline, with pulse animation and validation tones.'
+    ),
+    props: [
+      {
+        name: 'children',
+        type: 'ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Any focusable element or wrapped content.',
+        description: 'Content wrapped by the animated ring.'
+      },
+      {
+        name: 'target',
+        type: 'string | RefObject<HTMLElement | null>',
+        defaultValue: '-',
+        possibleValues: 'CSS selector or React ref.',
+        description: 'Optional external target to follow instead of wrapping children.'
+      },
+      {
+        name: 'active',
+        type: 'boolean',
+        defaultValue: '-',
+        possibleValues: 'true or false.',
+        description: 'Forces ring visible. Without active, wrapped mode reacts to focus.'
+      },
+      {
+        name: 'tone',
+        type: '"primary" | "success" | "warning" | "error"',
+        defaultValue: 'primary',
+        possibleValues: 'primary, success, warning, or error.',
+        description: 'Color tone for tutorial, success, warning, or validation states.'
+      },
+      {
+        name: 'pulse',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Animates the outer ring.'
+      },
+      {
+        name: 'padding / radius / thickness / pulseSize',
+        type: 'number',
+        defaultValue: '6 / 10 / 2 / 10',
+        possibleValues: 'Any positive pixel values.',
+        description: 'Controls ring spacing, corners, stroke width, and heartbeat width.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
       'MagneticCard',
       '3D magnetic card with cursor follow, tilt, lift, glare, and snap-back.',
       'MagneticCard is an interactive surface for feature cards, product tiles, and callouts that should respond physically to the cursor.'
@@ -1567,6 +2209,71 @@ export function Example() {
         defaultValue: '-',
         possibleValues: 'Any MUI sx value.',
         description: 'Material UI styles for the card.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'MorphMenu',
+      'Radial context menu that morphs out from its trigger.',
+      'MorphMenu is a radial action menu for compact tool clusters, context actions, and creative surfaces with smooth trigger-origin motion and keyboard navigation.'
+    ),
+    props: [
+      {
+        name: 'children',
+        type: 'ReactElement',
+        defaultValue: '-',
+        possibleValues: 'One trigger element.',
+        description: 'Element that opens the radial menu.'
+      },
+      {
+        name: 'items',
+        type: 'MorphMenuItem[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, icon, disabled, onClick }.',
+        description: 'Menu actions shown around the trigger.'
+      },
+      {
+        name: 'open / defaultOpen',
+        type: 'boolean',
+        defaultValue: '- / false',
+        possibleValues: 'true or false.',
+        description: 'Controlled or uncontrolled open state.'
+      },
+      {
+        name: 'radius',
+        type: 'number',
+        defaultValue: '112',
+        possibleValues: 'Any positive pixel radius.',
+        description: 'Distance from trigger center to each item.'
+      },
+      {
+        name: 'startAngle / endAngle',
+        type: 'number',
+        defaultValue: '-160 / -20',
+        possibleValues: 'Degrees. 0 points right, 90 points down.',
+        description: 'Arc used to place radial menu items.'
+      },
+      {
+        name: 'itemSize',
+        type: 'number',
+        defaultValue: '52',
+        possibleValues: 'Any positive pixel size.',
+        description: 'Circular item button size.'
+      },
+      {
+        name: 'showLabels',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Shows labels below radial buttons.'
+      },
+      {
+        name: 'onSelect',
+        type: '(item: MorphMenuItem) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving selected item.',
+        description: 'Called when a menu action is selected.'
       }
     ]
   },
@@ -1874,9 +2581,125 @@ export function Example() {
       {
         name: 'openDelay',
         type: 'number',
-        defaultValue: '120',
+        defaultValue: '500',
         possibleValues: 'Any millisecond delay.',
         description: 'Hover delay before open.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'ToastCenter',
+      'Notification stack with grouped toasts and history drawer.',
+      'ToastCenter is a controlled or uncontrolled toast system for active notifications, grouped repeats, actions, auto-dismiss, and a right-side history drawer.'
+    ),
+    props: [
+      {
+        name: 'toasts',
+        type: 'ToastCenterToast[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, title, message, tone, group, timestamp, actions, autoHideDuration }.',
+        description: 'Controlled active notifications.'
+      },
+      {
+        name: 'defaultToasts',
+        type: 'ToastCenterToast[]',
+        defaultValue: '[]',
+        possibleValues: 'Any toast array.',
+        description: 'Initial notifications when uncontrolled.'
+      },
+      {
+        name: 'maxVisible',
+        type: 'number',
+        defaultValue: '4',
+        possibleValues: 'Any positive count.',
+        description: 'Maximum visible toast cards before showing more count.'
+      },
+      {
+        name: 'groupToasts',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Groups toasts by group key or title.'
+      },
+      {
+        name: 'historyTitle',
+        type: 'ReactNode',
+        defaultValue: 'Notification history',
+        possibleValues: 'Any React renderable.',
+        description: 'Drawer heading.'
+      },
+      {
+        name: 'onToastsChange',
+        type: '(toasts: ToastCenterToast[]) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving active notifications.',
+        description: 'Called when a toast or group is dismissed.'
+      },
+      {
+        name: 'onDismiss',
+        type: '(toast: ToastCenterToast) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving dismissed toast.',
+        description: 'Called for every dismissed notification.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'TourGuide',
+      'Interactive walkthrough with spotlight mask, branching steps, and progress.',
+      'TourGuide walks users through an interface by highlighting targets, showing step cards, supporting branching choices, tracking progress, and reporting completion.'
+    ),
+    props: [
+      {
+        name: 'steps',
+        type: 'TourGuideStep[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, title, content, target, placement, branches, nextStepId }.',
+        description: 'Ordered walkthrough steps.'
+      },
+      {
+        name: 'open / defaultOpen',
+        type: 'boolean',
+        defaultValue: '- / false',
+        possibleValues: 'true or false.',
+        description: 'Controlled or uncontrolled tour visibility.'
+      },
+      {
+        name: 'stepId / initialStepId',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any step id.',
+        description: 'Controlled or initial active step.'
+      },
+      {
+        name: 'spotlightPadding / spotlightRadius',
+        type: 'number',
+        defaultValue: '10 / 12',
+        possibleValues: 'Any positive pixel values.',
+        description: 'Spotlight size and corner shape around target.'
+      },
+      {
+        name: 'scrollIntoView',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Scrolls target into view when the step changes.'
+      },
+      {
+        name: 'completed',
+        type: 'boolean',
+        defaultValue: 'false',
+        possibleValues: 'true or false.',
+        description: 'Hides the tour after external completion state is set.'
+      },
+      {
+        name: 'onStepChange / onComplete / onSkip',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks for progress, completion, and skip.',
+        description: 'Lifecycle callbacks for tour state.'
       }
     ]
   },
@@ -1921,6 +2744,57 @@ export function Example() {
         defaultValue: 'true / true',
         possibleValues: 'true or false.',
         description: 'Shows or hides trend charts and progress bars.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'DataLens',
+      'Tiny table and card viewer with filters, sorting, and inline charts.',
+      'DataLens turns small operational datasets into a searchable table or card grid with column filters, sortable headers, and tiny bar or sparkline cells.'
+    ),
+    props: [
+      {
+        name: 'rows',
+        type: 'Row[]',
+        defaultValue: '-',
+        possibleValues: 'Any array of objects.',
+        description: 'Data objects shown in table or cards.'
+      },
+      {
+        name: 'columns',
+        type: 'DataLensColumn<Row>[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, accessor, sortable, filterable, options, chart, render }.',
+        description: 'Column definitions, filters, sorting, rendering, and chart cells.'
+      },
+      {
+        name: 'defaultView',
+        type: '"table" | "cards"',
+        defaultValue: 'table',
+        possibleValues: 'table or cards.',
+        description: 'Initial display mode.'
+      },
+      {
+        name: 'initialSort',
+        type: 'DataLensSort',
+        defaultValue: '-',
+        possibleValues: '{ columnId, direction }.',
+        description: 'Initial sorted column and direction.'
+      },
+      {
+        name: 'dense',
+        type: 'boolean',
+        defaultValue: 'false',
+        possibleValues: 'true or false.',
+        description: 'Uses tighter spacing.'
+      },
+      {
+        name: 'onRowSelect',
+        type: '(row: Row) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving the clicked row.',
+        description: 'Called when a row or card is selected.'
       }
     ]
   },
@@ -1987,6 +2861,64 @@ export function Example() {
     'Frame resized from bottom-right handle.',
     'ResizableFrame is a simple container whose width and height can be changed by dragging its corner handle.'
   ),
+  {
+    ...createBasicDoc(
+      'ResizableDashboard',
+      'Widget dashboard with draggable, resizable, persistent grid layouts.',
+      'ResizableDashboard is a responsive widget surface with snap-to-grid movement, resize handles, alignment guides, saved layouts, and breakpoint-specific columns.'
+    ),
+    props: [
+      {
+        name: 'widgets',
+        type: 'ResizableDashboardWidget[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, title, children, layout, layouts }. layout uses x, y, w, h grid units.',
+        description: 'Dashboard widgets and their default grid positions.'
+      },
+      {
+        name: 'layouts / defaultLayouts',
+        type: 'Record<string, ResizableDashboardLayoutItem[]>',
+        defaultValue: '{}',
+        possibleValues: 'Object keyed by breakpoint name. Each item uses { id, x, y, w, h, minW, minH, maxW, maxH }.',
+        description: 'Controlled or uncontrolled saved layout state for each breakpoint.'
+      },
+      {
+        name: 'breakpoints',
+        type: 'ResizableDashboardBreakpoint[]',
+        defaultValue: 'lg/md/sm',
+        possibleValues: 'Array of { name, minWidth, columns }.',
+        description: 'Responsive column rules selected from the dashboard width.'
+      },
+      {
+        name: 'rowHeight / gap',
+        type: 'number',
+        defaultValue: '88 / 12',
+        possibleValues: 'Any positive pixel values.',
+        description: 'Grid unit height and space between widgets.'
+      },
+      {
+        name: 'persistKey',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any localStorage key.',
+        description: 'Saves uncontrolled layouts in localStorage.'
+      },
+      {
+        name: 'showGuides',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Shows grid lines and active placement guide while moving or resizing.'
+      },
+      {
+        name: 'onLayoutsChange',
+        type: '(layouts, breakpoint) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving all layouts and active breakpoint name.',
+        description: 'Called whenever drag or resize updates layout.'
+      }
+    ]
+  },
   createBasicDoc(
     'InspectorPanel',
     'Schema-driven inspector with grouped controls, reset, color/select fields, and value summary.',
@@ -1997,6 +2929,50 @@ export function Example() {
     'Color picker with swatches and alpha.',
     'ColorPicker is a controlled color input with preset swatches, optional alpha control, and readable selected values.'
   ),
+  {
+    ...createBasicDoc(
+      'ColorStudio',
+      'Palette builder with contrast checks, gradients, and token export.',
+      'ColorStudio is a design-token workbench for building palettes, checking WCAG contrast, composing gradients, and exporting CSS, JSON, or MUI tokens.'
+    ),
+    props: [
+      {
+        name: 'initialColors',
+        type: 'ColorStudioColor[]',
+        defaultValue: 'Brand palette',
+        possibleValues: 'Array of { id, name, value }. value should be a 6-digit hex color.',
+        description: 'Initial editable palette.'
+      },
+      {
+        name: 'initialGradientStops',
+        type: 'ColorStudioGradientStop[]',
+        defaultValue: 'Two stops',
+        possibleValues: 'Array of { id, color, position }. position is 0 to 100.',
+        description: 'Initial gradient stops.'
+      },
+      {
+        name: 'tokenFormat',
+        type: '"css" | "json" | "mui"',
+        defaultValue: 'css',
+        possibleValues: 'css, json, or mui.',
+        description: 'Initial export token format.'
+      },
+      {
+        name: 'onColorsChange',
+        type: '(colors: ColorStudioColor[]) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving next palette.',
+        description: 'Called when palette colors change.'
+      },
+      {
+        name: 'onGradientChange',
+        type: '(stops, gradient) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving stops and CSS gradient.',
+        description: 'Called when gradient stops change.'
+      }
+    ]
+  },
   {
     ...createBasicDoc(
       'TimelineScrubber',
@@ -2151,6 +3127,246 @@ const dataCardGridMetrics: DataCardGridMetric[] = [
   }
 ]
 
+type DataLensService = {
+  id: string
+  name: string
+  owner: string
+  status: 'Healthy' | 'Watch' | 'Down'
+  load: number
+  requests: number
+  trend: number[]
+}
+
+const dataLensRows: DataLensService[] = [
+  { id: 'api', name: 'API Gateway', owner: 'Platform', status: 'Healthy', load: 72, requests: 128400, trend: [42, 46, 51, 58, 64, 72] },
+  { id: 'web', name: 'Web App', owner: 'Growth', status: 'Watch', load: 58, requests: 84200, trend: [68, 64, 62, 60, 59, 58] },
+  { id: 'billing', name: 'Billing', owner: 'Core', status: 'Healthy', load: 81, requests: 31200, trend: [55, 59, 63, 70, 76, 81] },
+  { id: 'search', name: 'Search', owner: 'Platform', status: 'Healthy', load: 64, requests: 56600, trend: [38, 44, 49, 55, 61, 64] },
+  { id: 'mailer', name: 'Mailer', owner: 'Core', status: 'Down', load: 18, requests: 9200, trend: [70, 62, 48, 35, 22, 18] }
+]
+
+const dataLensColumns: DataLensColumn<DataLensService>[] = [
+  { id: 'name', label: 'Service', sortable: true },
+  { id: 'owner', label: 'Owner', filterable: true, options: ['Platform', 'Growth', 'Core'] },
+  {
+    id: 'status',
+    label: 'Status',
+    filterable: true,
+    options: ['Healthy', 'Watch', 'Down'],
+    render: (value) => (
+      <Chip
+        size="small"
+        label={String(value)}
+        color={value === 'Healthy' ? 'success' : value === 'Watch' ? 'warning' : 'error'}
+      />
+    )
+  },
+  { id: 'load', label: 'Load', sortable: true, chart: 'bar' },
+  { id: 'requests', label: 'Requests', sortable: true, align: 'right', render: (value) => Number(value).toLocaleString() },
+  { id: 'trend', label: 'Trend', chart: 'sparkline' }
+]
+
+const colorStudioColors: ColorStudioColor[] = [
+  { id: 'brand', name: 'Brand', value: '#2563eb' },
+  { id: 'accent', name: 'Accent', value: '#db2777' },
+  { id: 'success', name: 'Success', value: '#059669' },
+  { id: 'surface', name: 'Surface', value: '#f8fafc' }
+]
+
+const morphMenuItems: MorphMenuItem[] = [
+  { id: 'copy', label: 'Copy', icon: 'C' },
+  { id: 'share', label: 'Share', icon: 'S' },
+  { id: 'pin', label: 'Pin', icon: 'P' },
+  { id: 'archive', label: 'Archive', icon: 'A' }
+]
+
+const defaultDockTabs: DockTab[] = [
+  { id: 'home', label: 'Home', icon: 'H', preview: 'Home workspace' },
+  { id: 'docs', label: 'Docs', icon: 'D', preview: 'Documentation and examples' },
+  { id: 'search', label: 'Search', icon: 'F', preview: 'Search panel', dock: 'left' },
+  { id: 'theme', label: 'Theme', icon: 'T', preview: 'Design tokens and colors' },
+  { id: 'board', label: 'Board', icon: 'B', preview: 'Planning board' },
+  { id: 'console', label: 'Console', icon: 'C', preview: 'Runtime logs' },
+  { id: 'settings', label: 'Settings', icon: 'S', preview: 'Workspace settings' },
+  { id: 'deploys', label: 'Deploys', icon: 'P', preview: 'Deployment history' },
+  { id: 'profile', label: 'Profile', icon: 'U', preview: 'User profile' }
+]
+
+const commandDockItems: CommandDockItem[] = [
+  { id: 'inbox', label: 'Inbox', description: 'Messages and updates', group: 'Workspace', icon: <InboxOutlinedIcon fontSize="small" />, badge: <Chip label="4" size="small" /> },
+  { id: 'search', label: 'Search', description: 'Find anything', group: 'Workspace', icon: <SearchOutlinedIcon fontSize="small" /> },
+  {
+    id: 'projects',
+    label: 'Projects',
+    description: 'Active work',
+    group: 'Workspace',
+    icon: <FolderOutlinedIcon fontSize="small" />,
+    children: [
+      { id: 'roadmap', label: 'Roadmap', description: 'Milestones and bets', icon: <AccountTreeOutlinedIcon fontSize="small" /> },
+      { id: 'launch', label: 'Launch', description: 'Release checklist', icon: <RocketLaunchOutlinedIcon fontSize="small" /> }
+    ]
+  },
+  {
+    id: 'automations',
+    label: 'Automations',
+    description: 'Rules and triggers',
+    group: 'Tools',
+    icon: <BoltOutlinedIcon fontSize="small" />,
+    children: [
+      { id: 'rules', label: 'Rules', description: 'Routing logic', icon: <BoltOutlinedIcon fontSize="small" /> },
+      { id: 'webhooks', label: 'Webhooks', description: 'External events', icon: <AccountTreeOutlinedIcon fontSize="small" /> }
+    ]
+  },
+  { id: 'tokens', label: 'Tokens', description: 'Design system values', group: 'Tools', icon: <PaletteOutlinedIcon fontSize="small" /> },
+  { id: 'settings', label: 'Settings', description: 'Account and app prefs', group: 'System', icon: <SettingsOutlinedIcon fontSize="small" /> }
+]
+
+function findCommandDockItem(items: CommandDockItem[], itemId: string): CommandDockItem | undefined {
+  for (const item of items) {
+    if (item.id === itemId) {
+      return item
+    }
+
+    const child = findCommandDockItem(item.children ?? [], itemId)
+
+    if (child) {
+      return child
+    }
+  }
+
+  return undefined
+}
+
+const defaultToastCenterToasts: ToastCenterToast[] = [
+  {
+    id: 'deploy-live',
+    title: 'Deploy complete',
+    message: 'Production is live.',
+    tone: 'success',
+    group: 'deploys'
+  },
+  {
+    id: 'queue-live',
+    title: 'Build queued',
+    message: 'Runner starts soon.',
+    tone: 'info',
+    group: 'builds'
+  },
+  {
+    id: 'queue-live-2',
+    title: 'Build queued',
+    message: 'Docs job added.',
+    tone: 'info',
+    group: 'builds'
+  }
+]
+
+const tourGuideSteps: TourGuideStep[] = [
+  {
+    id: 'start',
+    title: 'Start the work',
+    content: 'This button begins the main workflow. The spotlight follows its target.',
+    target: '#tour-guide-start',
+    placement: 'bottom'
+  },
+  {
+    id: 'branch',
+    title: 'Pick a path',
+    content: 'Branches can send users to different steps based on what they need.',
+    target: '#tour-guide-branch',
+    placement: 'right',
+    branches: [
+      { label: 'Settings', stepId: 'settings' },
+      { label: 'Report', stepId: 'report' }
+    ]
+  },
+  {
+    id: 'settings',
+    title: 'Tune settings',
+    content: 'This branch highlights controls for configuration.',
+    target: '#tour-guide-settings',
+    placement: 'top'
+  },
+  {
+    id: 'report',
+    title: 'Review report',
+    content: 'This branch points to the output users should inspect.',
+    target: '#tour-guide-report',
+    placement: 'left'
+  }
+]
+
+const dashboardWidgets: ResizableDashboardWidget[] = [
+  {
+    id: 'revenue',
+    title: 'Revenue',
+    layout: { x: 0, y: 0, w: 4, h: 2, minW: 2, minH: 2 },
+    children: (
+      <Box>
+        <Typography variant="h4" fontWeight={950}>€128K</Typography>
+        <Typography color="text.secondary">+8.8% from last week</Typography>
+      </Box>
+    )
+  },
+  {
+    id: 'traffic',
+    title: 'Traffic',
+    layout: { x: 4, y: 0, w: 4, h: 3, minW: 2, minH: 2 },
+    children: (
+      <Stack spacing={1}>
+        {[68, 44, 82, 56, 74].map((value, index) => (
+          <Box key={index} sx={{ height: 10, borderRadius: 1, bgcolor: '#dbeafe', overflow: 'hidden' }}>
+            <Box sx={{ width: `${value}%`, height: '100%', bgcolor: '#2563eb' }} />
+          </Box>
+        ))}
+      </Stack>
+    )
+  },
+  {
+    id: 'tasks',
+    title: 'Tasks',
+    layout: { x: 8, y: 0, w: 4, h: 3, minW: 2, minH: 2 },
+    children: (
+      <Stack spacing={1}>
+        {['Review props', 'Ship docs', 'Polish examples'].map((task) => (
+          <Paper key={task} variant="outlined" sx={{ px: 1.25, py: 0.75, borderRadius: 1 }}>
+            <Typography variant="body2" fontWeight={750}>{task}</Typography>
+          </Paper>
+        ))}
+      </Stack>
+    )
+  },
+  {
+    id: 'health',
+    title: 'System health',
+    layout: { x: 0, y: 3, w: 5, h: 3, minW: 3, minH: 2 },
+    children: (
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1 }}>
+        {[
+          ['API', '99.9%'],
+          ['Queue', '12ms'],
+          ['Build', 'green']
+        ].map(([label, value]) => (
+          <Paper key={label} variant="outlined" sx={{ p: 1, borderRadius: 1 }}>
+            <Typography variant="caption" color="text.secondary">{label}</Typography>
+            <Typography fontWeight={900}>{value}</Typography>
+          </Paper>
+        ))}
+      </Box>
+    )
+  },
+  {
+    id: 'notes',
+    title: 'Notes',
+    layout: { x: 5, y: 3, w: 7, h: 3, minW: 3, minH: 2 },
+    children: (
+      <Typography color="text.secondary">
+        Drag widget headers. Pull bottom-right handles. Layout snaps, avoids overlap, and remembers positions.
+      </Typography>
+    )
+  }
+]
+
 const defaultKanbanColumns: KanbanColumn[] = [
   {
     id: 'ideas',
@@ -2182,16 +3398,24 @@ const defaultKanbanColumns: KanbanColumn[] = [
 const sampleTabs = ['JavaScript', 'TypeScript']
 
 function getComponentGroup(name: string) {
-  if (['GlassBox', 'ColorPicker', 'CodeViewer', 'DataCardGrid', 'DockBar', 'TimelineScrubber'].includes(name)) {
+  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DataLens', 'DockBar', 'TimelineScrubber'].includes(name)) {
     return 'Display'
   }
 
-  if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'BeforeAfterSlider', 'InfiniteCanvas'].includes(name)) {
+  if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'ResizableDashboard', 'BeforeAfterSlider', 'InfiniteCanvas'].includes(name)) {
     return 'Layout'
   }
 
-  if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip'].includes(name)) {
+  if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
     return 'Input'
+  }
+
+  if (['CommandDock', 'DockTabs', 'MorphMenu'].includes(name)) {
+    return 'Navigation'
+  }
+
+  if (['FocusRing'].includes(name)) {
+    return 'Effects'
   }
 
   return 'Effects'
@@ -2274,13 +3498,60 @@ function createGlassBoxSampleCode(config: GlassBoxConfig) {
   }
 }
 
-function createInitialSampleCode(config: GlassBoxConfig) {
+function createFocusRingJavaScriptSample(config: FocusRingConfig) {
+  return `import Button from '@mui/material/Button'
+import { FocusRing } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <FocusRing tone="error" active pulseSize={${config.pulseSize}}>
+      <Button variant="outlined">Needs attention</Button>
+    </FocusRing>
+  )
+}`
+}
+
+function createFocusRingTypeScriptSample(config: FocusRingConfig) {
+  return `import Button from '@mui/material/Button'
+import { FocusRing, type FocusRingProps } from '@mickyballadelli/react-things'
+
+const ringProps: FocusRingProps = {
+  tone: 'warning',
+  pulse: true,
+  pulseSize: ${config.pulseSize},
+  active: true
+}
+
+export function Example() {
+  return (
+    <FocusRing {...ringProps}>
+      <Button variant="outlined">Check this</Button>
+    </FocusRing>
+  )
+}`
+}
+
+function createFocusRingSampleCode(config: FocusRingConfig) {
   return {
-    ...createGlassBoxSampleCode(config),
+    'FocusRing:JavaScript': createFocusRingJavaScriptSample(config),
+    'FocusRing:TypeScript': createFocusRingTypeScriptSample(config)
+  }
+}
+
+function readFocusRingConfig(code: string, currentConfig: FocusRingConfig): FocusRingConfig {
+  return {
+    pulseSize: readNumberProp(code, 'pulseSize', currentConfig.pulseSize)
+  }
+}
+
+function createInitialSampleCode(glassConfig: GlassBoxConfig, focusRingConfig: FocusRingConfig) {
+  return {
     ...Object.fromEntries(componentDocs.flatMap((component) => component.samples.map((sample) => [
       `${component.name}:${sample.label}`,
       sample.initialCode
-    ])))
+    ]))),
+    ...createGlassBoxSampleCode(glassConfig),
+    ...createFocusRingSampleCode(focusRingConfig)
   }
 }
 
@@ -2290,8 +3561,10 @@ export function ComponentDocs() {
   const [selectedComponentName, setSelectedComponentName] = useState(initialComponent.name)
   const selectedComponent = componentDocs.find((component) => component.name === selectedComponentName) ?? componentDocs[0]
   const [glassBoxConfig, setGlassBoxConfig] = useState(defaultGlassBoxConfig)
-  const [sampleCode, setSampleCode] = useState<Record<string, string>>(createInitialSampleCode(defaultGlassBoxConfig))
+  const [focusRingConfig, setFocusRingConfig] = useState<FocusRingConfig>({ pulseSize: 34 })
+  const [sampleCode, setSampleCode] = useState<Record<string, string>>(createInitialSampleCode(defaultGlassBoxConfig, { pulseSize: 34 }))
   const [selectedSampleLabel, setSelectedSampleLabel] = useState(sampleTabs[0])
+  const [commandDockSelectedId, setCommandDockSelectedId] = useState('inbox')
   const [commandPaletteSelectedId, setCommandPaletteSelectedId] = useState('components')
   const [pickerColor, setPickerColor] = useState('#2563eb')
   const [pickerAlpha, setPickerAlpha] = useState(0.8)
@@ -2365,12 +3638,22 @@ export function ComponentDocs() {
   const [timelineTime, setTimelineTime] = useState(34)
   const [infiniteCanvasSelectedId, setInfiniteCanvasSelectedId] = useState<string | null>('idea')
   const [kanbanColumns, setKanbanColumns] = useState<KanbanColumn[]>(defaultKanbanColumns)
+  const [dockTabs, setDockTabs] = useState<DockTab[]>(defaultDockTabs)
+  const [activeDockTabId, setActiveDockTabId] = useState('home')
+  const [toastCenterToasts, setToastCenterToasts] = useState<ToastCenterToast[]>(defaultToastCenterToasts)
+  const [tourGuideOpen, setTourGuideOpen] = useState(false)
+  const [tourGuideDone, setTourGuideDone] = useState(false)
 
   const selectedSamples = selectedComponent.name === 'GlassBox'
     ? [
       { label: 'JavaScript', language: 'javascript', initialCode: sampleCode['GlassBox:JavaScript'] },
       { label: 'TypeScript', language: 'typescript', initialCode: sampleCode['GlassBox:TypeScript'] }
     ]
+    : selectedComponent.name === 'FocusRing'
+      ? [
+        { label: 'JavaScript', language: 'javascript', initialCode: sampleCode['FocusRing:JavaScript'] },
+        { label: 'TypeScript', language: 'typescript', initialCode: sampleCode['FocusRing:TypeScript'] }
+      ]
     : selectedComponent.samples
 
   useEffect(() => {
@@ -2381,6 +3664,19 @@ export function ComponentDocs() {
 
   function updateSample(nextCode: string, sampleLabel: string) {
     const sampleKey = `${selectedComponent.name}:${sampleLabel}`
+
+    if (selectedComponent.name === 'FocusRing') {
+      const nextConfig = readFocusRingConfig(nextCode, focusRingConfig)
+      const syncedCode = createFocusRingSampleCode(nextConfig)
+
+      setFocusRingConfig(nextConfig)
+      setSampleCode({
+        ...sampleCode,
+        ...syncedCode,
+        [sampleKey]: nextCode
+      })
+      return
+    }
 
     if (selectedComponent.name !== 'GlassBox') {
       setSampleCode((currentCode) => ({
@@ -2423,6 +3719,16 @@ export function ComponentDocs() {
             <Typography variant="h5" fontWeight={900}>MagneticCard</Typography>
             <Typography sx={{ opacity: 0.86 }}>Hover corners for tilt, lift, glare, and depth.</Typography>
           </MagneticCard>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'MorphMenu') {
+      return (
+        <Box sx={{ minHeight: 380, display: 'grid', placeItems: 'center', bgcolor: '#f8fafc', overflow: 'hidden' }}>
+          <MorphMenu items={morphMenuItems} radius={126} startAngle={-170} endAngle={-10}>
+            <Button variant="contained" size="large">Open radial menu</Button>
+          </MorphMenu>
         </Box>
       )
     }
@@ -2487,6 +3793,18 @@ export function ComponentDocs() {
       return <Box sx={{ minHeight: 340, p: 3, bgcolor: '#f8fafc' }}><ResizableFrame><Box sx={{ p: 2 }}><Typography fontWeight={850}>Resize me</Typography><Typography color="text.secondary">Drag bottom-right corner.</Typography></Box></ResizableFrame></Box>
     }
 
+    if (selectedComponent.name === 'ResizableDashboard') {
+      return (
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+          <ResizableDashboard
+            widgets={dashboardWidgets}
+            persistKey="react-things-resizable-dashboard-preview"
+            sx={{ minHeight: 500 }}
+          />
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'InspectorPanel') {
       const inspectorValue = (id: string) => inspectorFields.find((field) => field.id === id)?.value
       const title = String(inspectorValue('title') ?? 'Launch card')
@@ -2542,6 +3860,14 @@ export function ComponentDocs() {
               color: {pickerColor}, alpha: {pickerAlpha.toFixed(2)}
             </Typography>
           </Box>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'ColorStudio') {
+      return (
+        <Box sx={{ p: 3, bgcolor: '#f8fafc' }}>
+          <ColorStudio initialColors={colorStudioColors} sx={{ minHeight: 560 }} />
         </Box>
       )
     }
@@ -2611,6 +3937,78 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'ToastCenter') {
+      function addToast(tone: ToastCenterToast['tone'], group: string, title: string) {
+        setToastCenterToasts((currentToasts) => [
+          {
+            id: `${group}-${Date.now()}`,
+            title,
+            message: group === 'builds' ? 'Grouped with related build notifications.' : 'Stored in history when dismissed.',
+            tone,
+            group,
+            actions: [{ id: 'view', label: 'View' }]
+          },
+          ...currentToasts
+        ])
+      }
+
+      return (
+        <Box sx={{ position: 'relative', minHeight: 520, p: 3, bgcolor: '#f8fafc', overflow: 'hidden' }}>
+          <Stack spacing={2} sx={{ maxWidth: 520 }}>
+            <Typography variant="h5" fontWeight={900}>ToastCenter</Typography>
+            <Typography color="text.secondary">
+              Add repeated build messages to see grouping. Dismiss toasts, then open history.
+            </Typography>
+            <Stack direction="row" spacing={1} flexWrap="wrap">
+              <Button variant="contained" onClick={() => addToast('info', 'builds', 'Build queued')}>Build</Button>
+              <Button variant="contained" color="success" onClick={() => addToast('success', 'deploys', 'Deploy complete')}>Deploy</Button>
+              <Button variant="contained" color="warning" onClick={() => addToast('warning', 'alerts', 'Usage spike')}>Warn</Button>
+              <Button variant="outlined" onClick={() => setToastCenterToasts(defaultToastCenterToasts)}>Reset</Button>
+            </Stack>
+          </Stack>
+          <ToastCenter
+            toasts={toastCenterToasts}
+            onToastsChange={setToastCenterToasts}
+            sx={{ position: 'absolute', right: 16, bottom: 16 }}
+          />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'TourGuide') {
+      return (
+        <Box sx={{ position: 'relative', minHeight: 520, p: 3, bgcolor: '#f8fafc', overflow: 'hidden' }}>
+          <Stack spacing={2} sx={{ maxWidth: 680 }}>
+            <Typography variant="h5" fontWeight={900}>TourGuide</Typography>
+            <Typography color="text.secondary">
+              Start a walkthrough, branch to a path, and finish to mark completion.
+            </Typography>
+            <Stack direction="row" spacing={1} flexWrap="wrap">
+              <Button id="tour-guide-start" variant="contained" onClick={() => {
+                setTourGuideDone(false)
+                setTourGuideOpen(true)
+              }}>Start tour</Button>
+              <Button id="tour-guide-branch" variant="outlined">Branch choice</Button>
+              <Button id="tour-guide-settings" variant="outlined">Settings</Button>
+              <Button id="tour-guide-report" variant="outlined">Report</Button>
+              <Chip label={tourGuideDone ? 'complete' : 'not complete'} color={tourGuideDone ? 'success' : 'default'} />
+            </Stack>
+          </Stack>
+          <TourGuide
+            steps={tourGuideSteps}
+            open={tourGuideOpen}
+            completed={tourGuideDone}
+            onOpenChange={setTourGuideOpen}
+            onComplete={() => {
+              setTourGuideDone(true)
+              setTourGuideOpen(false)
+            }}
+            onSkip={() => setTourGuideOpen(false)}
+          />
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'DataCardGrid') {
       return (
         <Box sx={{ minHeight: 420, p: 3, bgcolor: '#f8fafc' }}>
@@ -2619,6 +4017,20 @@ export function ComponentDocs() {
             subtitle="Revenue, demand, conversion, and system health in one glance."
             metrics={dataCardGridMetrics}
             columns={4}
+          />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'DataLens') {
+      return (
+        <Box sx={{ minHeight: 460, p: 3, bgcolor: '#f8fafc' }}>
+          <DataLens<DataLensService>
+            title="Service lens"
+            subtitle="Filter owners and status, sort load or requests, switch table/card view."
+            rows={dataLensRows}
+            columns={dataLensColumns}
+            initialSort={{ columnId: 'load', direction: 'desc' }}
           />
         </Box>
       )
@@ -2719,6 +4131,22 @@ export function ComponentDocs() {
               Blue
             </Button>
           </FloatingToolbar>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'FocusRing') {
+      return (
+        <Box sx={{ minHeight: 340, display: 'grid', placeItems: 'center', bgcolor: '#f8fafc' }}>
+          <Stack spacing={3} alignItems="center">
+            <FocusRing tone="error" active padding={8} radius={12} pulseSize={focusRingConfig.pulseSize}>
+              <Button variant="outlined" color="error">Invalid field</Button>
+            </FocusRing>
+            <FocusRing tone="primary">
+              <Button variant="contained">Focus me</Button>
+            </FocusRing>
+            <Typography color="text.secondary">Second ring appears when button receives focus.</Typography>
+          </Stack>
         </Box>
       )
     }
@@ -2845,6 +4273,80 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'CommandDock') {
+      const activeItem = findCommandDockItem(commandDockItems, commandDockSelectedId) ?? commandDockItems[0]
+
+      return (
+        <Box sx={{ minHeight: 420, display: 'flex', bgcolor: '#f8fafc' }}>
+          <CommandDock
+            items={commandDockItems}
+            selectedId={commandDockSelectedId}
+            title="Launch"
+            persistKey="react-things-command-dock-preview"
+            onSelect={(item) => setCommandDockSelectedId(item.id)}
+            footer={(
+              <Typography variant="caption" color="text.secondary">
+                Persistent command rail
+              </Typography>
+            )}
+          />
+          <Box sx={{ flex: 1, minWidth: 0, p: 3 }}>
+            <Paper variant="outlined" sx={{ p: 3, borderRadius: 1, minHeight: 300 }}>
+              <Typography variant="overline" color="text.secondary" fontWeight={900}>
+                {activeItem?.group}
+              </Typography>
+              <Typography variant="h4" fontWeight={950}>
+                {activeItem?.label}
+              </Typography>
+              <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 520 }}>
+                {activeItem?.description}. Use the dock to jump between command areas. Collapse state saves in the browser.
+              </Typography>
+              <Box sx={{ mt: 3, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 1.5 }}>
+                {['Recent', 'Pinned', 'Shared'].map((label) => (
+                  <Paper key={label} variant="outlined" sx={{ p: 2, borderRadius: 1 }}>
+                    <Typography fontWeight={850}>{label}</Typography>
+                    <Typography variant="body2" color="text.secondary">Workspace item</Typography>
+                  </Paper>
+                ))}
+              </Box>
+            </Paper>
+          </Box>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'DockTabs') {
+      const activeTab = dockTabs.find((tab) => tab.id === activeDockTabId) ?? dockTabs[0]
+
+      return (
+        <Box sx={{ minHeight: 380, bgcolor: '#f8fafc' }}>
+          <Box sx={{ minHeight: 360 }}>
+          <DockTabs
+            tabs={dockTabs}
+            activeId={activeDockTabId}
+            maxVisible={5}
+            onTabsChange={setDockTabs}
+            onActiveChange={(tab) => setActiveDockTabId(tab.id)}
+          />
+          <Box sx={{ p: 3 }}>
+            <Paper variant="outlined" sx={{ p: 3, borderRadius: 1, minHeight: 220 }}>
+              <Typography variant="h5" fontWeight={900}>{activeTab?.label}</Typography>
+              <Typography color="text.secondary" sx={{ mt: 1 }}>
+                Drag tabs along the top to reorder. Drag one to the left side to dock it vertically.
+              </Typography>
+              <Button variant="outlined" sx={{ mt: 2 }} onClick={() => {
+                setDockTabs(defaultDockTabs)
+                setActiveDockTabId('home')
+              }}>
+                Reset tabs
+              </Button>
+            </Paper>
+          </Box>
+          </Box>
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'DraggableBox') {
       return (
         <DraggableBox
@@ -2952,6 +4454,17 @@ export function ComponentDocs() {
         renderVariantCard('Default', <DockBar items={[{ id: 'mail', label: 'Mail', icon: '✉️' }, { id: 'music', label: 'Music', icon: '🎵' }, { id: 'photos', label: 'Photos', icon: '🌄' }]} />),
         renderVariantCard('Big', <DockBar items={[{ id: 'finder', label: 'Finder', icon: '🗂️' }, { id: 'terminal', label: 'Terminal', icon: '⌘' }, { id: 'settings', label: 'Settings', icon: '⚙️' }]} iconSize={62} magnification={2} />)
       ],
+      DockTabs: [
+        renderVariantCard('Overflow', <DockTabs tabs={defaultDockTabs} maxVisible={4} />),
+        renderVariantCard('Left Dock', <DockTabs tabs={defaultDockTabs.map((tab, index) => index < 2 ? { ...tab, dock: 'left' } : tab)} activeId="home" />),
+        renderVariantCard('Drag Only', <DockTabs tabs={defaultDockTabs.slice(0, 5)} activeId="home" />),
+        renderVariantCard('Static', <DockTabs tabs={defaultDockTabs.slice(1, 5)} allowDrag={false} maxVisible={3} />)
+      ],
+      CommandDock: [
+        renderVariantCard('Expanded', <Box sx={{ height: 300, display: 'flex' }}><CommandDock items={commandDockItems} selectedId={commandDockSelectedId} onSelect={(item) => setCommandDockSelectedId(item.id)} /></Box>),
+        renderVariantCard('Collapsed', <Box sx={{ height: 300, display: 'flex' }}><CommandDock items={commandDockItems} selectedId={commandDockSelectedId} defaultCollapsed onSelect={(item) => setCommandDockSelectedId(item.id)} /></Box>),
+        renderVariantCard('Narrow', <Box sx={{ height: 300, display: 'flex' }}><CommandDock items={commandDockItems.slice(0, 4)} selectedId="projects" width={220} title="Ops" /></Box>)
+      ],
       CommandPalette: [
         renderVariantCard('List', <CommandPalette items={commandItems} selectedId={commandPaletteSelectedId} onSelect={(item) => setCommandPaletteSelectedId(item.id)} sx={{ minHeight: 220 }} />),
         renderVariantCard('Dense List', <CommandPalette dense items={commandItems} selectedId={commandPaletteSelectedId} onSelect={(item) => setCommandPaletteSelectedId(item.id)} sx={{ minHeight: 220 }} />),
@@ -2970,15 +4483,35 @@ export function ComponentDocs() {
         renderVariantCard('Element Anchor', <Box sx={{ position: 'relative', minHeight: 130, display: 'grid', placeItems: 'center' }}><Button ref={floatingToolbarButtonRef} variant="contained" onClick={() => setFloatingToolbarElementOpen((open) => !open)}>Anchor</Button><FloatingToolbar open={floatingToolbarElementOpen} anchorEl={floatingToolbarButtonRef.current}><Button size="small" color="inherit">Edit</Button><Button size="small" color="inherit">Copy</Button></FloatingToolbar></Box>),
         renderVariantCard('Bottom Tools', <Box sx={{ position: 'relative', minHeight: 130, display: 'grid', placeItems: 'center' }}><Button variant="outlined" ref={floatingToolbarBottomButtonRef} onClick={() => setFloatingToolbarBottomOpen((open) => !open)}>Open</Button><FloatingToolbar open={floatingToolbarBottomOpen} anchorEl={floatingToolbarBottomButtonRef.current} placement="bottom" offset={10}><Button size="small" color="inherit">Pin</Button><Button size="small" color="inherit">Share</Button></FloatingToolbar></Box>)
       ],
+      FocusRing: [
+        renderVariantCard('Focus', <Box sx={{ minHeight: 130, display: 'grid', placeItems: 'center' }}><FocusRing><Button variant="contained">Tab here</Button></FocusRing></Box>),
+        renderVariantCard('Error', <Box sx={{ minHeight: 130, display: 'grid', placeItems: 'center' }}><FocusRing tone="error" active pulseSize={34}><Button variant="outlined" color="error">Fix me</Button></FocusRing></Box>),
+        renderVariantCard('No Pulse', <Box sx={{ minHeight: 130, display: 'grid', placeItems: 'center' }}><FocusRing tone="warning" active pulse={false}><Button variant="outlined" color="warning">Warning</Button></FocusRing></Box>)
+      ],
       SmartTooltip: [
         renderVariantCard('Text', <Box sx={{ minHeight: 120, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Helpful detail" content="Extra context without leaving the flow."><Button variant="outlined">Hover</Button></SmartTooltip></Box>),
         renderVariantCard('Copy', <Box sx={{ minHeight: 120, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Install" content="Copy the package command." copyText="npm install @mickyballadelli/react-things" placement="bottom"><Button variant="outlined">Copy tooltip</Button></SmartTooltip></Box>),
-        renderVariantCard('Media Actions', <Box sx={{ minHeight: 140, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Preview card" content="Media, actions, and pin mode." media={<Box sx={{ height: 90, backgroundImage: 'url(/animals-colors.svg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />} actions={[{ id: 'open', label: 'Open' }]} defaultPinned><Button variant="contained">Pinned</Button></SmartTooltip></Box>)
+        renderVariantCard('Media Actions', <Box sx={{ minHeight: 140, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Preview card" content="Media, actions, and pin mode." media={<Box sx={{ height: 90, backgroundImage: 'url(/animals-colors.svg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />} actions={[{ id: 'open', label: 'Open' }]}><Button variant="contained">Preview</Button></SmartTooltip></Box>)
+      ],
+      ToastCenter: [
+        renderVariantCard('Grouped', <Box sx={{ position: 'relative', minHeight: 280, overflow: 'hidden' }}><ToastCenter defaultToasts={defaultToastCenterToasts} sx={{ position: 'absolute', right: 12, bottom: 12 }} /></Box>),
+        renderVariantCard('Ungrouped', <Box sx={{ position: 'relative', minHeight: 280, overflow: 'hidden' }}><ToastCenter defaultToasts={defaultToastCenterToasts} groupToasts={false} sx={{ position: 'absolute', right: 12, bottom: 12 }} /></Box>),
+        renderVariantCard('Limited', <Box sx={{ position: 'relative', minHeight: 260, overflow: 'hidden' }}><ToastCenter defaultToasts={defaultToastCenterToasts} maxVisible={2} sx={{ position: 'absolute', right: 12, bottom: 12 }} /></Box>)
+      ],
+      TourGuide: [
+        renderVariantCard('Closed', <Box sx={{ minHeight: 170, display: 'grid', placeItems: 'center' }}><Button variant="contained">Tour target</Button></Box>),
+        renderVariantCard('Branch Steps', <Box sx={{ minHeight: 170, display: 'grid', placeItems: 'center' }}><Chip label={`${tourGuideSteps.length} steps with branches`} /></Box>),
+        renderVariantCard('Completed', <Box sx={{ minHeight: 170, display: 'grid', placeItems: 'center' }}><TourGuide defaultOpen completed steps={tourGuideSteps} /><Chip label="Tour complete" color="success" /></Box>)
       ],
       MagneticCard: [
         renderVariantCard('Soft', <MagneticCard strength={10} tilt={4} sx={{ p: 2, border: 1, borderColor: 'divider', borderRadius: 1 }}>Soft pull</MagneticCard>),
         renderVariantCard('Tilt', <MagneticCard strength={18} tilt={12} lift={10} sx={{ p: 2, borderRadius: 2, bgcolor: '#dbeafe' }}>Tilt card</MagneticCard>),
         renderVariantCard('Glare', <MagneticCard strength={24} tilt={16} lift={16} glare sx={{ p: 3, borderRadius: 2, color: '#fff', background: 'linear-gradient(135deg,#2563eb,#db2777)' }}>Premium card</MagneticCard>)
+      ],
+      MorphMenu: [
+        renderVariantCard('Top Arc', <Box sx={{ minHeight: 180, display: 'grid', placeItems: 'center', overflow: 'hidden' }}><MorphMenu items={morphMenuItems} radius={90} startAngle={-160} endAngle={-20}><Button variant="contained">Open</Button></MorphMenu></Box>),
+        renderVariantCard('Bottom Arc', <Box sx={{ minHeight: 180, display: 'grid', placeItems: 'center', overflow: 'hidden' }}><MorphMenu items={morphMenuItems.slice(0, 3)} radius={82} startAngle={30} endAngle={150}><Button variant="outlined">Open</Button></MorphMenu></Box>),
+        renderVariantCard('No Labels', <Box sx={{ minHeight: 180, display: 'grid', placeItems: 'center', overflow: 'hidden' }}><MorphMenu items={morphMenuItems} showLabels={false} itemSize={44}><Button variant="contained">Tools</Button></MorphMenu></Box>)
       ],
       SpotlightPanel: [
         renderVariantCard('Small', <SpotlightPanel radius={90} sx={{ minHeight: 130, p: 2, color: '#fff', bgcolor: '#111827' }}>Small spotlight</SpotlightPanel>),
@@ -3008,6 +4541,11 @@ export function ComponentDocs() {
         renderVariantCard('Content', <ResizableFrame initialWidth={240} initialHeight={150}><Box sx={{ p: 2 }}>Resizable content</Box></ResizableFrame>),
         renderVariantCard('Large Min', <ResizableFrame initialWidth={280} initialHeight={170} minWidth={220} minHeight={140}><Box sx={{ p: 2 }}>Min size</Box></ResizableFrame>)
       ],
+      ResizableDashboard: [
+        renderVariantCard('Compact', <ResizableDashboard widgets={dashboardWidgets.slice(0, 3)} rowHeight={72} sx={{ minHeight: 300 }} />),
+        renderVariantCard('No Guides', <ResizableDashboard widgets={dashboardWidgets.slice(0, 4)} showGuides={false} sx={{ minHeight: 360 }} />),
+        renderVariantCard('Persistent', <ResizableDashboard widgets={dashboardWidgets} persistKey="react-things-resizable-dashboard-variant" sx={{ minHeight: 420 }} />)
+      ],
       InspectorPanel: [
         renderVariantCard('Text', <Stack spacing={1.5}><InspectorPanel title="Text prop" density="compact" showValueSummary={false} fields={[{ id: 'title', label: 'Title', type: 'text', value: inspectorTextTitle, defaultValue: 'Demo card' }]} onChange={(_, value) => setInspectorTextTitle(String(value))} /><Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}><Typography fontWeight={900}>{inspectorTextTitle}</Typography></Paper></Stack>),
         renderVariantCard('Number', <Stack spacing={1.5}><InspectorPanel title="Number prop" density="compact" showValueSummary={false} fields={[{ id: 'size', label: 'Size', type: 'number', value: inspectorNumberSize, defaultValue: 48, min: 24, max: 72, step: 2, unit: 'px' }]} onChange={(_, value) => setInspectorNumberSize(Number(value))} /><Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}><Typography fontWeight={900} sx={{ fontSize: inspectorNumberSize, lineHeight: 1 }}>Aa</Typography></Paper></Stack>),
@@ -3017,6 +4555,11 @@ export function ComponentDocs() {
         renderVariantCard('Simple', <ColorPicker value={pickerColor} onChange={setPickerColor} showValue={false} />),
         renderVariantCard('Alpha', <ColorPicker value={pickerColor} alpha={pickerAlpha} onChange={setPickerColor} onAlphaChange={setPickerAlpha} />),
         renderVariantCard('Swatches', <ColorPicker value={pickerColor} alpha={pickerAlpha} swatches={['#111827', '#2563eb', '#f59e0b', '#10b981']} onChange={setPickerColor} onAlphaChange={setPickerAlpha} />)
+      ],
+      ColorStudio: [
+        renderVariantCard('CSS Tokens', <ColorStudio initialColors={colorStudioColors} tokenFormat="css" />),
+        renderVariantCard('JSON Tokens', <ColorStudio initialColors={colorStudioColors.slice(0, 3)} tokenFormat="json" />),
+        renderVariantCard('MUI Tokens', <ColorStudio initialColors={colorStudioColors} tokenFormat="mui" />)
       ],
       TimelineScrubber: [
         renderVariantCard('Simple', <TimelineScrubber duration={90} defaultValue={22} preview={false} />),
@@ -3034,6 +4577,11 @@ export function ComponentDocs() {
         renderVariantCard('Compact', <DataCardGrid metrics={dataCardGridMetrics.slice(0, 2)} density="compact" columns={2} />),
         renderVariantCard('No Charts', <DataCardGrid title="Snapshot" metrics={dataCardGridMetrics.slice(0, 3)} showSparklines={false} columns={3} />)
       ],
+      DataLens: [
+        renderVariantCard('Table', <DataLens<DataLensService> rows={dataLensRows.slice(0, 4)} columns={dataLensColumns} dense />),
+        renderVariantCard('Cards', <DataLens<DataLensService> rows={dataLensRows.slice(0, 4)} columns={dataLensColumns.slice(0, 4)} defaultView="cards" />),
+        renderVariantCard('Sorted', <DataLens<DataLensService> rows={dataLensRows} columns={dataLensColumns} initialSort={{ columnId: 'requests', direction: 'desc' }} />)
+      ],
       KanbanBoard: [
         renderVariantCard('Compact', <KanbanBoard title="Sprint" columns={kanbanColumns.slice(0, 2)} onChange={(nextColumns) => setKanbanColumns([...nextColumns, ...kanbanColumns.slice(2)])} density="compact" />),
         renderVariantCard('No Column Drag', <KanbanBoard title="Fixed lanes" defaultColumns={defaultKanbanColumns.slice(0, 2)} allowColumnDrag={false} />),
@@ -3047,9 +4595,11 @@ export function ComponentDocs() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
+        height: '100vh',
         display: 'grid',
         gridTemplateColumns: { xs: '1fr', md: '260px 1fr' },
+        gridTemplateRows: { xs: 'auto 1fr', md: '1fr' },
+        overflow: 'hidden',
         bgcolor: 'background.default'
       }}
     >
@@ -3060,7 +4610,9 @@ export function ComponentDocs() {
           borderBottom: { xs: 1, md: 0 },
           borderColor: 'divider',
           bgcolor: 'background.paper',
-          p: 2
+          p: 2,
+          minHeight: 0,
+          overflow: 'auto'
         }}
       >
         <Stack direction="row" spacing={1.25} alignItems="center">
@@ -3104,7 +4656,7 @@ export function ComponentDocs() {
           }))}
           selectedId={selectedComponent.name}
           placeholder="Search components"
-          defaultExpandedGroups={['Display', 'Layout', 'Input', 'Effects']}
+          defaultExpandedGroups={['Display', 'Layout', 'Input', 'Navigation', 'Effects']}
           onSelect={(item) => {
             setSelectedComponentName(item.id)
             setSelectedSampleLabel(sampleTabs[0])
@@ -3112,7 +4664,7 @@ export function ComponentDocs() {
         />
       </Box>
 
-      <Box component="main" sx={{ p: { xs: 2, md: 4 }, minWidth: 0 }}>
+      <Box component="main" sx={{ p: { xs: 2, md: 4 }, minWidth: 0, minHeight: 0, overflow: 'auto' }}>
         <Stack spacing={3}>
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
