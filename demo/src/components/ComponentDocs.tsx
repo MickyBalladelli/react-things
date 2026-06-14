@@ -3047,9 +3047,11 @@ export function ComponentDocs() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
+        height: '100vh',
         display: 'grid',
         gridTemplateColumns: { xs: '1fr', md: '260px 1fr' },
+        gridTemplateRows: { xs: 'auto 1fr', md: '1fr' },
+        overflow: 'hidden',
         bgcolor: 'background.default'
       }}
     >
@@ -3060,7 +3062,9 @@ export function ComponentDocs() {
           borderBottom: { xs: 1, md: 0 },
           borderColor: 'divider',
           bgcolor: 'background.paper',
-          p: 2
+          p: 2,
+          minHeight: 0,
+          overflow: 'auto'
         }}
       >
         <Stack direction="row" spacing={1.25} alignItems="center">
@@ -3112,7 +3116,7 @@ export function ComponentDocs() {
         />
       </Box>
 
-      <Box component="main" sx={{ p: { xs: 2, md: 4 }, minWidth: 0 }}>
+      <Box component="main" sx={{ p: { xs: 2, md: 4 }, minWidth: 0, minHeight: 0, overflow: 'auto' }}>
         <Stack spacing={3}>
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
