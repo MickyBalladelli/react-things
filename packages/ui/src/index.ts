@@ -16,6 +16,8 @@ export type { FloatingToolbarPlacement, FloatingToolbarProps } from './component
 export { FloatingToolbar } from './components/FloatingToolbar'
 export type { MagneticCardProps } from './components/MagneticCard'
 export { MagneticCard } from './components/MagneticCard'
+export type { MorphMenuItem, MorphMenuProps } from './components/MorphMenu'
+export { MorphMenu } from './components/MorphMenu'
 export type { SpotlightPanelProps } from './components/SpotlightPanel'
 export { SpotlightPanel } from './components/SpotlightPanel'
 export type { NodeCanvasConnection, NodeCanvasConnectionType, NodeCanvasNode, NodeCanvasPosition, NodeCanvasProps } from './components/NodeCanvas'

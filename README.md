@@ -42,6 +42,7 @@ React and React DOM are peer dependencies.
 - SplitPane: two-panel layout with a draggable divider.
 - FloatingToolbar: contextual tool strip anchored to text selection or an element.
 - MagneticCard: cursor-reactive card with 3D tilt, lift, and glare.
+- MorphMenu: radial action menu that morphs out from its trigger.
 - SpotlightPanel: panel that reveals content through a cursor-following light.
 - NodeCanvas: diagram workspace with draggable connected nodes.
 - BeforeAfterSlider: comparison viewer with a draggable reveal handle.

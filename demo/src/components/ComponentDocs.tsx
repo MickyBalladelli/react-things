@@ -32,6 +32,7 @@ import {
   InspectorPanel,
   KanbanBoard,
   MagneticCard,
+  MorphMenu,
   NodeCanvas,
   ResizableDashboard,
   ResizableFrame,
@@ -41,7 +42,7 @@ import {
   TimelineScrubber,
   ToastCenter
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, DataCardGridMetric, InspectorPanelField, KanbanColumn, ResizableDashboardWidget, ToastCenterToast } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, DataCardGridMetric, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -132,6 +133,48 @@ const props: MagneticCardProps = {
 
 export function Example() {
   return <MagneticCard {...props}>Hover me</MagneticCard>
+}`
+      }
+    ],
+    MorphMenu: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import Button from '@mui/material/Button'
+import { MorphMenu } from '@mickyballadelli/react-things'
+
+const items = [
+  { id: 'copy', label: 'Copy', icon: 'C', onClick: () => console.log('copy') },
+  { id: 'share', label: 'Share', icon: 'S', onClick: () => console.log('share') },
+  { id: 'archive', label: 'Archive', icon: 'A', onClick: () => console.log('archive') }
+]
+
+export function Example() {
+  return (
+    <MorphMenu items={items}>
+      <Button variant="contained">Open menu</Button>
+    </MorphMenu>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import Button from '@mui/material/Button'
+import { MorphMenu, type MorphMenuItem } from '@mickyballadelli/react-things'
+
+const items: MorphMenuItem[] = [
+  { id: 'copy', label: 'Copy', icon: 'C', onClick: () => console.log('copy') },
+  { id: 'share', label: 'Share', icon: 'S', onClick: () => console.log('share') },
+  { id: 'archive', label: 'Archive', icon: 'A', onClick: () => console.log('archive') }
+]
+
+export function Example() {
+  return (
+    <MorphMenu items={items} radius={124} startAngle={-170} endAngle={-10}>
+      <Button variant="contained">Open menu</Button>
+    </MorphMenu>
+  )
 }`
       }
     ],
@@ -1708,6 +1751,71 @@ export function Example() {
       }
     ]
   },
+  {
+    ...createBasicDoc(
+      'MorphMenu',
+      'Radial context menu that morphs out from its trigger.',
+      'MorphMenu is a radial action menu for compact tool clusters, context actions, and creative surfaces with smooth trigger-origin motion and keyboard navigation.'
+    ),
+    props: [
+      {
+        name: 'children',
+        type: 'ReactElement',
+        defaultValue: '-',
+        possibleValues: 'One trigger element.',
+        description: 'Element that opens the radial menu.'
+      },
+      {
+        name: 'items',
+        type: 'MorphMenuItem[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, icon, disabled, onClick }.',
+        description: 'Menu actions shown around the trigger.'
+      },
+      {
+        name: 'open / defaultOpen',
+        type: 'boolean',
+        defaultValue: '- / false',
+        possibleValues: 'true or false.',
+        description: 'Controlled or uncontrolled open state.'
+      },
+      {
+        name: 'radius',
+        type: 'number',
+        defaultValue: '112',
+        possibleValues: 'Any positive pixel radius.',
+        description: 'Distance from trigger center to each item.'
+      },
+      {
+        name: 'startAngle / endAngle',
+        type: 'number',
+        defaultValue: '-160 / -20',
+        possibleValues: 'Degrees. 0 points right, 90 points down.',
+        description: 'Arc used to place radial menu items.'
+      },
+      {
+        name: 'itemSize',
+        type: 'number',
+        defaultValue: '52',
+        possibleValues: 'Any positive pixel size.',
+        description: 'Circular item button size.'
+      },
+      {
+        name: 'showLabels',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Shows labels below radial buttons.'
+      },
+      {
+        name: 'onSelect',
+        type: '(item: MorphMenuItem) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving selected item.',
+        description: 'Called when a menu action is selected.'
+      }
+    ]
+  },
   createBasicDoc(
     'SpotlightPanel',
     'Panel with cursor spotlight reveal.',
@@ -2456,6 +2564,13 @@ const colorStudioColors: ColorStudioColor[] = [
   { id: 'surface', name: 'Surface', value: '#f8fafc' }
 ]
 
+const morphMenuItems: MorphMenuItem[] = [
+  { id: 'copy', label: 'Copy', icon: 'C' },
+  { id: 'share', label: 'Share', icon: 'S' },
+  { id: 'pin', label: 'Pin', icon: 'P' },
+  { id: 'archive', label: 'Archive', icon: 'A' }
+]
+
 const defaultToastCenterToasts: ToastCenterToast[] = [
   {
     id: 'deploy-live',
@@ -2592,6 +2707,10 @@ function getComponentGroup(name: string) {
 
   if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter'].includes(name)) {
     return 'Input'
+  }
+
+  if (['MorphMenu'].includes(name)) {
+    return 'Navigation'
   }
 
   return 'Effects'
@@ -2824,6 +2943,16 @@ export function ComponentDocs() {
             <Typography variant="h5" fontWeight={900}>MagneticCard</Typography>
             <Typography sx={{ opacity: 0.86 }}>Hover corners for tilt, lift, glare, and depth.</Typography>
           </MagneticCard>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'MorphMenu') {
+      return (
+        <Box sx={{ minHeight: 380, display: 'grid', placeItems: 'center', bgcolor: '#f8fafc', overflow: 'hidden' }}>
+          <MorphMenu items={morphMenuItems} radius={126} startAngle={-170} endAngle={-10}>
+            <Button variant="contained" size="large">Open radial menu</Button>
+          </MorphMenu>
         </Box>
       )
     }
@@ -3444,6 +3573,11 @@ export function ComponentDocs() {
         renderVariantCard('Tilt', <MagneticCard strength={18} tilt={12} lift={10} sx={{ p: 2, borderRadius: 2, bgcolor: '#dbeafe' }}>Tilt card</MagneticCard>),
         renderVariantCard('Glare', <MagneticCard strength={24} tilt={16} lift={16} glare sx={{ p: 3, borderRadius: 2, color: '#fff', background: 'linear-gradient(135deg,#2563eb,#db2777)' }}>Premium card</MagneticCard>)
       ],
+      MorphMenu: [
+        renderVariantCard('Top Arc', <Box sx={{ minHeight: 180, display: 'grid', placeItems: 'center', overflow: 'hidden' }}><MorphMenu items={morphMenuItems} radius={90} startAngle={-160} endAngle={-20}><Button variant="contained">Open</Button></MorphMenu></Box>),
+        renderVariantCard('Bottom Arc', <Box sx={{ minHeight: 180, display: 'grid', placeItems: 'center', overflow: 'hidden' }}><MorphMenu items={morphMenuItems.slice(0, 3)} radius={82} startAngle={30} endAngle={150}><Button variant="outlined">Open</Button></MorphMenu></Box>),
+        renderVariantCard('No Labels', <Box sx={{ minHeight: 180, display: 'grid', placeItems: 'center', overflow: 'hidden' }}><MorphMenu items={morphMenuItems} showLabels={false} itemSize={44}><Button variant="contained">Tools</Button></MorphMenu></Box>)
+      ],
       SpotlightPanel: [
         renderVariantCard('Small', <SpotlightPanel radius={90} sx={{ minHeight: 130, p: 2, color: '#fff', bgcolor: '#111827' }}>Small spotlight</SpotlightPanel>),
         renderVariantCard('Wide', <SpotlightPanel radius={180} dim={0.55} sx={{ minHeight: 130, p: 2, color: '#fff', bgcolor: '#172554' }}>Wide spotlight</SpotlightPanel>),
@@ -3582,7 +3716,7 @@ export function ComponentDocs() {
           }))}
           selectedId={selectedComponent.name}
           placeholder="Search components"
-          defaultExpandedGroups={['Display', 'Layout', 'Input', 'Effects']}
+          defaultExpandedGroups={['Display', 'Layout', 'Input', 'Navigation', 'Effects']}
           onSelect={(item) => {
             setSelectedComponentName(item.id)
             setSelectedSampleLabel(sampleTabs[0])

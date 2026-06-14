@@ -35,6 +35,7 @@ export function Example() {
 - SplitPane
 - FloatingToolbar
 - MagneticCard
+- MorphMenu
 - SpotlightPanel
 - NodeCanvas
 - BeforeAfterSlider
