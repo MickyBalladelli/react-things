@@ -52,6 +52,8 @@ export type { ColorStudioColor, ColorStudioGradientStop, ColorStudioProps, Color
 export { ColorStudio } from './components/ColorStudio'
 export type { FileDropZoneProps } from './components/FileDropZone'
 export { FileDropZone } from './components/FileDropZone'
+export type { DropComposerItem, DropComposerProps, DropComposerStatus } from './components/DropComposer'
+export { DropComposer } from './components/DropComposer'
 export type { TimelineScrubberChangeReason, TimelineScrubberMarker, TimelineScrubberProps, TimelineScrubberThumbnail } from './components/TimelineScrubber'
 export { TimelineScrubber } from './components/TimelineScrubber'
 export type { InfiniteCanvasItem, InfiniteCanvasProps, InfiniteCanvasViewport } from './components/InfiniteCanvas'

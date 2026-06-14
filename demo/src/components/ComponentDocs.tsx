@@ -36,6 +36,7 @@ import {
   DataLens,
   DockBar,
   DockTabs,
+  DropComposer,
   DraggableBox,
   FileDropZone,
   FocusRing,
@@ -65,7 +66,7 @@ import {
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { BulkActionBarAction, ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, LayoutSwitcherItem, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, SmartBreadcrumbItem, SpotlightSearchItem, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { BulkActionBarAction, ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, DropComposerItem, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, LayoutSwitcherItem, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, SmartBreadcrumbItem, SpotlightSearchItem, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -4115,6 +4116,95 @@ export function Example() {
     'Drag-drop file area with state.',
     'FileDropZone is an upload target that handles drag, hover, and selected file states before handing files back to your app.'
   ),
+  {
+    ...createBasicDoc(
+      'DropComposer',
+      'Upload dropzone with previews, reorder, metadata edit, and progress.',
+      'DropComposer is a composed upload staging area where files can be dropped, previewed, reordered, annotated, and tracked before the real upload happens.'
+    ),
+    props: [
+      {
+        name: 'items / defaultItems',
+        type: 'DropComposerItem[]',
+        defaultValue: '[]',
+        possibleValues: 'Array of { id, name, size, type, previewUrl, title, description, progress, status, metadata }.',
+        description: 'Controlled or uncontrolled upload queue.'
+      },
+      {
+        name: 'accept / multiple',
+        type: 'string / boolean',
+        defaultValue: '- / true',
+        possibleValues: 'Any file input accept string and true or false.',
+        description: 'Controls file picker limits.'
+      },
+      {
+        name: 'metadataFields',
+        type: 'string[]',
+        defaultValue: '["title", "description"]',
+        possibleValues: 'title, description, or custom field names.',
+        description: 'Metadata fields shown for each file.'
+      },
+      {
+        name: 'renderPreview',
+        type: '(item) => ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Custom renderer for file thumbnails.',
+        description: 'Overrides default image/file preview.'
+      },
+      {
+        name: 'onItemsChange / onFiles',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks receiving queue or new files.',
+        description: 'Reports queue changes and dropped files.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { DropComposer } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <DropComposer
+      accept="image/*,.pdf"
+      onItemsChange={(items) => console.log(items)}
+      onFiles={(files) => console.log(files)}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { DropComposer, type DropComposerItem } from '@mickyballadelli/react-things'
+
+const items: DropComposerItem[] = [
+  {
+    id: 'hero',
+    name: 'hero-image.png',
+    size: 428000,
+    type: 'image/png',
+    previewUrl: '/animals-colors.svg',
+    title: 'Hero image',
+    description: 'Landing page visual',
+    progress: 100,
+    status: 'done'
+  }
+]
+
+export function Example() {
+  return (
+    <DropComposer
+      defaultItems={items}
+      metadataFields={['title', 'description']}
+    />
+  )
+}`
+      }
+    ]
+  },
 ]
 
 const defaultGlassBoxConfig: GlassBoxConfig = {
@@ -4124,6 +4214,40 @@ const defaultGlassBoxConfig: GlassBoxConfig = {
   glassColor: '#ffffff',
   children: 'Liquid glass content'
 }
+
+const defaultDropComposerItems: DropComposerItem[] = [
+  {
+    id: 'launch-hero',
+    name: 'launch-hero.png',
+    size: 428000,
+    type: 'image/png',
+    previewUrl: '/animals-colors.svg',
+    title: 'Launch hero',
+    description: 'Main campaign visual',
+    progress: 100,
+    status: 'done'
+  },
+  {
+    id: 'release-notes',
+    name: 'release-notes.pdf',
+    size: 218000,
+    type: 'application/pdf',
+    title: 'Release notes',
+    description: 'Customer-facing PDF',
+    progress: 66,
+    status: 'uploading'
+  },
+  {
+    id: 'token-export',
+    name: 'tokens.json',
+    size: 42000,
+    type: 'application/json',
+    title: 'Design tokens',
+    description: 'Theme handoff',
+    progress: 32,
+    status: 'queued'
+  }
+]
 
 const dataCardGridMetrics: DataCardGridMetric[] = [
   {
@@ -4704,7 +4828,7 @@ function getComponentGroup(name: string) {
     return 'Input'
   }
 
-  if (['CommandPalette', 'SpotlightSearch', 'FloatingToolbar', 'FileDropZone', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
+  if (['CommandPalette', 'SpotlightSearch', 'FloatingToolbar', 'FileDropZone', 'DropComposer', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
     return 'Input'
   }
 
@@ -5406,6 +5530,20 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'FileDropZone') {
       return <Box sx={{ p: 3 }}><FileDropZone onFiles={() => {}} /></Box>
+    }
+
+    if (selectedComponent.name === 'DropComposer') {
+      return (
+        <Box sx={{ minHeight: 620, p: 3, bgcolor: '#f8fafc' }}>
+          <DropComposer
+            defaultItems={defaultDropComposerItems}
+            accept="image/*,.pdf,.json"
+            title="Compose launch upload"
+            subtitle="Drop assets, reorder the queue, edit names, and watch upload progress."
+            sx={{ maxWidth: 920, mx: 'auto' }}
+          />
+        </Box>
+      )
     }
 
     if (selectedComponent.name === 'SmartTooltip') {
@@ -6197,6 +6335,11 @@ export function ComponentDocs() {
         renderVariantCard('Default', <FileDropZone />),
         renderVariantCard('Callback', <FileDropZone onFiles={() => {}} />),
         renderVariantCard('Styled', <FileDropZone sx={{ bgcolor: '#eef2ff', borderColor: '#6366f1' }} />)
+      ],
+      DropComposer: [
+        renderVariantCard('Queue', <DropComposer defaultItems={defaultDropComposerItems.slice(0, 2)} title="Upload queue" sx={{ minHeight: 360 }} />),
+        renderVariantCard('Images Only', <DropComposer defaultItems={defaultDropComposerItems.slice(0, 1)} accept="image/*" title="Image assets" sx={{ minHeight: 320 }} />),
+        renderVariantCard('Custom Preview', <DropComposer defaultItems={defaultDropComposerItems.slice(1)} renderPreview={(item) => <Box sx={{ p: 1, textAlign: 'center' }}><Typography fontWeight={900}>{item.name.split('.').pop()?.toUpperCase()}</Typography></Box>} sx={{ minHeight: 320 }} />)
       ],
       DataCardGrid: [
         renderVariantCard('Revenue', <DataCardGrid metrics={[dataCardGridMetrics[0]]} showProgress={false} />),

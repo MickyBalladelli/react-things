@@ -71,6 +71,7 @@ React and React DOM are peer dependencies.
 - ColorStudio: palette builder with contrast checks, gradients, and token export.
 - TimelineScrubber: timeline input for seeking through time-based content.
 - FileDropZone: upload target for dragged or selected files.
+- DropComposer: upload staging area with previews, reorder, metadata edit, and progress.
 - FocusRing: animated focus and validation highlight for any target.
 
 ## Commands

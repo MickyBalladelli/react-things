@@ -7,9 +7,6 @@ Trackpad-like surface for zoom, pan, rotate, scrub gestures.
 CompareStack
 Multi-layer before/after viewer with opacity sliders.
 
-DropComposer
-Upload dropzone with previews, reorder, metadata edit, progress.
-
 CommandTimeline
 Undo/redo history as visual timeline with jump-to-state.
 
