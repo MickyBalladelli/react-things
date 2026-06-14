@@ -3,7 +3,6 @@ SpotlightSearch: search box with command results, previews, fuzzy groups, action
 FlowBuilder: better NodeCanvas for workflows: ports, typed edges, validation, auto-layout.
 InfiniteCanvas: pan/zoom canvas with minimap, grid, selection box.
 DropComposer: drag/drop upload zone with previews, reorder, metadata edit.
-SelectionBox: drag-select items on canvas/list/grid.
 CompareStack: before/after but for many layers, with opacity sliders.
 GesturePad: trackpad-like component for zoom, pan, rotate gestures.
 KeyboardHintOverlay: hold key to show available shortcuts over UI.
@@ -12,7 +11,7 @@ KeyboardHintOverlay: hold key to show available shortcuts over UI.
 InfiniteCanvas
 
 
-## Current Components (31 total):
+## Current Components (32 total):
 1. BeforeAfterSlider
 2. CodeViewer
 3. ColorPicker
@@ -38,12 +37,13 @@ InfiniteCanvas
 23. NodeCanvas
 24. ResizableFrame
 25. ResizableDashboard
-26. SmartTooltip
-27. SplitPane
-28. SpotlightPanel
-29. TimelineScrubber
-30. ToastCenter
-31. TourGuide
+26. SelectionBox
+27. SmartTooltip
+28. SplitPane
+29. SpotlightPanel
+30. TimelineScrubber
+31. ToastCenter
+32. TourGuide
 
 ## New Component Suggestions:
 
@@ -60,10 +60,3 @@ InfiniteCanvas
 - Animated overlay with keyboard icons
 - Customizable hotkey detection
 - Material-UI doesn't have built-in keyboard hint systems
-
-### 3. **SelectionBox** - Drag Selection Component
-- Drag to select multiple items
-- Works with grids, lists, or canvases
-- Customizable selection visuals
-- Multi-selection with modifier keys
-- Useful for data tables, canvases, file managers

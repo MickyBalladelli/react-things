@@ -48,6 +48,8 @@ export type { TimelineScrubberChangeReason, TimelineScrubberMarker, TimelineScru
 export { TimelineScrubber } from './components/TimelineScrubber'
 export type { InfiniteCanvasItem, InfiniteCanvasProps, InfiniteCanvasViewport } from './components/InfiniteCanvas'
 export { InfiniteCanvas } from './components/InfiniteCanvas'
+export type { SelectionBoxChange, SelectionBoxChangeReason, SelectionBoxProps, SelectionBoxRect } from './components/SelectionBox'
+export { SelectionBox } from './components/SelectionBox'
 export type { SmartTooltipAction, SmartTooltipProps } from './components/SmartTooltip'
 export { SmartTooltip } from './components/SmartTooltip'
 export type { ToastCenterAction, ToastCenterProps, ToastCenterToast, ToastCenterTone } from './components/ToastCenter'

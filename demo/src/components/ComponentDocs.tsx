@@ -49,6 +49,7 @@ import {
   NodeCanvas,
   ResizableDashboard,
   ResizableFrame,
+  SelectionBox,
   SmartTooltip,
   SplitPane,
   SpotlightPanel,
@@ -811,6 +812,66 @@ export function Example() {
       onItemSelect={(item) => setSelected(item?.id ?? null)}
       onItemMove={(id, position) => console.log(id, position)}
     />
+  )
+}`
+      }
+    ],
+    SelectionBox: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import { Box } from '@mui/material'
+import { SelectionBox } from '@mickyballadelli/react-things'
+
+const files = ['Roadmap', 'Assets', 'Launch', 'Billing', 'Research', 'Support']
+
+export function Example() {
+  const [selectedIds, setSelectedIds] = useState([])
+
+  return (
+    <SelectionBox
+      selectedIds={selectedIds}
+      onSelectionChange={(change) => setSelectedIds(change.selectedIds)}
+      sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, p: 2 }}
+    >
+      {files.map((file) => (
+        <Box key={file} data-selection-id={file} sx={{ p: 2, border: 1, borderColor: 'divider', borderRadius: 1 }}>
+          {file}
+        </Box>
+      ))}
+    </SelectionBox>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import { Box } from '@mui/material'
+import { SelectionBox, type SelectionBoxChange } from '@mickyballadelli/react-things'
+
+const files = ['Roadmap', 'Assets', 'Launch', 'Billing', 'Research', 'Support']
+
+export function Example() {
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
+
+  function updateSelection(change: SelectionBoxChange) {
+    setSelectedIds(change.selectedIds)
+  }
+
+  return (
+    <SelectionBox
+      selectedIds={selectedIds}
+      onSelectionChange={updateSelection}
+      sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, p: 2 }}
+    >
+      {files.map((file) => (
+        <Box key={file} data-selection-id={file} sx={{ p: 2, border: 1, borderColor: 'divider', borderRadius: 1 }}>
+          {file}
+        </Box>
+      ))}
+    </SelectionBox>
   )
 }`
       }
@@ -2599,6 +2660,57 @@ export function Example() {
   },
   {
     ...createBasicDoc(
+      'SelectionBox',
+      'Drag selection for grids, lists, and canvases.',
+      'SelectionBox lets users drag a rectangle over any descendants with data-selection-id, supports click selection, modifier-key multi-select, custom visuals, and controlled selection state.'
+    ),
+    props: [
+      {
+        name: 'children',
+        type: 'ReactNode | render function',
+        defaultValue: '-',
+        possibleValues: 'Any content. Selectable descendants need data-selection-id.',
+        description: 'Grid, list, canvas, or render function receiving selectedIds.'
+      },
+      {
+        name: 'selectedIds / defaultSelectedIds',
+        type: 'string[]',
+        defaultValue: '- / []',
+        possibleValues: 'Ids matching data-selection-id.',
+        description: 'Controlled or uncontrolled selected ids.'
+      },
+      {
+        name: 'itemSelector',
+        type: 'string',
+        defaultValue: '[data-selection-id]',
+        possibleValues: 'Any selector for selectable descendants.',
+        description: 'Elements tested against the drag rectangle.'
+      },
+      {
+        name: 'selectionColor',
+        type: 'string',
+        defaultValue: '#2563eb',
+        possibleValues: 'Any CSS color.',
+        description: 'Color for selected outlines and drag rectangle.'
+      },
+      {
+        name: 'selectionRectSx',
+        type: 'BoxProps["sx"]',
+        defaultValue: '-',
+        possibleValues: 'Any MUI sx value.',
+        description: 'Overrides drag rectangle visuals.'
+      },
+      {
+        name: 'onSelectionChange',
+        type: '(change: SelectionBoxChange) => void',
+        defaultValue: '-',
+        possibleValues: 'Callback receiving selectedIds, addedIds, removedIds, and reason.',
+        description: 'Called after click, drag, or clear.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
       'SmartTooltip',
       'Tooltip that can hold actions, media, copy buttons, and pin mode.',
       'SmartTooltip is a rich hover or click popover for extra context, previews, quick actions, and copyable values.'
@@ -3535,6 +3647,17 @@ const defaultKanbanColumns: KanbanColumn[] = [
   }
 ]
 
+const selectionBoxItems = [
+  { id: 'roadmap', label: 'Roadmap', type: 'Doc', color: '#dbeafe' },
+  { id: 'assets', label: 'Assets', type: 'Folder', color: '#dcfce7' },
+  { id: 'launch', label: 'Launch', type: 'Board', color: '#fef3c7' },
+  { id: 'billing', label: 'Billing', type: 'Sheet', color: '#fee2e2' },
+  { id: 'research', label: 'Research', type: 'Doc', color: '#e0e7ff' },
+  { id: 'support', label: 'Support', type: 'Inbox', color: '#fce7f3' },
+  { id: 'qa', label: 'QA notes', type: 'Doc', color: '#ccfbf1' },
+  { id: 'metrics', label: 'Metrics', type: 'Chart', color: '#ffedd5' }
+]
+
 const defaultInspectorDrawerSections: InspectorDrawerSection[] = [
   {
     id: 'content',
@@ -3583,7 +3706,7 @@ function getComponentGroup(name: string) {
     return 'Display'
   }
 
-  if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'ResizableDashboard', 'BeforeAfterSlider', 'InfiniteCanvas'].includes(name)) {
+  if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'ResizableDashboard', 'BeforeAfterSlider', 'InfiniteCanvas', 'SelectionBox'].includes(name)) {
     return 'Layout'
   }
 
@@ -3751,6 +3874,7 @@ export function ComponentDocs() {
   const [pickerAlpha, setPickerAlpha] = useState(0.8)
   const [splitSize, setSplitSize] = useState(34)
   const [splitCollapsed, setSplitCollapsed] = useState<'first' | 'second' | null>(null)
+  const [selectionBoxSelectedIds, setSelectionBoxSelectedIds] = useState<string[]>(['roadmap', 'assets'])
   const [inspectorTextTitle, setInspectorTextTitle] = useState('Demo card')
   const [inspectorNumberSize, setInspectorNumberSize] = useState(48)
   const [inspectorFields, setInspectorFields] = useState<InspectorPanelField[]>([
@@ -3969,6 +4093,56 @@ export function ComponentDocs() {
           defaultViewport={{ x: 80, y: 40, zoom: 0.85 }}
           sx={{ minHeight: 420 }}
         />
+      )
+    }
+
+    if (selectedComponent.name === 'SelectionBox') {
+      return (
+        <Box sx={{ minHeight: 430, p: 3, bgcolor: '#f8fafc' }}>
+          <Stack spacing={1.5}>
+            <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+              <Typography color="text.secondary">
+                Drag across items. Cmd/Ctrl-click toggles. Shift-click adds.
+              </Typography>
+              <Chip label={`${selectionBoxSelectedIds.length} selected`} />
+            </Stack>
+            <SelectionBox
+              selectedIds={selectionBoxSelectedIds}
+              onSelectionChange={(change) => setSelectionBoxSelectedIds(change.selectedIds)}
+              selectionColor="#db2777"
+              sx={{
+                minHeight: 320,
+                display: 'grid',
+                gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: 'repeat(4, minmax(0, 1fr))' },
+                gap: 1.5,
+                p: 2,
+                border: 1,
+                borderColor: 'divider',
+                borderRadius: 1,
+                bgcolor: 'background.paper'
+              }}
+            >
+              {selectionBoxItems.map((item) => (
+                <Paper
+                  key={item.id}
+                  data-selection-id={item.id}
+                  variant="outlined"
+                  sx={{
+                    p: 2,
+                    borderRadius: 1,
+                    bgcolor: item.color,
+                    minHeight: 96,
+                    display: 'grid',
+                    alignContent: 'space-between'
+                  }}
+                >
+                  <Typography fontWeight={950}>{item.label}</Typography>
+                  <Typography variant="caption" color="text.secondary">{item.type}</Typography>
+                </Paper>
+              ))}
+            </SelectionBox>
+          </Stack>
+        </Box>
       )
     }
 
@@ -4761,6 +4935,11 @@ export function ComponentDocs() {
         renderVariantCard('Pan Zoom', <InfiniteCanvas items={[{ id: 'a', label: 'A', x: 20, y: 40 }, { id: 'b', label: 'B', x: 240, y: 120, color: '#dcfce7' }]} sx={{ minHeight: 220 }} />),
         renderVariantCard('No Minimap', <InfiniteCanvas showMinimap={false} items={[{ id: 'a', label: 'Card', x: 40, y: 40, color: '#dbeafe' }, { id: 'b', label: 'Note', x: 260, y: 160, color: '#fef3c7' }]} sx={{ minHeight: 220 }} />),
         renderVariantCard('Custom Items', <InfiniteCanvas defaultViewport={{ x: 30, y: 30, zoom: 0.9 }} items={[{ id: 'a', label: 'API', x: 40, y: 50, color: '#eff6ff' }, { id: 'b', label: 'Worker', x: 290, y: 160, color: '#f0fdf4' }]} renderItem={(item, selected) => <Box sx={{ textAlign: 'center' }}><Typography fontWeight={900}>{item.label}</Typography><Typography variant="caption" color={selected ? 'primary.main' : 'text.secondary'}>{selected ? 'selected' : 'drag me'}</Typography></Box>} sx={{ minHeight: 240 }} />)
+      ],
+      SelectionBox: [
+        renderVariantCard('Grid', <SelectionBox defaultSelectedIds={['roadmap']} sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1, p: 1 }} selectionColor="#2563eb">{selectionBoxItems.slice(0, 4).map((item) => <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}>{item.label}</Paper>)}</SelectionBox>),
+        renderVariantCard('List', <SelectionBox defaultSelectedIds={['support']} selectionColor="#059669" sx={{ display: 'grid', gap: 1, p: 1 }}>{selectionBoxItems.slice(4).map((item) => <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 1.25, borderRadius: 1 }}>{item.label}</Paper>)}</SelectionBox>),
+        renderVariantCard('Custom Box', <SelectionBox selectionColor="#db2777" selectionRectSx={{ borderStyle: 'dashed', bgcolor: '#db277733' }} sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, p: 1 }}>{selectionBoxItems.slice(0, 6).map((item) => <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 1, borderRadius: 1 }}>{item.label}</Paper>)}</SelectionBox>)
       ],
       ResizableFrame: [
         renderVariantCard('Small', <ResizableFrame initialWidth={180} initialHeight={120}>Small</ResizableFrame>),

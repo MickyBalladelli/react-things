@@ -43,6 +43,7 @@ export function Example() {
 - NodeCanvas
 - BeforeAfterSlider
 - InfiniteCanvas
+- SelectionBox
 - SmartTooltip
 - ToastCenter
 - TourGuide
