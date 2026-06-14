@@ -1,4 +1,6 @@
+import { useLayoutEffect, useRef } from 'react'
 import { Box, Typography } from '@mui/material'
+import type { KeyboardEvent } from 'react'
 
 export type CodeViewerProps = {
   label: string
@@ -115,12 +117,84 @@ function highlightCode(value: string) {
     .join('')
 }
 
+function getCaretOffset(element: HTMLElement | null) {
+  const selection = window.getSelection()
+
+  if (!element || !selection?.rangeCount) {
+    return 0
+  }
+
+  const range = selection.getRangeAt(0)
+
+  if (!element.contains(range.endContainer)) {
+    return 0
+  }
+
+  const preCaretRange = range.cloneRange()
+  preCaretRange.selectNodeContents(element)
+  preCaretRange.setEnd(range.endContainer, range.endOffset)
+
+  return preCaretRange.toString().length
+}
+
+function setCaretOffset(element: HTMLElement | null, offset: number) {
+  if (!element) {
+    return
+  }
+
+  const selection = window.getSelection()
+  const range = document.createRange()
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT)
+  let currentOffset = 0
+  let currentNode = walker.nextNode()
+
+  while (currentNode) {
+    const nextOffset = currentOffset + (currentNode.textContent?.length ?? 0)
+
+    if (offset <= nextOffset) {
+      range.setStart(currentNode, Math.max(0, offset - currentOffset))
+      range.collapse(true)
+      selection?.removeAllRanges()
+      selection?.addRange(range)
+      return
+    }
+
+    currentOffset = nextOffset
+    currentNode = walker.nextNode()
+  }
+
+  range.selectNodeContents(element)
+  range.collapse(false)
+  selection?.removeAllRanges()
+  selection?.addRange(range)
+}
+
 export function CodeViewer({ label, language, value, onChange, minHeight = 360 }: CodeViewerProps) {
+  const editorRef = useRef<HTMLElement | null>(null)
+  const caretOffsetRef = useRef<number | null>(null)
   const safeValue = value ?? ''
   const lineCount = Math.max(safeValue.split('\n').length, 1)
   const lineNumbers = Array.from({ length: lineCount }, (_, index) => index + 1).join('\n')
   const highlightedCode = highlightCode(safeValue)
   const languageColor = getLanguageColor(language)
+
+  useLayoutEffect(() => {
+    if (caretOffsetRef.current !== null && document.activeElement === editorRef.current) {
+      setCaretOffset(editorRef.current, caretOffsetRef.current)
+      caretOffsetRef.current = null
+    }
+  }, [safeValue])
+
+  function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.key !== 'Tab') {
+      return
+    }
+
+    event.preventDefault()
+    document.execCommand('insertText', false, '  ')
+    caretOffsetRef.current = getCaretOffset(editorRef.current)
+    onChange(editorRef.current?.textContent ?? '')
+  }
 
   return (
     <Box>
@@ -191,44 +265,30 @@ export function CodeViewer({ label, language, value, onChange, minHeight = 360 }
           }}
         >
           <Box
+            ref={editorRef}
             component="pre"
-            aria-hidden="true"
-            dangerouslySetInnerHTML={{ __html: highlightedCode }}
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              m: 0,
-              p: `${codePadding}px`,
-              boxSizing: 'border-box',
-              pointerEvents: 'none',
-              color: '#e5e7eb',
-              fontFamily: codeFont,
-              fontSize: 14,
-              lineHeight: 1.6,
-              tabSize: 2,
-              whiteSpace: 'pre-wrap',
-              overflowWrap: 'normal'
-            }}
-          />
-
-          <Box
-            component="textarea"
+            contentEditable
             aria-label={`${label} code editor`}
             spellCheck={false}
-            value={safeValue}
-            onChange={(event) => onChange(event.target.value)}
+            suppressContentEditableWarning
+            dangerouslySetInnerHTML={{ __html: highlightedCode }}
+            onInput={(event) => {
+              caretOffsetRef.current = getCaretOffset(event.currentTarget)
+              onChange(event.currentTarget.textContent ?? '')
+            }}
+            onKeyDown={handleKeyDown}
             sx={{
               position: 'relative',
               width: '100%',
               minWidth: 0,
               minHeight,
-              resize: 'vertical',
+              m: 0,
               border: 0,
               outline: 0,
               p: `${codePadding}px`,
               boxSizing: 'border-box',
-              color: 'transparent',
-              WebkitTextFillColor: 'transparent',
+              color: '#e5e7eb',
+              WebkitTextFillColor: '#e5e7eb',
               bgcolor: 'transparent',
               caretColor: '#60a5fa',
               fontFamily: codeFont,
@@ -236,12 +296,13 @@ export function CodeViewer({ label, language, value, onChange, minHeight = 360 }
               lineHeight: 1.6,
               tabSize: 2,
               whiteSpace: 'pre-wrap',
-              overflow: 'auto',
+              overflowWrap: 'normal',
+              overflow: 'visible',
               textShadow: 'none',
               MozOsxFontSmoothing: 'auto',
               '&::selection': {
-                color: 'transparent',
-                WebkitTextFillColor: 'transparent',
+                color: '#ffffff',
+                WebkitTextFillColor: '#ffffff',
                 bgcolor: 'rgba(96, 165, 250, 0.35)'
               }
             }}

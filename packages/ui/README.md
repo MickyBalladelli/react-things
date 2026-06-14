@@ -52,6 +52,7 @@ export function Example() {
 - ColorStudio
 - TimelineScrubber
 - FileDropZone
+- FocusRing
 
 ## Publish
 

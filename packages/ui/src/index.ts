@@ -16,6 +16,8 @@ export type { SplitPaneCollapse, SplitPaneOrientation, SplitPaneProps } from './
 export { SplitPane } from './components/SplitPane'
 export type { FloatingToolbarPlacement, FloatingToolbarProps } from './components/FloatingToolbar'
 export { FloatingToolbar } from './components/FloatingToolbar'
+export type { FocusRingProps, FocusRingTone } from './components/FocusRing'
+export { FocusRing } from './components/FocusRing'
 export type { MagneticCardProps } from './components/MagneticCard'
 export { MagneticCard } from './components/MagneticCard'
 export type { MorphMenuItem, MorphMenuProps } from './components/MorphMenu'

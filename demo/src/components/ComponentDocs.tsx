@@ -27,6 +27,7 @@ import {
   DockTabs,
   DraggableBox,
   FileDropZone,
+  FocusRing,
   FloatingToolbar,
   GlassBox,
   InfiniteCanvas,
@@ -777,6 +778,43 @@ export function Example() {
       <Button id="tour-settings">Settings</Button>
       <TourGuide steps={steps} open={open} onOpenChange={setOpen} onComplete={() => setOpen(false)} />
     </>
+  )
+}`
+      }
+    ],
+    FocusRing: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import Button from '@mui/material/Button'
+import { FocusRing } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+      <FocusRing tone="error" active pulseSize={22}>
+      <Button variant="outlined">Needs attention</Button>
+    </FocusRing>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import Button from '@mui/material/Button'
+import { FocusRing, type FocusRingProps } from '@mickyballadelli/react-things'
+
+const ringProps: FocusRingProps = {
+  tone: 'warning',
+  pulse: true,
+  pulseSize: 22,
+  active: true
+}
+
+export function Example() {
+  return (
+    <FocusRing {...ringProps}>
+      <Button variant="outlined">Check this</Button>
+    </FocusRing>
   )
 }`
       }
@@ -1858,6 +1896,57 @@ export function Example() {
     </div>
   )
 }`
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'FocusRing',
+      'Animated focus and validation highlight for any target.',
+      'FocusRing gives focused, guided, or invalid elements a stronger visual highlight than the browser outline, with pulse animation and validation tones.'
+    ),
+    props: [
+      {
+        name: 'children',
+        type: 'ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Any focusable element or wrapped content.',
+        description: 'Content wrapped by the animated ring.'
+      },
+      {
+        name: 'target',
+        type: 'string | RefObject<HTMLElement | null>',
+        defaultValue: '-',
+        possibleValues: 'CSS selector or React ref.',
+        description: 'Optional external target to follow instead of wrapping children.'
+      },
+      {
+        name: 'active',
+        type: 'boolean',
+        defaultValue: '-',
+        possibleValues: 'true or false.',
+        description: 'Forces ring visible. Without active, wrapped mode reacts to focus.'
+      },
+      {
+        name: 'tone',
+        type: '"primary" | "success" | "warning" | "error"',
+        defaultValue: 'primary',
+        possibleValues: 'primary, success, warning, or error.',
+        description: 'Color tone for tutorial, success, warning, or validation states.'
+      },
+      {
+        name: 'pulse',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Animates the outer ring.'
+      },
+      {
+        name: 'padding / radius / thickness / pulseSize',
+        type: 'number',
+        defaultValue: '6 / 10 / 2 / 10',
+        possibleValues: 'Any positive pixel values.',
+        description: 'Controls ring spacing, corners, stroke width, and heartbeat size.'
       }
     ]
   },
@@ -2979,6 +3068,10 @@ function getComponentGroup(name: string) {
     return 'Navigation'
   }
 
+  if (['FocusRing'].includes(name)) {
+    return 'Effects'
+  }
+
   return 'Effects'
 }
 
@@ -3615,6 +3708,22 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'FocusRing') {
+      return (
+        <Box sx={{ minHeight: 340, display: 'grid', placeItems: 'center', bgcolor: '#f8fafc' }}>
+          <Stack spacing={3} alignItems="center">
+            <FocusRing tone="error" active padding={8} radius={12} pulseSize={22}>
+              <Button variant="outlined" color="error">Invalid field</Button>
+            </FocusRing>
+            <FocusRing tone="primary">
+              <Button variant="contained">Focus me</Button>
+            </FocusRing>
+            <Typography color="text.secondary">Second ring appears when button receives focus.</Typography>
+          </Stack>
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'SplitPane') {
       return (
         <Box sx={{ minHeight: 420, bgcolor: '#f8fafc' }}>
@@ -3899,6 +4008,11 @@ export function ComponentDocs() {
         renderVariantCard('Selection', <Box sx={{ minHeight: 130, p: 2, bgcolor: '#f8fafc' }}><Typography color="text.secondary">Select text in the main preview to see it anchor to a selection rectangle.</Typography></Box>),
         renderVariantCard('Element Anchor', <Box sx={{ position: 'relative', minHeight: 130, display: 'grid', placeItems: 'center' }}><Button ref={floatingToolbarButtonRef} variant="contained" onClick={() => setFloatingToolbarElementOpen((open) => !open)}>Anchor</Button><FloatingToolbar open={floatingToolbarElementOpen} anchorEl={floatingToolbarButtonRef.current}><Button size="small" color="inherit">Edit</Button><Button size="small" color="inherit">Copy</Button></FloatingToolbar></Box>),
         renderVariantCard('Bottom Tools', <Box sx={{ position: 'relative', minHeight: 130, display: 'grid', placeItems: 'center' }}><Button variant="outlined" ref={floatingToolbarBottomButtonRef} onClick={() => setFloatingToolbarBottomOpen((open) => !open)}>Open</Button><FloatingToolbar open={floatingToolbarBottomOpen} anchorEl={floatingToolbarBottomButtonRef.current} placement="bottom" offset={10}><Button size="small" color="inherit">Pin</Button><Button size="small" color="inherit">Share</Button></FloatingToolbar></Box>)
+      ],
+      FocusRing: [
+        renderVariantCard('Focus', <Box sx={{ minHeight: 130, display: 'grid', placeItems: 'center' }}><FocusRing><Button variant="contained">Tab here</Button></FocusRing></Box>),
+        renderVariantCard('Error', <Box sx={{ minHeight: 130, display: 'grid', placeItems: 'center' }}><FocusRing tone="error" active pulseSize={22}><Button variant="outlined" color="error">Fix me</Button></FocusRing></Box>),
+        renderVariantCard('No Pulse', <Box sx={{ minHeight: 130, display: 'grid', placeItems: 'center' }}><FocusRing tone="warning" active pulse={false}><Button variant="outlined" color="warning">Warning</Button></FocusRing></Box>)
       ],
       SmartTooltip: [
         renderVariantCard('Text', <Box sx={{ minHeight: 120, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Helpful detail" content="Extra context without leaving the flow."><Button variant="outlined">Hover</Button></SmartTooltip></Box>),
