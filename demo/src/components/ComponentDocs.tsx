@@ -6503,7 +6503,7 @@ export function ComponentDocs() {
       sx={{
         height: '100vh',
         display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '260px 1fr' },
+        gridTemplateColumns: { xs: '1fr', md: '310px 1fr' },
         gridTemplateRows: { xs: 'auto 1fr', md: '1fr' },
         overflow: 'hidden',
         bgcolor: 'background.default'
@@ -6563,6 +6563,7 @@ export function ComponentDocs() {
           selectedId={selectedComponent.name}
           placeholder="Search components"
           defaultExpandedGroups={['Display', 'Layout', 'Input', 'Navigation', 'Effects']}
+          sx={{ gap: 1.25 }}
           onSelect={(item) => {
             setSelectedComponentName(item.id)
             setSelectedSampleLabel(sampleTabs[0])
