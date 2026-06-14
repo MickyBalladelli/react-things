@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { Box, Typography } from '@mui/material'
-import type { KeyboardEvent } from 'react'
+import type { ClipboardEvent, KeyboardEvent } from 'react'
 
 export type CodeViewerProps = {
   label: string
@@ -196,6 +196,13 @@ export function CodeViewer({ label, language, value, onChange, minHeight = 360 }
     onChange(editorRef.current?.textContent ?? '')
   }
 
+  function handlePaste(event: ClipboardEvent<HTMLElement>) {
+    event.preventDefault()
+    document.execCommand('insertText', false, event.clipboardData.getData('text/plain'))
+    caretOffsetRef.current = getCaretOffset(editorRef.current)
+    onChange(editorRef.current?.textContent ?? '')
+  }
+
   return (
     <Box>
       <Box
@@ -268,6 +275,9 @@ export function CodeViewer({ label, language, value, onChange, minHeight = 360 }
             ref={editorRef}
             component="pre"
             contentEditable
+            role="textbox"
+            tabIndex={0}
+            aria-multiline="true"
             aria-label={`${label} code editor`}
             spellCheck={false}
             suppressContentEditableWarning
@@ -277,6 +287,7 @@ export function CodeViewer({ label, language, value, onChange, minHeight = 360 }
               onChange(event.currentTarget.textContent ?? '')
             }}
             onKeyDown={handleKeyDown}
+            onPaste={handlePaste}
             sx={{
               position: 'relative',
               width: '100%',
@@ -288,10 +299,10 @@ export function CodeViewer({ label, language, value, onChange, minHeight = 360 }
               p: `${codePadding}px`,
               boxSizing: 'border-box',
               color: '#e5e7eb',
-              WebkitTextFillColor: '#e5e7eb',
               bgcolor: 'transparent',
               caretColor: '#60a5fa',
               fontFamily: codeFont,
+              fontVariantLigatures: 'none',
               fontSize: 14,
               lineHeight: 1.6,
               tabSize: 2,
@@ -302,7 +313,6 @@ export function CodeViewer({ label, language, value, onChange, minHeight = 360 }
               MozOsxFontSmoothing: 'auto',
               '&::selection': {
                 color: '#ffffff',
-                WebkitTextFillColor: '#ffffff',
                 bgcolor: 'rgba(96, 165, 250, 0.35)'
               }
             }}

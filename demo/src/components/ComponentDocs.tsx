@@ -80,6 +80,10 @@ type GlassBoxConfig = {
   children: string
 }
 
+type FocusRingConfig = {
+  pulseSize: number
+}
+
 function createBasicDoc(name: string, summary: string, description: string): ComponentDoc {
   return {
     name,
@@ -1946,7 +1950,7 @@ export function Example() {
         type: 'number',
         defaultValue: '6 / 10 / 2 / 10',
         possibleValues: 'Any positive pixel values.',
-        description: 'Controls ring spacing, corners, stroke width, and heartbeat size.'
+        description: 'Controls ring spacing, corners, stroke width, and heartbeat width.'
       }
     ]
   },
@@ -3152,13 +3156,60 @@ function createGlassBoxSampleCode(config: GlassBoxConfig) {
   }
 }
 
-function createInitialSampleCode(config: GlassBoxConfig) {
+function createFocusRingJavaScriptSample(config: FocusRingConfig) {
+  return `import Button from '@mui/material/Button'
+import { FocusRing } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <FocusRing tone="error" active pulseSize={${config.pulseSize}}>
+      <Button variant="outlined">Needs attention</Button>
+    </FocusRing>
+  )
+}`
+}
+
+function createFocusRingTypeScriptSample(config: FocusRingConfig) {
+  return `import Button from '@mui/material/Button'
+import { FocusRing, type FocusRingProps } from '@mickyballadelli/react-things'
+
+const ringProps: FocusRingProps = {
+  tone: 'warning',
+  pulse: true,
+  pulseSize: ${config.pulseSize},
+  active: true
+}
+
+export function Example() {
+  return (
+    <FocusRing {...ringProps}>
+      <Button variant="outlined">Check this</Button>
+    </FocusRing>
+  )
+}`
+}
+
+function createFocusRingSampleCode(config: FocusRingConfig) {
   return {
-    ...createGlassBoxSampleCode(config),
+    'FocusRing:JavaScript': createFocusRingJavaScriptSample(config),
+    'FocusRing:TypeScript': createFocusRingTypeScriptSample(config)
+  }
+}
+
+function readFocusRingConfig(code: string, currentConfig: FocusRingConfig): FocusRingConfig {
+  return {
+    pulseSize: readNumberProp(code, 'pulseSize', currentConfig.pulseSize)
+  }
+}
+
+function createInitialSampleCode(glassConfig: GlassBoxConfig, focusRingConfig: FocusRingConfig) {
+  return {
     ...Object.fromEntries(componentDocs.flatMap((component) => component.samples.map((sample) => [
       `${component.name}:${sample.label}`,
       sample.initialCode
-    ])))
+    ]))),
+    ...createGlassBoxSampleCode(glassConfig),
+    ...createFocusRingSampleCode(focusRingConfig)
   }
 }
 
@@ -3168,7 +3219,8 @@ export function ComponentDocs() {
   const [selectedComponentName, setSelectedComponentName] = useState(initialComponent.name)
   const selectedComponent = componentDocs.find((component) => component.name === selectedComponentName) ?? componentDocs[0]
   const [glassBoxConfig, setGlassBoxConfig] = useState(defaultGlassBoxConfig)
-  const [sampleCode, setSampleCode] = useState<Record<string, string>>(createInitialSampleCode(defaultGlassBoxConfig))
+  const [focusRingConfig, setFocusRingConfig] = useState<FocusRingConfig>({ pulseSize: 34 })
+  const [sampleCode, setSampleCode] = useState<Record<string, string>>(createInitialSampleCode(defaultGlassBoxConfig, { pulseSize: 34 }))
   const [selectedSampleLabel, setSelectedSampleLabel] = useState(sampleTabs[0])
   const [commandPaletteSelectedId, setCommandPaletteSelectedId] = useState('components')
   const [pickerColor, setPickerColor] = useState('#2563eb')
@@ -3254,6 +3306,11 @@ export function ComponentDocs() {
       { label: 'JavaScript', language: 'javascript', initialCode: sampleCode['GlassBox:JavaScript'] },
       { label: 'TypeScript', language: 'typescript', initialCode: sampleCode['GlassBox:TypeScript'] }
     ]
+    : selectedComponent.name === 'FocusRing'
+      ? [
+        { label: 'JavaScript', language: 'javascript', initialCode: sampleCode['FocusRing:JavaScript'] },
+        { label: 'TypeScript', language: 'typescript', initialCode: sampleCode['FocusRing:TypeScript'] }
+      ]
     : selectedComponent.samples
 
   useEffect(() => {
@@ -3264,6 +3321,19 @@ export function ComponentDocs() {
 
   function updateSample(nextCode: string, sampleLabel: string) {
     const sampleKey = `${selectedComponent.name}:${sampleLabel}`
+
+    if (selectedComponent.name === 'FocusRing') {
+      const nextConfig = readFocusRingConfig(nextCode, focusRingConfig)
+      const syncedCode = createFocusRingSampleCode(nextConfig)
+
+      setFocusRingConfig(nextConfig)
+      setSampleCode({
+        ...sampleCode,
+        ...syncedCode,
+        [sampleKey]: nextCode
+      })
+      return
+    }
 
     if (selectedComponent.name !== 'GlassBox') {
       setSampleCode((currentCode) => ({
@@ -3712,7 +3782,7 @@ export function ComponentDocs() {
       return (
         <Box sx={{ minHeight: 340, display: 'grid', placeItems: 'center', bgcolor: '#f8fafc' }}>
           <Stack spacing={3} alignItems="center">
-            <FocusRing tone="error" active padding={8} radius={12} pulseSize={22}>
+            <FocusRing tone="error" active padding={8} radius={12} pulseSize={focusRingConfig.pulseSize}>
               <Button variant="outlined" color="error">Invalid field</Button>
             </FocusRing>
             <FocusRing tone="primary">
@@ -4011,7 +4081,7 @@ export function ComponentDocs() {
       ],
       FocusRing: [
         renderVariantCard('Focus', <Box sx={{ minHeight: 130, display: 'grid', placeItems: 'center' }}><FocusRing><Button variant="contained">Tab here</Button></FocusRing></Box>),
-        renderVariantCard('Error', <Box sx={{ minHeight: 130, display: 'grid', placeItems: 'center' }}><FocusRing tone="error" active pulseSize={22}><Button variant="outlined" color="error">Fix me</Button></FocusRing></Box>),
+        renderVariantCard('Error', <Box sx={{ minHeight: 130, display: 'grid', placeItems: 'center' }}><FocusRing tone="error" active pulseSize={34}><Button variant="outlined" color="error">Fix me</Button></FocusRing></Box>),
         renderVariantCard('No Pulse', <Box sx={{ minHeight: 130, display: 'grid', placeItems: 'center' }}><FocusRing tone="warning" active pulse={false}><Button variant="outlined" color="warning">Warning</Button></FocusRing></Box>)
       ],
       SmartTooltip: [

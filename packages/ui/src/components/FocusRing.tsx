@@ -63,22 +63,23 @@ function Ring({
       sx={{
         position: 'absolute',
         inset: 0,
+        '--focus-ring-pulse-size': `${pulseSize}px`,
         border: `${thickness}px solid ${color}`,
         borderRadius: radius,
         opacity: active ? 1 : 0,
         pointerEvents: 'none',
         transition: 'opacity 160ms ease, box-shadow 160ms ease',
-        boxShadow: active ? `0 0 0 ${Math.round(pulseSize * 0.45)}px ${color}24, 0 0 0 ${pulseSize}px ${color}12` : 'none',
-        animation: active && pulse ? 'focus-ring-pulse 1400ms ease-out infinite' : 'none',
+        boxShadow: active ? `0 0 0 var(--focus-ring-pulse-size) ${color}33` : 'none',
+        animation: active && pulse ? 'focus-ring-pulse 1400ms ease-in-out infinite' : 'none',
         '@keyframes focus-ring-pulse': {
           '0%': {
-            boxShadow: `0 0 0 0 ${color}36, 0 0 0 0 ${color}20`
+            boxShadow: `0 0 0 calc(var(--focus-ring-pulse-size) * 0.3) ${color}18`
           },
-          '70%': {
-            boxShadow: `0 0 0 ${pulseSize}px ${color}00, 0 0 0 ${pulseSize * 2}px ${color}00`
+          '50%': {
+            boxShadow: `0 0 0 var(--focus-ring-pulse-size) ${color}44`
           },
           '100%': {
-            boxShadow: `0 0 0 0 ${color}00, 0 0 0 0 ${color}00`
+            boxShadow: `0 0 0 calc(var(--focus-ring-pulse-size) * 0.3) ${color}18`
           }
         }
       }}
