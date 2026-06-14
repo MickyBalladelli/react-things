@@ -32,13 +32,14 @@ import {
   KanbanBoard,
   MagneticCard,
   NodeCanvas,
+  ResizableDashboard,
   ResizableFrame,
   SmartTooltip,
   SplitPane,
   SpotlightPanel,
   TimelineScrubber
 } from '@mickyballadelli/react-things'
-import type { DataCardGridMetric, InspectorPanelField, KanbanColumn } from '@mickyballadelli/react-things'
+import type { DataCardGridMetric, InspectorPanelField, KanbanColumn, ResizableDashboardWidget } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -567,6 +568,51 @@ export function Example() {
       <FileDropZone onFiles={(files) => setNames(files.map((file) => file.name))} />
       <pre>{names.join('\\n')}</pre>
     </>
+  )
+}`
+      }
+    ],
+    ResizableDashboard: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { ResizableDashboard } from '@mickyballadelli/react-things'
+
+const widgets = [
+  { id: 'revenue', title: 'Revenue', layout: { x: 0, y: 0, w: 4, h: 2 }, children: <strong>€128K</strong> },
+  { id: 'traffic', title: 'Traffic', layout: { x: 4, y: 0, w: 4, h: 3 }, children: <div>Live visits</div> },
+  { id: 'tasks', title: 'Tasks', layout: { x: 8, y: 0, w: 4, h: 3 }, children: <div>9 open</div> }
+]
+
+export function Example() {
+  return (
+    <ResizableDashboard
+      widgets={widgets}
+      persistKey="my-dashboard"
+      sx={{ minHeight: 420 }}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { ResizableDashboard, type ResizableDashboardWidget } from '@mickyballadelli/react-things'
+
+const widgets: ResizableDashboardWidget[] = [
+  { id: 'revenue', title: 'Revenue', layout: { x: 0, y: 0, w: 4, h: 2 }, children: <strong>€128K</strong> },
+  { id: 'traffic', title: 'Traffic', layout: { x: 4, y: 0, w: 4, h: 3 }, children: <div>Live visits</div> },
+  { id: 'tasks', title: 'Tasks', layout: { x: 8, y: 0, w: 4, h: 3 }, children: <div>9 open</div> }
+]
+
+export function Example() {
+  return (
+    <ResizableDashboard
+      widgets={widgets}
+      persistKey="my-dashboard"
+      onLayoutsChange={(layouts, breakpoint) => console.log(breakpoint, layouts)}
+      sx={{ minHeight: 420 }}
+    />
   )
 }`
       }
@@ -1987,6 +2033,64 @@ export function Example() {
     'Frame resized from bottom-right handle.',
     'ResizableFrame is a simple container whose width and height can be changed by dragging its corner handle.'
   ),
+  {
+    ...createBasicDoc(
+      'ResizableDashboard',
+      'Widget dashboard with draggable, resizable, persistent grid layouts.',
+      'ResizableDashboard is a responsive widget surface with snap-to-grid movement, resize handles, alignment guides, saved layouts, and breakpoint-specific columns.'
+    ),
+    props: [
+      {
+        name: 'widgets',
+        type: 'ResizableDashboardWidget[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, title, children, layout, layouts }. layout uses x, y, w, h grid units.',
+        description: 'Dashboard widgets and their default grid positions.'
+      },
+      {
+        name: 'layouts / defaultLayouts',
+        type: 'Record<string, ResizableDashboardLayoutItem[]>',
+        defaultValue: '{}',
+        possibleValues: 'Object keyed by breakpoint name. Each item uses { id, x, y, w, h, minW, minH, maxW, maxH }.',
+        description: 'Controlled or uncontrolled saved layout state for each breakpoint.'
+      },
+      {
+        name: 'breakpoints',
+        type: 'ResizableDashboardBreakpoint[]',
+        defaultValue: 'lg/md/sm',
+        possibleValues: 'Array of { name, minWidth, columns }.',
+        description: 'Responsive column rules selected from the dashboard width.'
+      },
+      {
+        name: 'rowHeight / gap',
+        type: 'number',
+        defaultValue: '88 / 12',
+        possibleValues: 'Any positive pixel values.',
+        description: 'Grid unit height and space between widgets.'
+      },
+      {
+        name: 'persistKey',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any localStorage key.',
+        description: 'Saves uncontrolled layouts in localStorage.'
+      },
+      {
+        name: 'showGuides',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Shows grid lines and active placement guide while moving or resizing.'
+      },
+      {
+        name: 'onLayoutsChange',
+        type: '(layouts, breakpoint) => void',
+        defaultValue: '-',
+        possibleValues: 'Function receiving all layouts and active breakpoint name.',
+        description: 'Called whenever drag or resize updates layout.'
+      }
+    ]
+  },
   createBasicDoc(
     'InspectorPanel',
     'Schema-driven inspector with grouped controls, reset, color/select fields, and value summary.',
@@ -2151,6 +2255,77 @@ const dataCardGridMetrics: DataCardGridMetric[] = [
   }
 ]
 
+const dashboardWidgets: ResizableDashboardWidget[] = [
+  {
+    id: 'revenue',
+    title: 'Revenue',
+    layout: { x: 0, y: 0, w: 4, h: 2, minW: 2, minH: 2 },
+    children: (
+      <Box>
+        <Typography variant="h4" fontWeight={950}>€128K</Typography>
+        <Typography color="text.secondary">+8.8% from last week</Typography>
+      </Box>
+    )
+  },
+  {
+    id: 'traffic',
+    title: 'Traffic',
+    layout: { x: 4, y: 0, w: 4, h: 3, minW: 2, minH: 2 },
+    children: (
+      <Stack spacing={1}>
+        {[68, 44, 82, 56, 74].map((value, index) => (
+          <Box key={index} sx={{ height: 10, borderRadius: 1, bgcolor: '#dbeafe', overflow: 'hidden' }}>
+            <Box sx={{ width: `${value}%`, height: '100%', bgcolor: '#2563eb' }} />
+          </Box>
+        ))}
+      </Stack>
+    )
+  },
+  {
+    id: 'tasks',
+    title: 'Tasks',
+    layout: { x: 8, y: 0, w: 4, h: 3, minW: 2, minH: 2 },
+    children: (
+      <Stack spacing={1}>
+        {['Review props', 'Ship docs', 'Polish examples'].map((task) => (
+          <Paper key={task} variant="outlined" sx={{ px: 1.25, py: 0.75, borderRadius: 1 }}>
+            <Typography variant="body2" fontWeight={750}>{task}</Typography>
+          </Paper>
+        ))}
+      </Stack>
+    )
+  },
+  {
+    id: 'health',
+    title: 'System health',
+    layout: { x: 0, y: 3, w: 5, h: 3, minW: 3, minH: 2 },
+    children: (
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1 }}>
+        {[
+          ['API', '99.9%'],
+          ['Queue', '12ms'],
+          ['Build', 'green']
+        ].map(([label, value]) => (
+          <Paper key={label} variant="outlined" sx={{ p: 1, borderRadius: 1 }}>
+            <Typography variant="caption" color="text.secondary">{label}</Typography>
+            <Typography fontWeight={900}>{value}</Typography>
+          </Paper>
+        ))}
+      </Box>
+    )
+  },
+  {
+    id: 'notes',
+    title: 'Notes',
+    layout: { x: 5, y: 3, w: 7, h: 3, minW: 3, minH: 2 },
+    children: (
+      <Typography color="text.secondary">
+        Drag widget headers. Pull bottom-right handles. Layout snaps, avoids overlap, and remembers positions.
+      </Typography>
+    )
+  }
+]
+
 const defaultKanbanColumns: KanbanColumn[] = [
   {
     id: 'ideas',
@@ -2186,7 +2361,7 @@ function getComponentGroup(name: string) {
     return 'Display'
   }
 
-  if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'BeforeAfterSlider', 'InfiniteCanvas'].includes(name)) {
+  if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'ResizableDashboard', 'BeforeAfterSlider', 'InfiniteCanvas'].includes(name)) {
     return 'Layout'
   }
 
@@ -2485,6 +2660,18 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'ResizableFrame') {
       return <Box sx={{ minHeight: 340, p: 3, bgcolor: '#f8fafc' }}><ResizableFrame><Box sx={{ p: 2 }}><Typography fontWeight={850}>Resize me</Typography><Typography color="text.secondary">Drag bottom-right corner.</Typography></Box></ResizableFrame></Box>
+    }
+
+    if (selectedComponent.name === 'ResizableDashboard') {
+      return (
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+          <ResizableDashboard
+            widgets={dashboardWidgets}
+            persistKey="react-things-resizable-dashboard-preview"
+            sx={{ minHeight: 500 }}
+          />
+        </Box>
+      )
     }
 
     if (selectedComponent.name === 'InspectorPanel') {
@@ -3007,6 +3194,11 @@ export function ComponentDocs() {
         renderVariantCard('Small', <ResizableFrame initialWidth={180} initialHeight={120}>Small</ResizableFrame>),
         renderVariantCard('Content', <ResizableFrame initialWidth={240} initialHeight={150}><Box sx={{ p: 2 }}>Resizable content</Box></ResizableFrame>),
         renderVariantCard('Large Min', <ResizableFrame initialWidth={280} initialHeight={170} minWidth={220} minHeight={140}><Box sx={{ p: 2 }}>Min size</Box></ResizableFrame>)
+      ],
+      ResizableDashboard: [
+        renderVariantCard('Compact', <ResizableDashboard widgets={dashboardWidgets.slice(0, 3)} rowHeight={72} sx={{ minHeight: 300 }} />),
+        renderVariantCard('No Guides', <ResizableDashboard widgets={dashboardWidgets.slice(0, 4)} showGuides={false} sx={{ minHeight: 360 }} />),
+        renderVariantCard('Persistent', <ResizableDashboard widgets={dashboardWidgets} persistKey="react-things-resizable-dashboard-variant" sx={{ minHeight: 420 }} />)
       ],
       InspectorPanel: [
         renderVariantCard('Text', <Stack spacing={1.5}><InspectorPanel title="Text prop" density="compact" showValueSummary={false} fields={[{ id: 'title', label: 'Title', type: 'text', value: inspectorTextTitle, defaultValue: 'Demo card' }]} onChange={(_, value) => setInspectorTextTitle(String(value))} /><Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}><Typography fontWeight={900}>{inspectorTextTitle}</Typography></Paper></Stack>),

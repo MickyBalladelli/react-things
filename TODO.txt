@@ -12,7 +12,6 @@ ColorStudio: palette builder, contrast checker, gradients, export tokens.
 DropComposer: drag/drop upload zone with previews, reorder, metadata edit.
 CommandDock: persistent left command nav like Linear/Raycast sidebar.
 SelectionBox: drag-select items on canvas/list/grid.
-ResizableDashboard: draggable/resizable widget dashboard with saved layouts.
 ToastCenter: notification stack with history drawer and grouped toasts.
 FocusRing: animated focus/highlight wrapper for tutorials or validation.
 CompareStack: before/after but for many layers, with opacity sliders.
@@ -30,7 +29,7 @@ ColorStudio
 
 I've reviewed the entire React Things project and analyzed the existing components. Here's my assessment and suggestions for new components that would be awesome additions and don't exist in Material-UI:
 
-## Current Components (19 total):
+## Current Components (22 total):
 1. BeforeAfterSlider
 2. CodeViewer
 3. ColorPicker
@@ -48,10 +47,11 @@ I've reviewed the entire React Things project and analyzed the existing componen
 15. MagneticCard
 16. NodeCanvas
 17. ResizableFrame
-18. SmartTooltip
-19. SplitPane
-20. SpotlightPanel
-21. TimelineScrubber
+18. ResizableDashboard
+19. SmartTooltip
+20. SplitPane
+21. SpotlightPanel
+22. TimelineScrubber
 
 ## New Component Suggestions:
 
@@ -104,21 +104,14 @@ I've reviewed the entire React Things project and analyzed the existing componen
 - Multi-selection with modifier keys
 - Useful for data tables, canvases, file managers
 
-### 8. **ResizableDashboard** - Widget Dashboard
-- Draggable and resizable widgets
-- Saved layout persistence
-- Grid snapping and alignment guides
-- Responsive breakpoints
-- More advanced than Material-UI's Grid system
-
-### 9. **ToastCenter** - Advanced Notification System
+### 8. **ToastCenter** - Advanced Notification System
 - Notification stack with history drawer
 - Grouped toasts by type/source
 - Interactive toast actions
 - Rich media support in toasts
 - Material-UI has Snackbar but not this comprehensive
 
-### 10. **FocusRing** - Animated Focus Highlight
+### 9. **FocusRing** - Animated Focus Highlight
 - Animated focus rings for tutorials
 - Validation error highlighting
 - Customizable pulse animations

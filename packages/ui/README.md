@@ -41,6 +41,7 @@ export function Example() {
 - InfiniteCanvas
 - SmartTooltip
 - ResizableFrame
+- ResizableDashboard
 - InspectorPanel
 - KanbanBoard
 - ColorPicker

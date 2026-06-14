@@ -48,6 +48,7 @@ React and React DOM are peer dependencies.
 - InfiniteCanvas: pan-and-zoom workspace for draggable items.
 - SmartTooltip: rich tooltip for context, media, actions, copy, and pinning.
 - ResizableFrame: container resized from a corner handle.
+- ResizableDashboard: widget dashboard with draggable, resizable, persistent grid layouts.
 - InspectorPanel: compact settings form for editing structured props.
 - KanbanBoard: editable workflow board with columns, cards, drag and drop, and card editing.
 - ColorPicker: controlled color input with swatches and alpha.
