@@ -34,6 +34,7 @@ import {
   CommandPalette,
   DataCardGrid,
   DataLens,
+  DensityController,
   DiffViewer,
   DockBar,
   DockTabs,
@@ -1853,6 +1854,87 @@ export function Example() {
       before={{ status: 'draft', retries: 2 }}
       after={{ status: 'ready', retries: 3 }}
       defaultComments={comments}
+    />
+  )
+}`
+      }
+    ]
+  },
+  {
+    name: 'DensityController',
+    summary: 'User-facing compact, cozy, and spacious layout controller with persistence.',
+    description: 'DensityController lets users choose how dense a layout feels, persists the choice with localStorage, and passes spacing tokens to child content.',
+    props: [
+      {
+        name: 'value / defaultValue',
+        type: '"compact" | "cozy" | "spacious"',
+        defaultValue: '"cozy"',
+        possibleValues: 'compact, cozy, or spacious.',
+        description: 'Controlled or initial density value.'
+      },
+      {
+        name: 'persistKey',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any stable localStorage key.',
+        description: 'Saves the selected density between visits.'
+      },
+      {
+        name: 'children',
+        type: 'ReactNode | (state) => ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Static content or a render function receiving density, spacing, padding, radius, and rowHeight.',
+        description: 'Content wrapped in density CSS variables and optional render state.'
+      },
+      {
+        name: 'onChange',
+        type: '(density, state) => void',
+        defaultValue: '-',
+        possibleValues: 'Function called after a density selection.',
+        description: 'Receives the selected density and derived layout tokens.'
+      },
+      {
+        name: 'showSummary / showReset',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Toggles the active-density chip and reset button.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { DensityController } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <DensityController persistKey="demo-density">
+      {({ spacing, padding, rowHeight }) => (
+        <div style={{ display: 'grid', gap: spacing }}>
+          <div style={{ padding, minHeight: rowHeight }}>Inbox</div>
+          <div style={{ padding, minHeight: rowHeight }}>Roadmap</div>
+        </div>
+      )}
+    </DensityController>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { DensityController, type DensityControllerValue } from '@mickyballadelli/react-things'
+
+export function Example() {
+  function saveDensity(density: DensityControllerValue) {
+    console.log(density)
+  }
+
+  return (
+    <DensityController
+      defaultValue="cozy"
+      persistKey="workspace-density"
+      onChange={saveDensity}
     />
   )
 }`
@@ -4892,7 +4974,7 @@ function getInspectorDrawerValue(sections: InspectorDrawerSection[], fieldId: st
 }
 
 function getComponentGroup(name: string) {
-  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DataLens', 'LayoutSwitcher', 'DockBar', 'TimelineScrubber'].includes(name)) {
+  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DataLens', 'DensityController', 'LayoutSwitcher', 'DockBar', 'TimelineScrubber'].includes(name)) {
     return 'Display'
   }
 
@@ -6246,6 +6328,46 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'DensityController') {
+      return (
+        <Box sx={{ p: 3, bgcolor: '#f8fafc' }}>
+          <DensityController
+            title="Workspace density"
+            subtitle="Pick the layout feel once. The value persists in localStorage."
+            persistKey="react-things-density-preview"
+          >
+            {({ density, spacing, padding, rowHeight, radius }) => (
+              <Box sx={{ display: 'grid', gap: `${spacing}px` }}>
+                {[
+                  { title: 'Inbox triage', meta: '12 items', color: '#dbeafe' },
+                  { title: 'Roadmap review', meta: '4 owners', color: '#dcfce7' },
+                  { title: 'Launch checklist', meta: density, color: '#fef3c7' }
+                ].map((item) => (
+                  <Paper
+                    key={item.title}
+                    variant="outlined"
+                    sx={{
+                      p: `${padding}px`,
+                      minHeight: `${rowHeight}px`,
+                      borderRadius: `${radius}px`,
+                      bgcolor: item.color,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 1.5
+                    }}
+                  >
+                    <Typography fontWeight={950}>{item.title}</Typography>
+                    <Chip size="small" label={item.meta} />
+                  </Paper>
+                ))}
+              </Box>
+            )}
+          </DensityController>
+        </Box>
+      )
+    }
+
     return (
       <DraggableGlassBoxPreview
         transparency={glassBoxConfig.transparency}
@@ -6299,6 +6421,11 @@ export function ComponentDocs() {
         renderVariantCard('JavaScript', <CodeViewer label="JS" language="javascript" value={'const name = "Ada"'} onChange={() => {}} minHeight={120} />),
         renderVariantCard('Rust', <CodeViewer label="Rust" language="rust" value={'fn main() {\n  println!("hello");\n}'} onChange={() => {}} minHeight={120} />),
         renderVariantCard('SQL', <CodeViewer label="SQL" language="sql" value={"select * from users\nwhere status = 'active';"} onChange={() => {}} minHeight={120} />)
+      ],
+      DensityController: [
+        renderVariantCard('Compact', <DensityController defaultValue="compact" showReset={false}><Typography>Dense rows for high-volume tools.</Typography></DensityController>),
+        renderVariantCard('Cozy', <DensityController defaultValue="cozy" showReset={false}><Typography>Balanced default for daily work.</Typography></DensityController>),
+        renderVariantCard('Spacious', <DensityController defaultValue="spacious" showReset={false}><Typography>Touch-friendly breathing room.</Typography></DensityController>)
       ],
       DockBar: [
         renderVariantCard('Small', <DockBar items={[{ id: 'a', label: 'A', icon: 'A' }, { id: 'b', label: 'B', icon: 'B' }]} iconSize={40} />),
@@ -6563,6 +6690,7 @@ export function ComponentDocs() {
           selectedId={selectedComponent.name}
           placeholder="Search components"
           defaultExpandedGroups={['Display', 'Layout', 'Input', 'Navigation', 'Effects']}
+          descriptionDisplay="tooltip"
           sx={{ gap: 1.25 }}
           onSelect={(item) => {
             setSelectedComponentName(item.id)

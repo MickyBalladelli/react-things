@@ -16,9 +16,6 @@ Rich picker for users/files/projects with avatars, recent, pinned, groups.
 RuleBuilder
 No-code condition builder: if/and/or groups, validation, readable output.
 
-DiffViewer
-Beautiful text/object diff with inline comments and accept/reject.
-
 MiniMapNavigator
 Overview minimap for long pages, canvases, dashboards, docs.
 

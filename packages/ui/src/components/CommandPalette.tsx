@@ -6,11 +6,13 @@ import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
+import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import type { BoxProps } from '@mui/material/Box'
 import type { ReactNode } from 'react'
 
 export type CommandPaletteVariant = 'list' | 'tree'
+export type CommandPaletteDescriptionDisplay = 'inline' | 'tooltip' | 'both' | 'none'
 
 export type CommandPaletteItem = {
   id: string
@@ -32,6 +34,7 @@ export type CommandPaletteProps = Omit<BoxProps, 'onSelect'> & {
   maxResults?: number
   showSearch?: boolean
   dense?: boolean
+  descriptionDisplay?: CommandPaletteDescriptionDisplay
   expandedGroups?: string[]
   defaultExpandedGroups?: string[]
   onExpandedGroupsChange?: (groups: string[]) => void
@@ -65,6 +68,7 @@ export function CommandPalette({
   maxResults,
   showSearch = true,
   dense = false,
+  descriptionDisplay = 'inline',
   expandedGroups,
   defaultExpandedGroups,
   onExpandedGroupsChange,
@@ -113,19 +117,19 @@ export function CommandPalette({
 
   function renderItem(item: CommandPaletteItem, depth = 0) {
     const selected = item.id === selectedId
-
-    return (
+    const showInlineDescription = descriptionDisplay === 'inline' || descriptionDisplay === 'both'
+    const showTooltipDescription = Boolean(item.description) && (descriptionDisplay === 'tooltip' || descriptionDisplay === 'both')
+    const button = (
       <ListItemButton
-        key={item.id}
         selected={selected}
         dense={dense}
         onClick={() => selectItem(item)}
         sx={{
           borderRadius: 1,
-          alignItems: 'flex-start',
+          alignItems: showInlineDescription ? 'flex-start' : 'center',
           gap: 0.75,
           my: 0.25,
-          minHeight: dense ? 46 : 58,
+          minHeight: showInlineDescription ? (dense ? 46 : 58) : (dense ? 36 : 44),
           pl: 1.25 + depth * 1.5,
           pr: 1,
           border: 1,
@@ -142,13 +146,13 @@ export function CommandPalette({
         }}
       >
         {item.icon ? (
-          <ListItemIcon sx={{ minWidth: 30, mt: 0.25, color: 'inherit' }}>
+          <ListItemIcon sx={{ minWidth: 30, mt: showInlineDescription ? 0.25 : 0, color: 'inherit' }}>
             {item.icon}
           </ListItemIcon>
         ) : null}
         <ListItemText
           primary={item.label}
-          secondary={item.description}
+          secondary={showInlineDescription ? item.description : undefined}
           sx={{ my: 0 }}
           primaryTypographyProps={{
             fontWeight: selected ? 900 : 780,
@@ -170,6 +174,16 @@ export function CommandPalette({
           }}
         />
       </ListItemButton>
+    )
+
+    return showTooltipDescription ? (
+      <Tooltip key={item.id} title={item.description} placement="right" arrow enterDelay={350}>
+        {button}
+      </Tooltip>
+    ) : (
+      <Box key={item.id}>
+        {button}
+      </Box>
     )
   }
 
