@@ -2,7 +2,6 @@ Good ideas:
 SpotlightSearch: search box with command results, previews, fuzzy groups, actions.
 FlowBuilder: better NodeCanvas for workflows: ports, typed edges, validation, auto-layout.
 InfiniteCanvas: pan/zoom canvas with minimap, grid, selection box.
-InspectorDrawer: beautiful property editor with sections, live validation, undo.
 DropComposer: drag/drop upload zone with previews, reorder, metadata edit.
 SelectionBox: drag-select items on canvas/list/grid.
 CompareStack: before/after but for many layers, with opacity sliders.
@@ -13,7 +12,7 @@ KeyboardHintOverlay: hold key to show available shortcuts over UI.
 InfiniteCanvas
 
 
-## Current Components (30 total):
+## Current Components (31 total):
 1. BeforeAfterSlider
 2. CodeViewer
 3. ColorPicker
@@ -31,19 +30,20 @@ InfiniteCanvas
 15. FloatingToolbar
 16. GlassBox
 17. InfiniteCanvas
-18. InspectorPanel
-19. KanbanBoard
-20. MagneticCard
-21. MorphMenu
-22. NodeCanvas
-23. ResizableFrame
-24. ResizableDashboard
-25. SmartTooltip
-26. SplitPane
-27. SpotlightPanel
-28. TimelineScrubber
-29. ToastCenter
-30. TourGuide
+18. InspectorDrawer
+19. InspectorPanel
+20. KanbanBoard
+21. MagneticCard
+22. MorphMenu
+23. NodeCanvas
+24. ResizableFrame
+25. ResizableDashboard
+26. SmartTooltip
+27. SplitPane
+28. SpotlightPanel
+29. TimelineScrubber
+30. ToastCenter
+31. TourGuide
 
 ## New Component Suggestions:
 

@@ -49,6 +49,7 @@ export function Example() {
 - ResizableFrame
 - ResizableDashboard
 - InspectorPanel
+- InspectorDrawer
 - KanbanBoard
 - ColorPicker
 - ColorStudio

@@ -56,6 +56,7 @@ React and React DOM are peer dependencies.
 - ResizableFrame: container resized from a corner handle.
 - ResizableDashboard: widget dashboard with draggable, resizable, persistent grid layouts.
 - InspectorPanel: compact settings form for editing structured props.
+- InspectorDrawer: property drawer with sections, live validation, and undo.
 - KanbanBoard: editable workflow board with columns, cards, drag and drop, and card editing.
 - ColorPicker: controlled color input with swatches and alpha.
 - ColorStudio: palette builder with contrast checks, gradients, and token export.

@@ -36,6 +36,8 @@ export type { ResizableDashboardBreakpoint, ResizableDashboardLayoutItem, Resiza
 export { ResizableDashboard } from './components/ResizableDashboard'
 export type { InspectorPanelField, InspectorPanelProps } from './components/InspectorPanel'
 export { InspectorPanel } from './components/InspectorPanel'
+export type { InspectorDrawerChange, InspectorDrawerField, InspectorDrawerFieldOption, InspectorDrawerFieldValue, InspectorDrawerProps, InspectorDrawerSection } from './components/InspectorDrawer'
+export { InspectorDrawer } from './components/InspectorDrawer'
 export type { ColorPickerProps } from './components/ColorPicker'
 export { ColorPicker } from './components/ColorPicker'
 export type { ColorStudioColor, ColorStudioGradientStop, ColorStudioProps, ColorStudioTokenFormat } from './components/ColorStudio'

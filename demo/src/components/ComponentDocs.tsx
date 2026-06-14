@@ -41,6 +41,7 @@ import {
   FloatingToolbar,
   GlassBox,
   InfiniteCanvas,
+  InspectorDrawer,
   InspectorPanel,
   KanbanBoard,
   MagneticCard,
@@ -55,7 +56,7 @@ import {
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -534,6 +535,94 @@ export function Example() {
       fields={fields}
       onChange={(id, value) => setFields(fields.map((field) => field.id === id ? { ...field, value } : field))}
     />
+  )
+}`
+      }
+    ],
+    InspectorDrawer: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import { Button } from '@mui/material'
+import { InspectorDrawer } from '@mickyballadelli/react-things'
+
+const initialSections = [
+  {
+    id: 'content',
+    title: 'Content',
+    fields: [
+      { id: 'title', label: 'Title', type: 'text', value: 'Launch card', validate: (value) => String(value).length < 3 ? 'Use at least 3 characters' : null },
+      { id: 'enabled', label: 'Enabled', type: 'boolean', value: true }
+    ]
+  },
+  {
+    id: 'style',
+    title: 'Style',
+    fields: [
+      { id: 'width', label: 'Width', type: 'number', value: 320, min: 180, max: 520, unit: 'px' },
+      { id: 'tone', label: 'Tone', type: 'select', value: 'Calm', options: [{ label: 'Calm', value: 'Calm' }, { label: 'Bold', value: 'Bold' }] }
+    ]
+  }
+]
+
+export function Example() {
+  const [open, setOpen] = useState(false)
+  const [sections, setSections] = useState(initialSections)
+
+  return (
+    <>
+      <Button variant="contained" onClick={() => setOpen(true)}>Open inspector</Button>
+      <InspectorDrawer
+        open={open}
+        onClose={() => setOpen(false)}
+        sections={sections}
+        onSectionsChange={setSections}
+      />
+    </>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import { Button } from '@mui/material'
+import { InspectorDrawer, type InspectorDrawerSection } from '@mickyballadelli/react-things'
+
+const initialSections: InspectorDrawerSection[] = [
+  {
+    id: 'content',
+    title: 'Content',
+    fields: [
+      { id: 'title', label: 'Title', type: 'text', value: 'Launch card', validate: (value) => String(value).length < 3 ? 'Use at least 3 characters' : null },
+      { id: 'enabled', label: 'Enabled', type: 'boolean', value: true }
+    ]
+  },
+  {
+    id: 'style',
+    title: 'Style',
+    fields: [
+      { id: 'width', label: 'Width', type: 'number', value: 320, min: 180, max: 520, unit: 'px' },
+      { id: 'tone', label: 'Tone', type: 'select', value: 'Calm', options: [{ label: 'Calm', value: 'Calm' }, { label: 'Bold', value: 'Bold' }] }
+    ]
+  }
+]
+
+export function Example() {
+  const [open, setOpen] = useState(false)
+  const [sections, setSections] = useState<InspectorDrawerSection[]>(initialSections)
+
+  return (
+    <>
+      <Button variant="contained" onClick={() => setOpen(true)}>Open inspector</Button>
+      <InspectorDrawer
+        open={open}
+        onClose={() => setOpen(false)}
+        sections={sections}
+        onSectionsChange={setSections}
+      />
+    </>
   )
 }`
       }
@@ -2924,6 +3013,57 @@ export function Example() {
     'Schema-driven inspector with grouped controls, reset, color/select fields, and value summary.',
     'InspectorPanel is a compact control surface for editing live component props, design tokens, tool settings, or selected-object attributes.'
   ),
+  {
+    ...createBasicDoc(
+      'InspectorDrawer',
+      'Beautiful property drawer with sections, live validation, and undo.',
+      'InspectorDrawer is a right-side property editor for selected objects with sectioned fields, inline validation, controlled updates, and local undo history.'
+    ),
+    props: [
+      {
+        name: 'open / onClose',
+        type: 'boolean / function',
+        defaultValue: '-',
+        possibleValues: 'MUI Drawer open and close props.',
+        description: 'Controls drawer visibility.'
+      },
+      {
+        name: 'sections',
+        type: 'InspectorDrawerSection[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, title, description, fields }. Fields support text, number, boolean, select, and color.',
+        description: 'Sectioned field schema and current values.'
+      },
+      {
+        name: 'width',
+        type: 'number',
+        defaultValue: '380',
+        possibleValues: 'Any positive pixel width.',
+        description: 'Drawer width above mobile.'
+      },
+      {
+        name: 'density',
+        type: '"comfortable" | "compact"',
+        defaultValue: 'comfortable',
+        possibleValues: 'comfortable or compact.',
+        description: 'Controls spacing and field size.'
+      },
+      {
+        name: 'showUndo',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Shows undo controls and keeps local edit history.'
+      },
+      {
+        name: 'onSectionsChange / onFieldChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks receiving next sections or field change details.',
+        description: 'Reports edits and undo changes.'
+      }
+    ]
+  },
   createBasicDoc(
     'ColorPicker',
     'Color picker with swatches and alpha.',
@@ -3395,7 +3535,48 @@ const defaultKanbanColumns: KanbanColumn[] = [
   }
 ]
 
+const defaultInspectorDrawerSections: InspectorDrawerSection[] = [
+  {
+    id: 'content',
+    title: 'Content',
+    description: 'Main copy and visibility',
+    fields: [
+      {
+        id: 'title',
+        label: 'Title',
+        type: 'text',
+        value: 'Launch report',
+        description: 'Shown in the preview card',
+        validate: (value) => String(value).trim().length < 3 ? 'Use at least 3 characters' : null
+      },
+      { id: 'enabled', label: 'Enabled', type: 'boolean', value: true, description: 'Controls active state' }
+    ]
+  },
+  {
+    id: 'layout',
+    title: 'Layout',
+    description: 'Size and visual weight',
+    fields: [
+      { id: 'width', label: 'Width', type: 'number', value: 320, min: 180, max: 520, step: 10, unit: 'px', description: 'Card width' },
+      { id: 'radius', label: 'Radius', type: 'number', value: 8, min: 0, max: 32, step: 1, unit: 'px', description: 'Corner radius' }
+    ]
+  },
+  {
+    id: 'style',
+    title: 'Style',
+    description: 'Presentation controls',
+    fields: [
+      { id: 'tone', label: 'Tone', type: 'select', value: 'Calm', options: [{ label: 'Calm', value: 'Calm' }, { label: 'Bold', value: 'Bold' }, { label: 'Urgent', value: 'Urgent' }] },
+      { id: 'accent', label: 'Accent', type: 'color', value: '#2563eb', validate: (value) => /^#[0-9a-f]{6}$/i.test(String(value)) ? null : 'Use a 6 digit hex color' }
+    ]
+  }
+]
+
 const sampleTabs = ['JavaScript', 'TypeScript']
+
+function getInspectorDrawerValue(sections: InspectorDrawerSection[], fieldId: string, fallback: InspectorDrawerFieldValue) {
+  return sections.flatMap((section) => section.fields).find((field) => field.id === fieldId)?.value ?? fallback
+}
 
 function getComponentGroup(name: string) {
   if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DataLens', 'DockBar', 'TimelineScrubber'].includes(name)) {
@@ -3406,7 +3587,7 @@ function getComponentGroup(name: string) {
     return 'Layout'
   }
 
-  if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
+  if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
     return 'Input'
   }
 
@@ -3628,6 +3809,8 @@ export function ComponentDocs() {
       group: 'State'
     }
   ])
+  const [inspectorDrawerOpen, setInspectorDrawerOpen] = useState(false)
+  const [inspectorDrawerSections, setInspectorDrawerSections] = useState<InspectorDrawerSection[]>(defaultInspectorDrawerSections)
   const floatingToolbarContainerRef = useRef<HTMLDivElement | null>(null)
   const floatingToolbarButtonRef = useRef<HTMLButtonElement | null>(null)
   const floatingToolbarBottomButtonRef = useRef<HTMLButtonElement | null>(null)
@@ -3844,6 +4027,49 @@ export function ComponentDocs() {
               </Typography>
             </Paper>
           </Box>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'InspectorDrawer') {
+      const title = String(getInspectorDrawerValue(inspectorDrawerSections, 'title', 'Launch report'))
+      const accent = String(getInspectorDrawerValue(inspectorDrawerSections, 'accent', '#2563eb'))
+      const tone = String(getInspectorDrawerValue(inspectorDrawerSections, 'tone', 'Calm'))
+      const width = Number(getInspectorDrawerValue(inspectorDrawerSections, 'width', 320))
+      const radius = Number(getInspectorDrawerValue(inspectorDrawerSections, 'radius', 8))
+      const enabled = Boolean(getInspectorDrawerValue(inspectorDrawerSections, 'enabled', true))
+
+      return (
+        <Box sx={{ p: 3, minHeight: 420, bgcolor: '#f8fafc' }}>
+          <Stack spacing={2} alignItems="flex-start">
+            <Button variant="contained" onClick={() => setInspectorDrawerOpen(true)}>Open inspector</Button>
+            <Paper
+              variant="outlined"
+              sx={{
+                width,
+                maxWidth: '100%',
+                p: 3,
+                borderRadius: `${radius}px`,
+                borderColor: accent,
+                bgcolor: enabled ? 'background.paper' : '#e5e7eb',
+                boxShadow: tone === 'Bold' ? `0 18px 45px ${accent}44` : 'none'
+              }}
+            >
+              <Typography variant="overline" color="text.secondary" fontWeight={900}>{tone}</Typography>
+              <Typography variant="h4" fontWeight={950} sx={{ color: accent }}>{title}</Typography>
+              <Typography color="text.secondary" sx={{ mt: 1 }}>
+                Drawer edits this card, validates title and color, and can undo changes.
+              </Typography>
+            </Paper>
+          </Stack>
+          <InspectorDrawer
+            open={inspectorDrawerOpen}
+            onClose={() => setInspectorDrawerOpen(false)}
+            title="Card properties"
+            subtitle="Sectioned fields with live validation"
+            sections={inspectorDrawerSections}
+            onSectionsChange={setInspectorDrawerSections}
+          />
         </Box>
       )
     }
@@ -4550,6 +4776,11 @@ export function ComponentDocs() {
         renderVariantCard('Text', <Stack spacing={1.5}><InspectorPanel title="Text prop" density="compact" showValueSummary={false} fields={[{ id: 'title', label: 'Title', type: 'text', value: inspectorTextTitle, defaultValue: 'Demo card' }]} onChange={(_, value) => setInspectorTextTitle(String(value))} /><Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}><Typography fontWeight={900}>{inspectorTextTitle}</Typography></Paper></Stack>),
         renderVariantCard('Number', <Stack spacing={1.5}><InspectorPanel title="Number prop" density="compact" showValueSummary={false} fields={[{ id: 'size', label: 'Size', type: 'number', value: inspectorNumberSize, defaultValue: 48, min: 24, max: 72, step: 2, unit: 'px' }]} onChange={(_, value) => setInspectorNumberSize(Number(value))} /><Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}><Typography fontWeight={900} sx={{ fontSize: inspectorNumberSize, lineHeight: 1 }}>Aa</Typography></Paper></Stack>),
         renderVariantCard('Mixed', <InspectorPanel fields={inspectorFields} onChange={(id, value) => setInspectorFields((fields) => fields.map((field) => field.id === id ? { ...field, value } : field))} />)
+      ],
+      InspectorDrawer: [
+        renderVariantCard('Sections', <Stack spacing={1.5}><Typography color="text.secondary">Content, layout, and style fields.</Typography><Button variant="contained" onClick={() => setInspectorDrawerOpen(true)}>Open drawer</Button></Stack>),
+        renderVariantCard('Validation', <Stack spacing={1.5}><Typography color="text.secondary">Title and color validate live.</Typography><Button variant="outlined" onClick={() => setInspectorDrawerOpen(true)}>Edit values</Button></Stack>),
+        renderVariantCard('Undo', <Stack spacing={1.5}><Typography color="text.secondary">Changes can be undone from header or footer.</Typography><Button variant="outlined" onClick={() => setInspectorDrawerOpen(true)}>Try undo</Button></Stack>)
       ],
       ColorPicker: [
         renderVariantCard('Simple', <ColorPicker value={pickerColor} onChange={setPickerColor} showValue={false} />),
