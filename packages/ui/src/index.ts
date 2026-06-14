@@ -16,6 +16,8 @@ export type { CommandPaletteItem, CommandPaletteProps, CommandPaletteVariant } f
 export { CommandPalette } from './components/CommandPalette'
 export type { SpotlightSearchAction, SpotlightSearchItem, SpotlightSearchProps } from './components/SpotlightSearch'
 export { SpotlightSearch } from './components/SpotlightSearch'
+export type { SmartBreadcrumbAction, SmartBreadcrumbItem, SmartBreadcrumbsProps } from './components/SmartBreadcrumbs'
+export { SmartBreadcrumbs } from './components/SmartBreadcrumbs'
 export type { SplitPaneCollapse, SplitPaneOrientation, SplitPaneProps } from './components/SplitPane'
 export { SplitPane } from './components/SplitPane'
 export type { FloatingToolbarPlacement, FloatingToolbarProps } from './components/FloatingToolbar'

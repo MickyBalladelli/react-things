@@ -13,9 +13,6 @@ Upload dropzone with previews, reorder, metadata edit, progress.
 CommandTimeline
 Undo/redo history as visual timeline with jump-to-state.
 
-SmartBreadcrumbs
-Breadcrumbs with previews, command actions, collapsible path search.
-
 PeekPanel
 Hover/click preview panel like IDE “peek definition”.
 

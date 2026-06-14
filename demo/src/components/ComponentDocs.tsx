@@ -54,6 +54,7 @@ import {
   ResizableDashboard,
   ResizableFrame,
   SelectionBox,
+  SmartBreadcrumbs,
   SmartTooltip,
   SplitPane,
   SpotlightSearch,
@@ -63,7 +64,7 @@ import {
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { BulkActionBarAction, ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, LayoutSwitcherItem, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, SpotlightSearchItem, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { BulkActionBarAction, ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, LayoutSwitcherItem, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, SmartBreadcrumbItem, SpotlightSearchItem, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -2193,6 +2194,131 @@ const items: SpotlightSearchItem[] = [
 
 export function Example() {
   return <SpotlightSearch items={items} maxResults={6} />
+}`
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'SmartBreadcrumbs',
+      'Breadcrumbs with previews, command actions, and collapsible path search.',
+      'SmartBreadcrumbs turns long paths into an interactive navigation trail with hover previews, action buttons, and searchable collapsed crumbs.'
+    ),
+    props: [
+      {
+        name: 'items',
+        type: 'SmartBreadcrumbItem[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, children, labelText, description, href, icon, preview, actions, keywords }.',
+        description: 'Path items to render.'
+      },
+      {
+        name: 'currentId',
+        type: 'string',
+        defaultValue: 'last item id',
+        possibleValues: 'Any item id.',
+        description: 'Marks the active crumb.'
+      },
+      {
+        name: 'maxVisible',
+        type: 'number',
+        defaultValue: '4',
+        possibleValues: 'Any positive count.',
+        description: 'Collapses middle crumbs when the path is longer.'
+      },
+      {
+        name: 'showPreview',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Enables hover and focus preview popovers.'
+      },
+      {
+        name: 'searchPlaceholder / emptyText',
+        type: 'ReactNode',
+        defaultValue: 'Search path / No matching path',
+        possibleValues: 'Any renderable content.',
+        description: 'Text for collapsed-path search.'
+      },
+      {
+        name: 'onSelect',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Function receiving selected item.',
+        description: 'Called when a breadcrumb or collapsed item is selected.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { Box, Chip, Typography } from '@mui/material'
+import { SmartBreadcrumbs } from '@mickyballadelli/react-things'
+
+const items = [
+  { id: 'workspace', label: 'Workspace', description: 'Team home' },
+  { id: 'product', label: 'Product', description: 'Product area' },
+  { id: 'roadmap', label: 'Roadmap', description: 'Planning board' },
+  {
+    id: 'release',
+    children: (
+      <Box sx={{ display: 'flex', gap: 0.75, alignItems: 'center' }}>
+        Release 2.4
+        <Chip size="small" label="live" color="success" />
+      </Box>
+    ),
+    labelText: 'Release 2.4 live',
+    description: 'Active release train',
+    preview: <Typography color="text.secondary">Ship checklist and rollout health.</Typography>,
+    actions: [{ id: 'brief', label: 'Open brief' }]
+  },
+  {
+    id: 'assets',
+    label: 'Design assets',
+    description: 'Images, tokens, and handoff notes',
+    preview: <Typography color="text.secondary">Brand colors, mockups, and export tokens.</Typography>,
+    actions: [{ id: 'copy', label: 'Copy link' }]
+  }
+]
+
+export function Example() {
+  return <SmartBreadcrumbs items={items} maxVisible={3} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { Box, Chip, Typography } from '@mui/material'
+import { SmartBreadcrumbs, type SmartBreadcrumbItem } from '@mickyballadelli/react-things'
+
+const items: SmartBreadcrumbItem[] = [
+  { id: 'org', label: 'Acme', description: 'Workspace root', keywords: ['team'] },
+  { id: 'product', label: 'Product', description: 'Product area' },
+  { id: 'roadmap', label: 'Roadmap', description: 'Planning board' },
+  {
+    id: 'release',
+    children: (
+      <Box sx={{ display: 'flex', gap: 0.75, alignItems: 'center' }}>
+        Release <strong>2.4</strong>
+        <Chip size="small" label="live" color="success" />
+      </Box>
+    ),
+    labelText: 'Release 2.4 live',
+    description: 'Active release',
+    preview: <Typography color="text.secondary">Rollout checklist and launch owners.</Typography>,
+    actions: [{ id: 'copy', label: 'Copy link' }]
+  },
+  {
+    id: 'assets',
+    label: 'Design assets',
+    description: 'Images, tokens, and handoff notes',
+    preview: <Typography color="text.secondary">Brand colors, mockups, and export tokens.</Typography>,
+    actions: [{ id: 'open', label: 'Open assets' }]
+  }
+]
+
+export function Example() {
+  return <SmartBreadcrumbs items={items} currentId="assets" maxVisible={3} />
 }`
       }
     ]
@@ -4345,6 +4471,67 @@ const spotlightSearchItems: SpotlightSearchItem[] = [
   }
 ]
 
+const smartBreadcrumbItems: SmartBreadcrumbItem[] = [
+  {
+    id: 'workspace',
+    label: 'Acme',
+    description: 'Workspace root and team overview',
+    icon: <InboxOutlinedIcon fontSize="small" />,
+    keywords: ['team', 'root'],
+    preview: <DataCardGrid metrics={dataCardGridMetrics.slice(0, 3)} columns={3} density="compact" />,
+    actions: [{ id: 'open', label: 'Open workspace' }, { id: 'copy', label: 'Copy link' }]
+  },
+  {
+    id: 'product',
+    label: 'Product',
+    description: 'Product operations and planning',
+    icon: <FolderOutlinedIcon fontSize="small" />,
+    keywords: ['area', 'planning'],
+    preview: <Typography color="text.secondary">Product area contains roadmaps, releases, and customer signals.</Typography>,
+    actions: [{ id: 'pin', label: 'Pin' }]
+  },
+  {
+    id: 'roadmap',
+    label: 'Roadmap',
+    description: 'Quarterly priorities and milestones',
+    icon: <AccountTreeOutlinedIcon fontSize="small" />,
+    keywords: ['plan', 'milestones'],
+    preview: <LayoutSwitcher items={layoutSwitcherItems.slice(0, 4)} defaultView="kanban" dense sx={{ minHeight: 240 }} />
+  },
+  {
+    id: 'release',
+    children: (
+      <Stack direction="row" spacing={0.75} alignItems="center" sx={{ minWidth: 0 }}>
+        <span>Release 2.4</span>
+        <Chip size="small" label="live" color="success" sx={{ height: 18, fontSize: 11, fontWeight: 900 }} />
+      </Stack>
+    ),
+    labelText: 'Release 2.4 live',
+    description: 'Active launch train',
+    icon: <RocketLaunchOutlinedIcon fontSize="small" />,
+    keywords: ['launch', 'ship'],
+    preview: <StatusRail groups={statusRailGroups.slice(0, 3)} title="Release health" compact />,
+    actions: [{ id: 'brief', label: 'Open brief' }, { id: 'status', label: 'Copy status' }]
+  },
+  {
+    id: 'assets',
+    label: 'Design assets',
+    description: 'Images, tokens, and handoff notes',
+    icon: <PaletteOutlinedIcon fontSize="small" />,
+    keywords: ['figma', 'tokens'],
+    preview: <ColorStudio initialColors={colorStudioColors.slice(0, 3)} />
+  },
+  {
+    id: 'handoff',
+    label: 'Engineering handoff',
+    description: 'Current implementation checklist',
+    icon: <BoltOutlinedIcon fontSize="small" />,
+    keywords: ['dev', 'implementation'],
+    preview: <Typography color="text.secondary">Ready for implementation with owners, risks, and linked specs.</Typography>,
+    actions: [{ id: 'assign', label: 'Assign owner' }]
+  }
+]
+
 const defaultInspectorDrawerSections: InspectorDrawerSection[] = [
   {
     id: 'content',
@@ -4413,7 +4600,7 @@ function getComponentGroup(name: string) {
     return 'Input'
   }
 
-  if (['CommandDock', 'DockTabs', 'MorphMenu'].includes(name)) {
+  if (['CommandDock', 'DockTabs', 'MorphMenu', 'SmartBreadcrumbs'].includes(name)) {
     return 'Navigation'
   }
 
@@ -5466,6 +5653,31 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'SmartBreadcrumbs') {
+      return (
+        <Box sx={{ minHeight: 420, p: 3, bgcolor: '#f8fafc' }}>
+          <Stack spacing={3}>
+            <SmartBreadcrumbs
+              items={smartBreadcrumbItems}
+              maxVisible={3}
+              sx={{ maxWidth: 760 }}
+            />
+            <Paper variant="outlined" sx={{ p: 3, borderRadius: 1 }}>
+              <Typography variant="overline" color="text.secondary" fontWeight={900}>
+                Collapsed path search
+              </Typography>
+              <Typography variant="h4" fontWeight={950}>
+                Long trails stay usable
+              </Typography>
+              <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 620 }}>
+                Hover crumbs to peek. Click the dots to search hidden path segments and jump there.
+              </Typography>
+            </Paper>
+          </Stack>
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'DockBar') {
       const dockItems = [
         { id: 'finder', label: 'Finder', icon: '🗂️' },
@@ -5694,6 +5906,11 @@ export function ComponentDocs() {
         renderVariantCard('Grouped', <SpotlightSearch items={spotlightSearchItems} maxResults={4} sx={{ minHeight: 260 }} />),
         renderVariantCard('Exact', <SpotlightSearch items={spotlightSearchItems} fuzzy={false} sx={{ minHeight: 260 }} />),
         renderVariantCard('Actions', <SpotlightSearch items={spotlightSearchItems.slice(0, 2)} previewTitle="Action preview" sx={{ minHeight: 260 }} />)
+      ],
+      SmartBreadcrumbs: [
+        renderVariantCard('Collapsed', <SmartBreadcrumbs items={smartBreadcrumbItems} maxVisible={3} />),
+        renderVariantCard('Full Path', <SmartBreadcrumbs items={smartBreadcrumbItems.slice(0, 4)} maxVisible={6} />),
+        renderVariantCard('No Preview', <SmartBreadcrumbs items={smartBreadcrumbItems} maxVisible={3} showPreview={false} />)
       ],
       SplitPane: [
         renderVariantCard('Simple', <SplitPane sx={{ minHeight: 150 }} first={<Box sx={{ p: 2 }}>Left</Box>} second={<Box sx={{ p: 2 }}>Right</Box>} />),

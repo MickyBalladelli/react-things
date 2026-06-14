@@ -37,6 +37,7 @@ export function Example() {
 - CommandDock
 - CommandPalette
 - SpotlightSearch
+- SmartBreadcrumbs
 - SplitPane
 - FloatingToolbar
 - MagneticCard
