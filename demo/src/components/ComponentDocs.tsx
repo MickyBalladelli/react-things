@@ -39,6 +39,7 @@ import {
   FileDropZone,
   FocusRing,
   FloatingToolbar,
+  FlowBuilder,
   GlassBox,
   InfiniteCanvas,
   InspectorDrawer,
@@ -57,7 +58,7 @@ import {
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -424,6 +425,56 @@ export function Example() {
       connectionStyle="curved"
     />
   )
+}`
+      }
+    ],
+    FlowBuilder: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import { FlowBuilder } from '@mickyballadelli/react-things'
+
+const nodes = [
+  { id: 'trigger', label: 'New signup', x: 48, y: 120, outputs: [{ id: 'event', label: 'Event', type: 'event' }] },
+  { id: 'enrich', label: 'Enrich user', x: 330, y: 80, inputs: [{ id: 'event', label: 'Event', type: 'event' }], outputs: [{ id: 'data', label: 'Profile', type: 'data' }] },
+  { id: 'email', label: 'Send email', x: 610, y: 120, inputs: [{ id: 'profile', label: 'Profile', type: 'data' }] }
+]
+
+const connections = [
+  { id: 'a', fromNodeId: 'trigger', fromPortId: 'event', toNodeId: 'enrich', toPortId: 'event', type: 'event' },
+  { id: 'b', fromNodeId: 'enrich', fromPortId: 'data', toNodeId: 'email', toPortId: 'profile', type: 'data' }
+]
+
+export function Example() {
+  const [flowNodes, setFlowNodes] = useState(nodes)
+  const [flowConnections, setFlowConnections] = useState(connections)
+
+  return <FlowBuilder nodes={flowNodes} connections={flowConnections} onNodesChange={setFlowNodes} onConnectionsChange={setFlowConnections} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import { FlowBuilder, type FlowBuilderConnection, type FlowBuilderNode } from '@mickyballadelli/react-things'
+
+const nodes: FlowBuilderNode[] = [
+  { id: 'trigger', label: 'New signup', x: 48, y: 120, outputs: [{ id: 'event', label: 'Event', type: 'event' }] },
+  { id: 'enrich', label: 'Enrich user', x: 330, y: 80, inputs: [{ id: 'event', label: 'Event', type: 'event' }], outputs: [{ id: 'data', label: 'Profile', type: 'data' }] },
+  { id: 'email', label: 'Send email', x: 610, y: 120, inputs: [{ id: 'profile', label: 'Profile', type: 'data' }] }
+]
+
+const connections: FlowBuilderConnection[] = [
+  { id: 'a', fromNodeId: 'trigger', fromPortId: 'event', toNodeId: 'enrich', toPortId: 'event', type: 'event' },
+  { id: 'b', fromNodeId: 'enrich', fromPortId: 'data', toNodeId: 'email', toPortId: 'profile', type: 'data' }
+]
+
+export function Example() {
+  const [flowNodes, setFlowNodes] = useState<FlowBuilderNode[]>(nodes)
+  const [flowConnections, setFlowConnections] = useState<FlowBuilderConnection[]>(connections)
+
+  return <FlowBuilder nodes={flowNodes} connections={flowConnections} onNodesChange={setFlowNodes} onConnectionsChange={setFlowConnections} />
 }`
       }
     ],
@@ -2567,6 +2618,57 @@ export function Example() {
       }
     ]
   },
+  {
+    ...createBasicDoc(
+      'FlowBuilder',
+      'Workflow editor with ports, typed edges, validation, and auto-layout.',
+      'FlowBuilder is a workflow surface for connecting typed ports between nodes, spotting invalid edges, arranging graphs automatically, and editing node positions.'
+    ),
+    props: [
+      {
+        name: 'nodes',
+        type: 'FlowBuilderNode[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, x, y, inputs, outputs, tone, data }.',
+        description: 'Workflow nodes and typed ports.'
+      },
+      {
+        name: 'connections',
+        type: 'FlowBuilderConnection[]',
+        defaultValue: '[]',
+        possibleValues: 'Array of { id, fromNodeId, fromPortId, toNodeId, toPortId, type, label }.',
+        description: 'Typed edges between output and input ports.'
+      },
+      {
+        name: 'portTypes',
+        type: 'string[]',
+        defaultValue: 'event/data/success/error',
+        possibleValues: 'Any list of type names.',
+        description: 'Types available in the connection helper.'
+      },
+      {
+        name: 'validate',
+        type: '(nodes, connections) => FlowBuilderValidation[]',
+        defaultValue: 'built-in typed validation',
+        possibleValues: 'Function returning validation issues.',
+        description: 'Checks missing inputs, invalid ports, or custom workflow rules.'
+      },
+      {
+        name: 'snapToGrid / gridSize',
+        type: 'boolean / number',
+        defaultValue: 'true / 24',
+        possibleValues: 'true or false, and any positive grid size.',
+        description: 'Snaps drag and auto-layout positions.'
+      },
+      {
+        name: 'onNodesChange / onConnectionsChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks receiving updated graph arrays.',
+        description: 'Use for controlled workflow editing.'
+      }
+    ]
+  },
   createBasicDoc(
     'BeforeAfterSlider',
     'Compare two panes with draggable slider.',
@@ -3647,6 +3749,49 @@ const defaultKanbanColumns: KanbanColumn[] = [
   }
 ]
 
+const defaultFlowBuilderNodes: FlowBuilderNode[] = [
+  {
+    id: 'trigger',
+    label: 'New signup',
+    x: 48,
+    y: 128,
+    tone: '#eff6ff',
+    outputs: [{ id: 'event', label: 'Event', type: 'event' }]
+  },
+  {
+    id: 'enrich',
+    label: 'Enrich user',
+    x: 330,
+    y: 78,
+    tone: '#f0fdf4',
+    inputs: [{ id: 'event', label: 'Event', type: 'event' }],
+    outputs: [{ id: 'profile', label: 'Profile', type: 'data' }, { id: 'failed', label: 'Failed', type: 'error' }]
+  },
+  {
+    id: 'email',
+    label: 'Send email',
+    x: 620,
+    y: 110,
+    tone: '#fdf2f8',
+    inputs: [{ id: 'profile', label: 'Profile', type: 'data' }],
+    outputs: [{ id: 'sent', label: 'Sent', type: 'success' }]
+  },
+  {
+    id: 'slack',
+    label: 'Alert team',
+    x: 620,
+    y: 260,
+    tone: '#fef3c7',
+    inputs: [{ id: 'error', label: 'Error', type: 'error' }]
+  }
+]
+
+const defaultFlowBuilderConnections: FlowBuilderConnection[] = [
+  { id: 'signup-enrich', fromNodeId: 'trigger', fromPortId: 'event', toNodeId: 'enrich', toPortId: 'event', type: 'event', label: 'signup' },
+  { id: 'enrich-email', fromNodeId: 'enrich', fromPortId: 'profile', toNodeId: 'email', toPortId: 'profile', type: 'data', label: 'profile' },
+  { id: 'enrich-slack', fromNodeId: 'enrich', fromPortId: 'failed', toNodeId: 'slack', toPortId: 'error', type: 'error', label: 'failure' }
+]
+
 const selectionBoxItems = [
   { id: 'roadmap', label: 'Roadmap', type: 'Doc', color: '#dbeafe' },
   { id: 'assets', label: 'Assets', type: 'Folder', color: '#dcfce7' },
@@ -3708,6 +3853,10 @@ function getComponentGroup(name: string) {
 
   if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'ResizableDashboard', 'BeforeAfterSlider', 'InfiniteCanvas', 'SelectionBox'].includes(name)) {
     return 'Layout'
+  }
+
+  if (['FlowBuilder'].includes(name)) {
+    return 'Input'
   }
 
   if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
@@ -3942,6 +4091,8 @@ export function ComponentDocs() {
   const [floatingToolbarElementOpen, setFloatingToolbarElementOpen] = useState(false)
   const [floatingToolbarBottomOpen, setFloatingToolbarBottomOpen] = useState(false)
   const [nodeCanvasSelectedId, setNodeCanvasSelectedId] = useState<string | null>('a')
+  const [flowBuilderNodes, setFlowBuilderNodes] = useState<FlowBuilderNode[]>(defaultFlowBuilderNodes)
+  const [flowBuilderConnections, setFlowBuilderConnections] = useState<FlowBuilderConnection[]>(defaultFlowBuilderConnections)
   const [timelineTime, setTimelineTime] = useState(34)
   const [infiniteCanvasSelectedId, setInfiniteCanvasSelectedId] = useState<string | null>('idea')
   const [kanbanColumns, setKanbanColumns] = useState<KanbanColumn[]>(defaultKanbanColumns)
@@ -4068,6 +4219,20 @@ export function ComponentDocs() {
             linkTypes={['line', 'curved', 'step', 'ellipse']}
             showGrid
             snapToGrid
+          />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'FlowBuilder') {
+      return (
+        <Box sx={{ minHeight: 540, p: 3, bgcolor: '#f8fafc' }}>
+          <FlowBuilder
+            nodes={flowBuilderNodes}
+            connections={flowBuilderConnections}
+            onNodesChange={setFlowBuilderNodes}
+            onConnectionsChange={setFlowBuilderConnections}
+            sx={{ minHeight: 500, border: 1, borderColor: 'divider', borderRadius: 1 }}
           />
         </Box>
       )
@@ -4925,6 +5090,11 @@ export function ComponentDocs() {
         renderVariantCard('Compact Nodes', <NodeCanvas nodeWidth={96} nodeHeight={42} nodes={[{ id: 'a', label: 'In', x: 30, y: 50 }, { id: 'b', label: 'Out', x: 170, y: 50 }]} connections={[{ from: 'a', to: 'b' }]} sx={{ minHeight: 170 }} />),
         renderVariantCard('Custom Render', <NodeCanvas nodeWidth={150} nodeHeight={68} connectionStyle="curved" nodes={[{ id: 'a', label: 'API', x: 20, y: 40, color: '#eff6ff' }, { id: 'b', label: 'Worker', x: 220, y: 90, color: '#f0fdf4' }]} connections={[{ from: 'a', to: 'b', color: '#059669' }]} renderNode={(node, selected) => <Box sx={{ textAlign: 'center' }}><Typography fontWeight={900}>{node.label}</Typography><Typography variant="caption" color={selected ? 'primary.main' : 'text.secondary'}>{selected ? 'selected' : 'service'}</Typography></Box>} sx={{ minHeight: 190 }} />),
         renderVariantCard('Editor Tools', <NodeCanvas editableTools showGrid snapToGrid linkTypes={['line', 'curved', 'step', 'ellipse']} nodes={[{ id: 'a', label: 'Box A', x: 24, y: 44, color: '#dbeafe' }, { id: 'b', label: 'Box B', x: 196, y: 100, color: '#dcfce7' }]} connections={[{ from: 'a', to: 'b', type: 'curved', label: 'uses', color: '#2563eb' }]} sx={{ minHeight: 260 }} />)
+      ],
+      FlowBuilder: [
+        renderVariantCard('Typed Flow', <FlowBuilder nodes={defaultFlowBuilderNodes.slice(0, 3)} connections={defaultFlowBuilderConnections.slice(0, 2)} sx={{ minHeight: 260 }} />),
+        renderVariantCard('Invalid Edge', <FlowBuilder nodes={defaultFlowBuilderNodes.slice(0, 3)} connections={[...defaultFlowBuilderConnections.slice(0, 1), { id: 'bad', fromNodeId: 'trigger', fromPortId: 'event', toNodeId: 'email', toPortId: 'profile', type: 'event' }]} sx={{ minHeight: 260 }} />),
+        renderVariantCard('No Grid', <FlowBuilder showGrid={false} nodes={defaultFlowBuilderNodes} connections={defaultFlowBuilderConnections} sx={{ minHeight: 260 }} />)
       ],
       BeforeAfterSlider: [
         renderVariantCard('50/50', <BeforeAfterSlider sx={{ minHeight: 140 }} before={<Box sx={{ height: '100%', bgcolor: '#2563eb' }} />} after={<Box sx={{ height: '100%', bgcolor: '#f59e0b' }} />} />),

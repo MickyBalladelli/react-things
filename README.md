@@ -48,6 +48,7 @@ React and React DOM are peer dependencies.
 - MorphMenu: radial action menu that morphs out from its trigger.
 - SpotlightPanel: panel that reveals content through a cursor-following light.
 - NodeCanvas: diagram workspace with draggable connected nodes.
+- FlowBuilder: workflow editor with ports, typed edges, validation, and auto-layout.
 - BeforeAfterSlider: comparison viewer with a draggable reveal handle.
 - InfiniteCanvas: pan-and-zoom workspace for draggable items.
 - SelectionBox: drag selection wrapper for grids, lists, and canvases.

@@ -41,6 +41,7 @@ export function Example() {
 - MorphMenu
 - SpotlightPanel
 - NodeCanvas
+- FlowBuilder
 - BeforeAfterSlider
 - InfiniteCanvas
 - SelectionBox
