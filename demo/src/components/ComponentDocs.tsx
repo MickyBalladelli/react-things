@@ -51,6 +51,7 @@ import {
   KanbanBoard,
   LayoutSwitcher,
   MagneticCard,
+  MiniMapNavigator,
   MorphMenu,
   NodeCanvas,
   PeekPanel,
@@ -1937,6 +1938,92 @@ export function Example() {
       onChange={saveDensity}
     />
   )
+}`
+      }
+    ]
+  },
+  {
+    name: 'MiniMapNavigator',
+    summary: 'Overview minimap for long pages, canvases, dashboards, and docs.',
+    description: 'MiniMapNavigator renders a compact overview of measured sections, shows the current viewport, and lets users click or drag to jump through long content.',
+    props: [
+      {
+        name: 'items',
+        type: 'MiniMapNavigatorItem[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, description, targetId, top, height, color }.',
+        description: 'Sections or regions shown in the minimap.'
+      },
+      {
+        name: 'containerRef',
+        type: 'RefObject<HTMLElement | null>',
+        defaultValue: 'document',
+        possibleValues: 'A scroll container ref, or omit for page scrolling.',
+        description: 'Element whose scroll position and target sections are measured.'
+      },
+      {
+        name: 'activeId',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any item id.',
+        description: 'Optional controlled active section.'
+      },
+      {
+        name: 'height',
+        type: 'number',
+        defaultValue: '280',
+        possibleValues: 'Any positive pixel height.',
+        description: 'Height of the minimap track.'
+      },
+      {
+        name: 'showLabels / showProgress / sticky',
+        type: 'boolean',
+        defaultValue: 'true / true / false',
+        possibleValues: 'true or false.',
+        description: 'Controls labels, progress chip, and sticky positioning.'
+      },
+      {
+        name: 'onActiveChange / onNavigate / onMeasureChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks for section changes, jumps, and scroll measurements.',
+        description: 'Receive minimap events.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useRef } from 'react'
+import { MiniMapNavigator } from '@mickyballadelli/react-things'
+
+const items = [
+  { id: 'intro', label: 'Intro', targetId: 'intro' },
+  { id: 'api', label: 'API', targetId: 'api' },
+  { id: 'examples', label: 'Examples', targetId: 'examples' }
+]
+
+export function Example() {
+  const containerRef = useRef(null)
+
+  return <MiniMapNavigator items={items} containerRef={containerRef} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useRef } from 'react'
+import { MiniMapNavigator, type MiniMapNavigatorItem } from '@mickyballadelli/react-things'
+
+const items: MiniMapNavigatorItem[] = [
+  { id: 'overview', label: 'Overview', top: 0, height: 280, color: '#2563eb' },
+  { id: 'canvas', label: 'Canvas', top: 320, height: 420, color: '#059669' }
+]
+
+export function Example() {
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
+  return <MiniMapNavigator items={items} containerRef={containerRef} showLabels={false} />
 }`
       }
     ]
@@ -4974,7 +5061,7 @@ function getInspectorDrawerValue(sections: InspectorDrawerSection[], fieldId: st
 }
 
 function getComponentGroup(name: string) {
-  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DataLens', 'DensityController', 'LayoutSwitcher', 'DockBar', 'TimelineScrubber'].includes(name)) {
+  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DataLens', 'DensityController', 'LayoutSwitcher', 'MiniMapNavigator', 'DockBar', 'TimelineScrubber'].includes(name)) {
     return 'Display'
   }
 
@@ -5222,6 +5309,7 @@ export function ComponentDocs() {
   const floatingToolbarContainerRef = useRef<HTMLDivElement | null>(null)
   const floatingToolbarButtonRef = useRef<HTMLButtonElement | null>(null)
   const floatingToolbarBottomButtonRef = useRef<HTMLButtonElement | null>(null)
+  const miniMapPreviewRef = useRef<HTMLDivElement | null>(null)
   const [floatingToolbarRect, setFloatingToolbarRect] = useState<DOMRect | null>(null)
   const [floatingToolbarElementOpen, setFloatingToolbarElementOpen] = useState(false)
   const [floatingToolbarBottomOpen, setFloatingToolbarBottomOpen] = useState(false)
@@ -6368,6 +6456,71 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'MiniMapNavigator') {
+      const sections = [
+        { id: 'brief', label: 'Brief', targetId: 'mini-map-brief', color: '#2563eb', description: 'Opening context and goals' },
+        { id: 'metrics', label: 'Metrics', targetId: 'mini-map-metrics', color: '#059669', description: 'Dashboard style section' },
+        { id: 'canvas', label: 'Canvas', targetId: 'mini-map-canvas', color: '#7c3aed', description: 'Large visual workspace' },
+        { id: 'notes', label: 'Notes', targetId: 'mini-map-notes', color: '#f59e0b', description: 'Long docs and decisions' }
+      ]
+
+      return (
+        <Box sx={{ p: 3, bgcolor: '#f8fafc' }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 260px' }, gap: 2, alignItems: 'start' }}>
+            <Paper
+              ref={miniMapPreviewRef}
+              variant="outlined"
+              sx={{
+                height: 520,
+                overflow: 'auto',
+                borderRadius: 1,
+                bgcolor: '#ffffff'
+              }}
+            >
+              {sections.map((section, index) => (
+                <Box
+                  key={section.id}
+                  id={section.targetId}
+                  sx={{
+                    minHeight: index === 2 ? 520 : 360,
+                    p: 3,
+                    borderBottom: 1,
+                    borderColor: 'divider',
+                    bgcolor: index % 2 === 0 ? '#ffffff' : '#f8fafc'
+                  }}
+                >
+                  <Typography variant="overline" color="text.secondary" fontWeight={900}>
+                    {section.label}
+                  </Typography>
+                  <Typography variant="h4" fontWeight={950} sx={{ color: section.color }}>
+                    {section.description}
+                  </Typography>
+                  <Box sx={{ mt: 3, display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' }, gap: 1.5 }}>
+                    {Array.from({ length: index === 2 ? 6 : 4 }, (_, cardIndex) => (
+                      <Paper key={cardIndex} variant="outlined" sx={{ p: 2, borderRadius: 1, minHeight: 96 }}>
+                        <Typography fontWeight={900}>Block {cardIndex + 1}</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Click the minimap or drag its viewport to move through this long surface.
+                        </Typography>
+                      </Paper>
+                    ))}
+                  </Box>
+                </Box>
+              ))}
+            </Paper>
+
+            <MiniMapNavigator
+              title="Document map"
+              subtitle="Click bars or drag viewport"
+              items={sections}
+              containerRef={miniMapPreviewRef}
+              sticky
+            />
+          </Box>
+        </Box>
+      )
+    }
+
     return (
       <DraggableGlassBoxPreview
         transparency={glassBoxConfig.transparency}
@@ -6426,6 +6579,11 @@ export function ComponentDocs() {
         renderVariantCard('Compact', <DensityController defaultValue="compact" showReset={false}><Typography>Dense rows for high-volume tools.</Typography></DensityController>),
         renderVariantCard('Cozy', <DensityController defaultValue="cozy" showReset={false}><Typography>Balanced default for daily work.</Typography></DensityController>),
         renderVariantCard('Spacious', <DensityController defaultValue="spacious" showReset={false}><Typography>Touch-friendly breathing room.</Typography></DensityController>)
+      ],
+      MiniMapNavigator: [
+        renderVariantCard('Page', <MiniMapNavigator height={170} showLabels={false} items={[{ id: 'a', label: 'Intro', top: 0, height: 240, color: '#2563eb' }, { id: 'b', label: 'API', top: 280, height: 360, color: '#059669' }, { id: 'c', label: 'Examples', top: 720, height: 300, color: '#f59e0b' }]} />),
+        renderVariantCard('Labels', <MiniMapNavigator height={150} items={[{ id: 'a', label: 'Overview', top: 0, height: 160 }, { id: 'b', label: 'Canvas', top: 220, height: 380 }, { id: 'c', label: 'Notes', top: 660, height: 220 }]} />),
+        renderVariantCard('Dashboard', <MiniMapNavigator height={180} showProgress={false} items={[{ id: 'kpi', label: 'KPIs', top: 0, height: 180, color: '#dbeafe' }, { id: 'table', label: 'Table', top: 220, height: 420, color: '#dcfce7' }, { id: 'logs', label: 'Logs', top: 700, height: 260, color: '#fee2e2' }]} />)
       ],
       DockBar: [
         renderVariantCard('Small', <DockBar items={[{ id: 'a', label: 'A', icon: 'A' }, { id: 'b', label: 'B', icon: 'B' }]} iconSize={40} />),
