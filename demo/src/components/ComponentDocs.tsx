@@ -1965,7 +1965,7 @@ export function Example() {
       {
         name: 'openDelay',
         type: 'number',
-        defaultValue: '120',
+        defaultValue: '500',
         possibleValues: 'Any millisecond delay.',
         description: 'Hover delay before open.'
       }
@@ -3264,7 +3264,7 @@ export function ComponentDocs() {
       SmartTooltip: [
         renderVariantCard('Text', <Box sx={{ minHeight: 120, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Helpful detail" content="Extra context without leaving the flow."><Button variant="outlined">Hover</Button></SmartTooltip></Box>),
         renderVariantCard('Copy', <Box sx={{ minHeight: 120, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Install" content="Copy the package command." copyText="npm install @mickyballadelli/react-things" placement="bottom"><Button variant="outlined">Copy tooltip</Button></SmartTooltip></Box>),
-        renderVariantCard('Media Actions', <Box sx={{ minHeight: 140, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Preview card" content="Media, actions, and pin mode." media={<Box sx={{ height: 90, backgroundImage: 'url(/animals-colors.svg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />} actions={[{ id: 'open', label: 'Open' }]} defaultPinned><Button variant="contained">Pinned</Button></SmartTooltip></Box>)
+        renderVariantCard('Media Actions', <Box sx={{ minHeight: 140, display: 'grid', placeItems: 'center' }}><SmartTooltip title="Preview card" content="Media, actions, and pin mode." media={<Box sx={{ height: 90, backgroundImage: 'url(/animals-colors.svg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />} actions={[{ id: 'open', label: 'Open' }]}><Button variant="contained">Preview</Button></SmartTooltip></Box>)
       ],
       MagneticCard: [
         renderVariantCard('Soft', <MagneticCard strength={10} tilt={4} sx={{ p: 2, border: 1, borderColor: 'divider', borderRadius: 1 }}>Soft pull</MagneticCard>),

@@ -1,7 +1,6 @@
 Good ideas:
 MorphMenu: radial/context menu that morphs from clicked element, with keyboard nav.
 SpotlightSearch: search box with command results, previews, fuzzy groups, actions.
-SmartTooltip: tooltip that can hold actions, media, copy buttons, pin mode.
 FlowBuilder: better NodeCanvas for workflows: ports, typed edges, validation, auto-layout.
 TourGuide: product walkthrough with spotlight mask, steps, branching.
 DockTabs: browser-like draggable tabs with pin, close, reorder, overflow.
@@ -21,7 +20,6 @@ TimelineScrubber: slick time scrubber with markers, preview thumbnails.
 
 InfiniteCanvas
 TourGuide
-SmartTooltip
 DockTabs
 ToastCenter
 
