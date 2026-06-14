@@ -40,6 +40,7 @@ import {
   DockTabs,
   DropComposer,
   DraggableBox,
+  EntityPicker,
   FileDropZone,
   FocusRing,
   FloatingToolbar,
@@ -4458,6 +4459,79 @@ export function Example() {
       }
     ]
   },
+  {
+    name: 'EntityPicker',
+    summary: 'Rich picker for users, files, and projects with avatars, recent, pinned, and groups.',
+    description: 'EntityPicker is a searchable selection surface for mixed workspace entities, with avatars, group headings, pinned and recent filters, single or multi-select, and selected chips.',
+    props: [
+      {
+        name: 'entities',
+        type: 'EntityPickerEntity[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, type, label, description, group, avatarUrl, avatarText, color, status, recent, pinned, keywords, meta }.',
+        description: 'Entities shown in the picker.'
+      },
+      {
+        name: 'value / defaultValue',
+        type: 'string | string[] | null',
+        defaultValue: 'null',
+        possibleValues: 'Entity id for single select, array of ids for multiple.',
+        description: 'Controlled or uncontrolled selected entities.'
+      },
+      {
+        name: 'multiple',
+        type: 'boolean',
+        defaultValue: 'false',
+        possibleValues: 'true or false.',
+        description: 'Enables checkbox multi-select.'
+      },
+      {
+        name: 'showFilters / showSelected',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Shows recent/pinned filters and selected chips.'
+      },
+      {
+        name: 'onChange / onSelect',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks receiving value, selected entities, or clicked entity.',
+        description: 'Reports selection changes.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { EntityPicker } from '@mickyballadelli/react-things'
+
+const entities = [
+  { id: 'ada', type: 'user', label: 'Ada Lovelace', group: 'People', pinned: true },
+  { id: 'brief', type: 'file', label: 'Launch brief.pdf', group: 'Files', recent: true },
+  { id: 'atlas', type: 'project', label: 'Atlas', group: 'Projects' }
+]
+
+export function Example() {
+  return <EntityPicker entities={entities} multiple />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { EntityPicker, type EntityPickerEntity } from '@mickyballadelli/react-things'
+
+const entities: EntityPickerEntity[] = [
+  { id: 'micky', type: 'user', label: 'Micky', status: 'online', recent: true },
+  { id: 'tokens', type: 'file', label: 'tokens.json', pinned: true }
+]
+
+export function Example() {
+  return <EntityPicker entities={entities} defaultValue="micky" />
+}`
+      }
+    ]
+  },
 ]
 
 const defaultGlassBoxConfig: GlassBoxConfig = {
@@ -4499,6 +4573,70 @@ const defaultDropComposerItems: DropComposerItem[] = [
     description: 'Theme handoff',
     progress: 32,
     status: 'queued'
+  }
+]
+
+const entityPickerEntities = [
+  {
+    id: 'micky',
+    type: 'user' as const,
+    label: 'Micky Balladelli',
+    description: 'Product engineering',
+    group: 'People',
+    avatarText: 'MB',
+    color: '#2563eb',
+    status: 'online',
+    pinned: true,
+    recent: true,
+    keywords: ['owner', 'frontend']
+  },
+  {
+    id: 'ada',
+    type: 'user' as const,
+    label: 'Ada Lovelace',
+    description: 'Systems and analytics',
+    group: 'People',
+    avatarText: 'AL',
+    color: '#7c3aed',
+    recent: true
+  },
+  {
+    id: 'launch-brief',
+    type: 'file' as const,
+    label: 'launch-brief.pdf',
+    description: 'Customer launch narrative',
+    group: 'Files',
+    color: '#059669',
+    status: 'PDF',
+    pinned: true,
+    recent: true
+  },
+  {
+    id: 'tokens',
+    type: 'file' as const,
+    label: 'design-tokens.json',
+    description: 'Theme colors and spacing',
+    group: 'Files',
+    color: '#0ea5e9',
+    status: 'JSON'
+  },
+  {
+    id: 'atlas',
+    type: 'project' as const,
+    label: 'Atlas workspace',
+    description: 'Core planning and dashboards',
+    group: 'Projects',
+    color: '#f59e0b',
+    pinned: true
+  },
+  {
+    id: 'vela',
+    type: 'project' as const,
+    label: 'Vela client',
+    description: 'Interactive canvas workstream',
+    group: 'Projects',
+    color: '#db2777',
+    recent: true
   }
 ]
 
@@ -5081,7 +5219,7 @@ function getComponentGroup(name: string) {
     return 'Input'
   }
 
-  if (['CommandPalette', 'SpotlightSearch', 'FloatingToolbar', 'FileDropZone', 'DropComposer', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
+  if (['CommandPalette', 'SpotlightSearch', 'FloatingToolbar', 'FileDropZone', 'DropComposer', 'EntityPicker', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
     return 'Input'
   }
 
@@ -5795,6 +5933,21 @@ export function ComponentDocs() {
             title="Compose launch upload"
             subtitle="Drop assets, reorder the queue, edit names, and watch upload progress."
             sx={{ maxWidth: 920, mx: 'auto' }}
+          />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'EntityPicker') {
+      return (
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+          <EntityPicker
+            title="Add to workspace"
+            subtitle="Pick people, files, and projects from one surface."
+            entities={entityPickerEntities}
+            defaultValue={['micky', 'launch-brief']}
+            multiple
+            sx={{ maxWidth: 720, mx: 'auto' }}
           />
         </Box>
       )
@@ -6757,6 +6910,11 @@ export function ComponentDocs() {
         renderVariantCard('Queue', <DropComposer defaultItems={defaultDropComposerItems.slice(0, 2)} title="Upload queue" sx={{ minHeight: 360 }} />),
         renderVariantCard('Images Only', <DropComposer defaultItems={defaultDropComposerItems.slice(0, 1)} accept="image/*" title="Image assets" sx={{ minHeight: 320 }} />),
         renderVariantCard('Custom Preview', <DropComposer defaultItems={defaultDropComposerItems.slice(1)} renderPreview={(item) => <Box sx={{ p: 1, textAlign: 'center' }}><Typography fontWeight={900}>{item.name.split('.').pop()?.toUpperCase()}</Typography></Box>} sx={{ minHeight: 320 }} />)
+      ],
+      EntityPicker: [
+        renderVariantCard('Mixed', <EntityPicker entities={entityPickerEntities} defaultValue="micky" maxHeight={220} />),
+        renderVariantCard('Multiple', <EntityPicker entities={entityPickerEntities} multiple defaultValue={['micky', 'atlas']} maxHeight={220} />),
+        renderVariantCard('Pinned', <EntityPicker entities={entityPickerEntities} defaultValue="atlas" showSelected={false} maxHeight={220} />)
       ],
       DataCardGrid: [
         renderVariantCard('Revenue', <DataCardGrid metrics={[dataCardGridMetrics[0]]} showProgress={false} />),

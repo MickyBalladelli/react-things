@@ -10,14 +10,8 @@ Multi-layer before/after viewer with opacity sliders.
 CommandTimeline
 Undo/redo history as visual timeline with jump-to-state.
 
-EntityPicker
-Rich picker for users/files/projects with avatars, recent, pinned, groups.
-
 RuleBuilder
 No-code condition builder: if/and/or groups, validation, readable output.
-
-MiniMapNavigator
-Overview minimap for long pages, canvases, dashboards, docs.
 
 FieldComposer
 Schema form builder with drag fields, validation preview, generated JSON.
