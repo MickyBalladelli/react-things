@@ -33,6 +33,7 @@ import {
   CommandDock,
   CommandPalette,
   CommandTimeline,
+  CompareStack,
   DataCardGrid,
   DataLens,
   DensityController,
@@ -3497,6 +3498,85 @@ export function Example() {
     'BeforeAfterSlider is a comparison viewer that reveals one layer over another with a draggable dividing handle.'
   ),
   {
+    name: 'CompareStack',
+    summary: 'Multi-layer before and after viewer with opacity sliders.',
+    description: 'CompareStack stacks visual layers for before/after reviews, design overlays, map states, or dashboard comparisons, with per-layer opacity and visibility controls.',
+    props: [
+      {
+        name: 'layers',
+        type: 'CompareStackLayer[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, content, description, opacity, visible, color, blendMode }.',
+        description: 'Visual layers rendered in stack order.'
+      },
+      {
+        name: 'opacities / defaultOpacities',
+        type: 'Record<string, number>',
+        defaultValue: '-',
+        possibleValues: 'Map layer id to opacity from 0 to 100.',
+        description: 'Controlled or initial opacity values.'
+      },
+      {
+        name: 'visibleLayers / defaultVisibleLayers',
+        type: 'Record<string, boolean>',
+        defaultValue: '-',
+        possibleValues: 'Map layer id to true or false.',
+        description: 'Controlled or initial layer visibility.'
+      },
+      {
+        name: 'minHeight',
+        type: 'number',
+        defaultValue: '340',
+        possibleValues: 'Any positive pixel height.',
+        description: 'Minimum viewer height.'
+      },
+      {
+        name: 'showControls / showLegend',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Shows sliders and layer badges.'
+      },
+      {
+        name: 'onChange',
+        type: '(change, state) => void',
+        defaultValue: '-',
+        possibleValues: 'Callback receiving changed layer and full state.',
+        description: 'Reports opacity and visibility changes.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { CompareStack } from '@mickyballadelli/react-things'
+
+const layers = [
+  { id: 'before', label: 'Before', content: <img src="/before.png" /> },
+  { id: 'after', label: 'After', opacity: 70, content: <img src="/after.png" /> }
+]
+
+export function Example() {
+  return <CompareStack layers={layers} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { CompareStack, type CompareStackLayer } from '@mickyballadelli/react-things'
+
+const layers: CompareStackLayer[] = [
+  { id: 'base', label: 'Base', content: <div>Base map</div>, opacity: 100 },
+  { id: 'changes', label: 'Changes', content: <div>New state</div>, opacity: 64 }
+]
+
+export function Example() {
+  return <CompareStack layers={layers} minHeight={420} />
+}`
+      }
+    ]
+  },
+  {
     ...createBasicDoc(
       'InfiniteCanvas',
       'Pan and zoom canvas with draggable items, grid, selection, and minimap.',
@@ -4762,6 +4842,70 @@ const commandTimelineEntries = [
   }
 ]
 
+const compareStackLayers = [
+  {
+    id: 'before',
+    label: 'Before',
+    description: 'Original campaign surface',
+    color: '#2563eb',
+    opacity: 100,
+    content: (
+      <Box sx={{ height: '100%', p: 4, color: '#ffffff', bgcolor: '#2563eb', backgroundImage: 'linear-gradient(135deg, #2563eb, #0f172a)' }}>
+        <Typography variant="h3" fontWeight={950}>Launch plan</Typography>
+        <Typography sx={{ maxWidth: 420, mt: 1 }}>Original layout with strong hero and wide empty space.</Typography>
+        <Box sx={{ mt: 4, display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 2 }}>
+          {[1, 2, 3].map((item) => <Box key={item} sx={{ height: 96, borderRadius: 1, bgcolor: 'rgba(255,255,255,0.18)' }} />)}
+        </Box>
+      </Box>
+    )
+  },
+  {
+    id: 'after',
+    label: 'After',
+    description: 'Reworked hierarchy',
+    color: '#059669',
+    opacity: 72,
+    content: (
+      <Box sx={{ height: '100%', p: 4, color: '#052e16', bgcolor: '#bbf7d0', backgroundImage: 'linear-gradient(135deg, #bbf7d0, #fef3c7)' }}>
+        <Typography variant="h3" fontWeight={950}>Launch plan</Typography>
+        <Typography sx={{ maxWidth: 420, mt: 1 }}>Updated structure with denser cards and clearer status.</Typography>
+        <Box sx={{ mt: 3, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 1.5 }}>
+          {[1, 2, 3, 4].map((item) => <Box key={item} sx={{ height: 70, borderRadius: 1, bgcolor: 'rgba(255,255,255,0.72)', border: 1, borderColor: 'rgba(5,46,22,0.12)' }} />)}
+        </Box>
+      </Box>
+    )
+  },
+  {
+    id: 'notes',
+    label: 'Review notes',
+    description: 'Annotation overlay',
+    color: '#db2777',
+    opacity: 58,
+    content: (
+      <Box sx={{ height: '100%', position: 'relative' }}>
+        {[
+          { left: '58%', top: '22%', text: 'Tighter headline' },
+          { left: '18%', top: '62%', text: 'Cards need status' },
+          { left: '72%', top: '70%', text: 'Ready' }
+        ].map((note) => (
+          <Chip
+            key={note.text}
+            label={note.text}
+            sx={{
+              position: 'absolute',
+              left: note.left,
+              top: note.top,
+              bgcolor: '#db2777',
+              color: '#ffffff',
+              fontWeight: 900
+            }}
+          />
+        ))}
+      </Box>
+    )
+  }
+]
+
 const dataCardGridMetrics: DataCardGridMetric[] = [
   {
     id: 'revenue',
@@ -5321,7 +5465,7 @@ function getInspectorDrawerValue(sections: InspectorDrawerSection[], fieldId: st
 }
 
 function getComponentGroup(name: string) {
-  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DataLens', 'DensityController', 'LayoutSwitcher', 'MiniMapNavigator', 'DockBar', 'TimelineScrubber'].includes(name)) {
+  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'CompareStack', 'DataCardGrid', 'DataLens', 'DensityController', 'LayoutSwitcher', 'MiniMapNavigator', 'DockBar', 'TimelineScrubber'].includes(name)) {
     return 'Display'
   }
 
@@ -5723,6 +5867,19 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'BeforeAfterSlider') {
       return <BeforeAfterSlider sx={{ minHeight: 320 }} before={<Box sx={{ height: '100%', bgcolor: '#2563eb', color: '#fff', p: 4 }}><Typography variant="h4">Before</Typography></Box>} after={<Box sx={{ height: '100%', bgcolor: '#f59e0b', color: '#111827', p: 4 }}><Typography variant="h4">After</Typography></Box>} />
+    }
+
+    if (selectedComponent.name === 'CompareStack') {
+      return (
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+          <CompareStack
+            title="Campaign comparison"
+            subtitle="Blend before, after, and annotation layers."
+            layers={compareStackLayers}
+            minHeight={420}
+          />
+        </Box>
+      )
     }
 
     if (selectedComponent.name === 'InfiniteCanvas') {
@@ -6981,6 +7138,11 @@ export function ComponentDocs() {
         renderVariantCard('50/50', <BeforeAfterSlider sx={{ minHeight: 140 }} before={<Box sx={{ height: '100%', bgcolor: '#2563eb' }} />} after={<Box sx={{ height: '100%', bgcolor: '#f59e0b' }} />} />),
         renderVariantCard('Before Heavy', <BeforeAfterSlider initialPosition={70} sx={{ minHeight: 140 }} before={<Box sx={{ height: '100%', bgcolor: '#059669' }} />} after={<Box sx={{ height: '100%', bgcolor: '#db2777' }} />} />),
         renderVariantCard('Content', <BeforeAfterSlider initialPosition={35} sx={{ minHeight: 140 }} before={<Box sx={{ p: 2, height: '100%', bgcolor: '#dbeafe' }}>Before</Box>} after={<Box sx={{ p: 2, height: '100%', bgcolor: '#fee2e2' }}>After</Box>} />)
+      ],
+      CompareStack: [
+        renderVariantCard('Layers', <CompareStack layers={compareStackLayers.slice(0, 2)} minHeight={180} showLegend={false} />),
+        renderVariantCard('Notes', <CompareStack layers={compareStackLayers} minHeight={180} showLegend={false} />),
+        renderVariantCard('Preview Only', <CompareStack layers={compareStackLayers.slice(0, 2)} minHeight={180} showControls={false} />)
       ],
       InfiniteCanvas: [
         renderVariantCard('Pan Zoom', <InfiniteCanvas items={[{ id: 'a', label: 'A', x: 20, y: 40 }, { id: 'b', label: 'B', x: 240, y: 120, color: '#dcfce7' }]} sx={{ minHeight: 220 }} />),

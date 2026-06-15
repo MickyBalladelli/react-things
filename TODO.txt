@@ -4,9 +4,6 @@ Hold a key to reveal contextual shortcuts over UI.
 GesturePad
 Trackpad-like surface for zoom, pan, rotate, scrub gestures.
 
-CompareStack
-Multi-layer before/after viewer with opacity sliders.
-
 RuleBuilder
 No-code condition builder: if/and/or groups, validation, readable output.
 

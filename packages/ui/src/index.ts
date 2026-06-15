@@ -20,6 +20,8 @@ export type { CommandPaletteDescriptionDisplay, CommandPaletteItem, CommandPalet
 export { CommandPalette } from './components/CommandPalette'
 export type { CommandTimelineChangeReason, CommandTimelineEntry, CommandTimelineProps, CommandTimelineStatus } from './components/CommandTimeline'
 export { CommandTimeline } from './components/CommandTimeline'
+export type { CompareStackChange, CompareStackLayer, CompareStackProps } from './components/CompareStack'
+export { CompareStack } from './components/CompareStack'
 export type { SpotlightSearchAction, SpotlightSearchItem, SpotlightSearchProps } from './components/SpotlightSearch'
 export { SpotlightSearch } from './components/SpotlightSearch'
 export type { SmartBreadcrumbAction, SmartBreadcrumbItem, SmartBreadcrumbsProps } from './components/SmartBreadcrumbs'
