@@ -5,6 +5,7 @@ import LinearProgress from '@mui/material/LinearProgress'
 import Paper from '@mui/material/Paper'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import type { BoxProps } from '@mui/material/Box'
 import type { ReactNode, RefObject } from 'react'
 
@@ -269,7 +270,7 @@ export function TourGuide({
       </Box>
       {paddedRect ? (
         <Box
-          sx={{
+          sx={(theme) => ({
             position: 'absolute',
             left: paddedRect.left,
             top: paddedRect.top,
@@ -278,9 +279,9 @@ export function TourGuide({
             border: '2px solid',
             borderColor: 'primary.main',
             borderRadius: spotlightRadius,
-            boxShadow: '0 0 0 4px rgba(37,99,235,0.22), 0 18px 42px rgba(15,23,42,0.28)',
+            boxShadow: `0 0 0 4px ${alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.34 : 0.22)}, 0 18px 42px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.38 : 0.28)}`,
             pointerEvents: 'none'
-          }}
+          })}
         />
       ) : null}
       <Paper

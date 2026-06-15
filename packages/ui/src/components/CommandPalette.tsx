@@ -6,11 +6,14 @@ import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
+import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import type { BoxProps } from '@mui/material/Box'
 import type { ReactNode } from 'react'
 
 export type CommandPaletteVariant = 'list' | 'tree'
+export type CommandPaletteDescriptionDisplay = 'inline' | 'tooltip' | 'both' | 'none'
 
 export type CommandPaletteItem = {
   id: string
@@ -32,6 +35,7 @@ export type CommandPaletteProps = Omit<BoxProps, 'onSelect'> & {
   maxResults?: number
   showSearch?: boolean
   dense?: boolean
+  descriptionDisplay?: CommandPaletteDescriptionDisplay
   expandedGroups?: string[]
   defaultExpandedGroups?: string[]
   onExpandedGroupsChange?: (groups: string[]) => void
@@ -65,6 +69,7 @@ export function CommandPalette({
   maxResults,
   showSearch = true,
   dense = false,
+  descriptionDisplay = 'inline',
   expandedGroups,
   defaultExpandedGroups,
   onExpandedGroupsChange,
@@ -113,37 +118,75 @@ export function CommandPalette({
 
   function renderItem(item: CommandPaletteItem, depth = 0) {
     const selected = item.id === selectedId
-
-    return (
+    const showInlineDescription = descriptionDisplay === 'inline' || descriptionDisplay === 'both'
+    const showTooltipDescription = Boolean(item.description) && (descriptionDisplay === 'tooltip' || descriptionDisplay === 'both')
+    const button = (
       <ListItemButton
-        key={item.id}
         selected={selected}
         dense={dense}
         onClick={() => selectItem(item)}
-        sx={{
+        sx={(theme) => ({
           borderRadius: 1,
-          pl: 1.25 + depth * 2,
+          alignItems: showInlineDescription ? 'flex-start' : 'center',
+          gap: 0.75,
+          my: 0.25,
+          minHeight: showInlineDescription ? (dense ? 46 : 58) : (dense ? 36 : 44),
+          pl: 1.25 + depth * 1.5,
+          pr: 1,
+          border: 1,
+          borderColor: selected ? alpha(theme.palette.primary.main, 0.48) : 'transparent',
+          borderLeftWidth: selected ? 3 : 1,
+          bgcolor: selected ? alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.18 : 0.08) : 'transparent',
           '&.Mui-selected': {
-            bgcolor: 'action.selected',
+            bgcolor: alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.18 : 0.08),
             color: 'primary.main'
           },
           '&.Mui-selected:hover, &:hover': {
-            bgcolor: 'action.hover'
+            bgcolor: selected
+              ? alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.26 : 0.12)
+              : alpha(theme.palette.text.primary, theme.palette.mode === 'dark' ? 0.08 : 0.04)
           }
-        }}
+        })}
       >
         {item.icon ? (
-          <ListItemIcon sx={{ minWidth: 34, color: 'inherit' }}>
+          <ListItemIcon sx={{ minWidth: 30, mt: showInlineDescription ? 0.25 : 0, color: 'inherit' }}>
             {item.icon}
           </ListItemIcon>
         ) : null}
         <ListItemText
           primary={item.label}
-          secondary={item.description}
-          primaryTypographyProps={{ fontWeight: selected ? 850 : 700 }}
-          secondaryTypographyProps={{ color: 'text.secondary' }}
+          secondary={showInlineDescription ? item.description : undefined}
+          sx={{ my: 0 }}
+          primaryTypographyProps={{
+            fontWeight: selected ? 900 : 780,
+            fontSize: dense ? 13.5 : 14.5,
+            lineHeight: 1.25,
+            color: selected ? 'primary.main' : 'text.primary'
+          }}
+          secondaryTypographyProps={{
+            color: 'text.secondary',
+            fontSize: 12,
+            lineHeight: 1.3,
+            sx: {
+              mt: 0.35,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden'
+            }
+          }}
         />
       </ListItemButton>
+    )
+
+    return showTooltipDescription ? (
+      <Tooltip key={item.id} title={item.description} placement="right" arrow enterDelay={350}>
+        {button}
+      </Tooltip>
+    ) : (
+      <Box key={item.id}>
+        {button}
+      </Box>
     )
   }
 
@@ -177,24 +220,42 @@ export function CommandPalette({
 
     return visibleGroups.map((group) => {
       const open = normalizedQuery || expanded.includes(group)
+      const groupItems = filteredItems.filter((item) => item.group === group)
 
       return (
-        <Box key={group}>
+        <Box key={group} sx={{ mb: 0.75 }}>
           <ListItemButton
             dense={dense}
             onClick={() => toggleGroup(group)}
-            sx={{ borderRadius: 1, px: 1.25 }}
+            sx={{
+              borderRadius: 1,
+              px: 1,
+              py: 0.75,
+              position: 'sticky',
+              top: 0,
+              zIndex: 1,
+              bgcolor: 'background.paper',
+              '&:hover': {
+                bgcolor: 'rgba(15, 23, 42, 0.04)'
+              }
+            }}
           >
-            <Typography component="span" aria-hidden="true" sx={{ mr: 1, width: 16, color: 'text.secondary' }}>
+            <Typography component="span" aria-hidden="true" sx={{ mr: 0.75, width: 16, color: 'text.secondary', fontSize: 13 }}>
               {open ? '▾' : '▸'}
             </Typography>
             <ListItemText
               primary={group}
-              primaryTypographyProps={{ fontWeight: 900 }}
+              primaryTypographyProps={{ fontWeight: 950, fontSize: 12, letterSpacing: 0, textTransform: 'uppercase', color: 'text.secondary' }}
+              sx={{ my: 0 }}
             />
+            <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 800 }}>
+              {groupItems.length}
+            </Typography>
           </ListItemButton>
           <Collapse in={Boolean(open)} timeout="auto" unmountOnExit>
-            {filteredItems.filter((item) => item.group === group).map((item) => renderItem(item, 1))}
+            <Box sx={{ pl: 0.5, borderLeft: 1, borderColor: 'divider', ml: 1 }}>
+              {groupItems.map((item) => renderItem(item, 1))}
+            </Box>
           </Collapse>
         </Box>
       )
@@ -222,7 +283,11 @@ export function CommandPalette({
             border: 1,
             borderColor: 'divider',
             borderRadius: 1,
-            bgcolor: 'background.paper'
+            bgcolor: 'background.paper',
+            position: 'sticky',
+            top: 0,
+            zIndex: 2,
+            boxShadow: '0 8px 18px rgba(15, 23, 42, 0.06)'
           }}
         >
           <InputBase

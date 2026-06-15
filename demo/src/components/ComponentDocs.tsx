@@ -16,6 +16,7 @@ import {
   Tabs,
   Typography
 } from '@mui/material'
+import { alpha } from '@mui/material/styles'
 import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined'
 import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined'
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined'
@@ -26,36 +27,55 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import {
   BeforeAfterSlider,
+  BulkActionBar,
   CodeViewer,
   ColorPicker,
   ColorStudio,
   CommandDock,
   CommandPalette,
+  CommandTimeline,
+  CompareStack,
   DataCardGrid,
   DataLens,
+  DensityController,
+  DiffViewer,
   DockBar,
   DockTabs,
+  DropComposer,
   DraggableBox,
+  EntityPicker,
+  FieldComposer,
   FileDropZone,
   FocusRing,
   FloatingToolbar,
+  FlowBuilder,
   GlassBox,
   InfiniteCanvas,
+  InspectorDrawer,
   InspectorPanel,
   KanbanBoard,
+  LayoutSwitcher,
   MagneticCard,
+  MiniMapNavigator,
   MorphMenu,
   NodeCanvas,
+  PeekPanel,
+  PresenceCursors,
   ResizableDashboard,
   ResizableFrame,
+  RuleBuilder,
+  SelectionBox,
+  SmartBreadcrumbs,
   SmartTooltip,
   SplitPane,
+  SpotlightSearch,
+  StatusRail,
   SpotlightPanel,
   TimelineScrubber,
   ToastCenter,
   TourGuide
 } from '@mickyballadelli/react-things'
-import type { ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, InspectorPanelField, KanbanColumn, MorphMenuItem, ResizableDashboardWidget, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import type { BulkActionBarAction, ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, DropComposerItem, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, LayoutSwitcherItem, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, SmartBreadcrumbItem, SpotlightSearchItem, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -425,6 +445,56 @@ export function Example() {
 }`
       }
     ],
+    FlowBuilder: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import { FlowBuilder } from '@mickyballadelli/react-things'
+
+const nodes = [
+  { id: 'trigger', label: 'New signup', x: 48, y: 120, outputs: [{ id: 'event', label: 'Event', type: 'event' }] },
+  { id: 'enrich', label: 'Enrich user', x: 330, y: 80, inputs: [{ id: 'event', label: 'Event', type: 'event' }], outputs: [{ id: 'data', label: 'Profile', type: 'data' }] },
+  { id: 'email', label: 'Send email', x: 610, y: 120, inputs: [{ id: 'profile', label: 'Profile', type: 'data' }] }
+]
+
+const connections = [
+  { id: 'a', fromNodeId: 'trigger', fromPortId: 'event', toNodeId: 'enrich', toPortId: 'event', type: 'event' },
+  { id: 'b', fromNodeId: 'enrich', fromPortId: 'data', toNodeId: 'email', toPortId: 'profile', type: 'data' }
+]
+
+export function Example() {
+  const [flowNodes, setFlowNodes] = useState(nodes)
+  const [flowConnections, setFlowConnections] = useState(connections)
+
+  return <FlowBuilder nodes={flowNodes} connections={flowConnections} onNodesChange={setFlowNodes} onConnectionsChange={setFlowConnections} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import { FlowBuilder, type FlowBuilderConnection, type FlowBuilderNode } from '@mickyballadelli/react-things'
+
+const nodes: FlowBuilderNode[] = [
+  { id: 'trigger', label: 'New signup', x: 48, y: 120, outputs: [{ id: 'event', label: 'Event', type: 'event' }] },
+  { id: 'enrich', label: 'Enrich user', x: 330, y: 80, inputs: [{ id: 'event', label: 'Event', type: 'event' }], outputs: [{ id: 'data', label: 'Profile', type: 'data' }] },
+  { id: 'email', label: 'Send email', x: 610, y: 120, inputs: [{ id: 'profile', label: 'Profile', type: 'data' }] }
+]
+
+const connections: FlowBuilderConnection[] = [
+  { id: 'a', fromNodeId: 'trigger', fromPortId: 'event', toNodeId: 'enrich', toPortId: 'event', type: 'event' },
+  { id: 'b', fromNodeId: 'enrich', fromPortId: 'data', toNodeId: 'email', toPortId: 'profile', type: 'data' }
+]
+
+export function Example() {
+  const [flowNodes, setFlowNodes] = useState<FlowBuilderNode[]>(nodes)
+  const [flowConnections, setFlowConnections] = useState<FlowBuilderConnection[]>(connections)
+
+  return <FlowBuilder nodes={flowNodes} connections={flowConnections} onNodesChange={setFlowNodes} onConnectionsChange={setFlowConnections} />
+}`
+      }
+    ],
     BeforeAfterSlider: [
       {
         label: 'JavaScript',
@@ -534,6 +604,94 @@ export function Example() {
       fields={fields}
       onChange={(id, value) => setFields(fields.map((field) => field.id === id ? { ...field, value } : field))}
     />
+  )
+}`
+      }
+    ],
+    InspectorDrawer: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import { Button } from '@mui/material'
+import { InspectorDrawer } from '@mickyballadelli/react-things'
+
+const initialSections = [
+  {
+    id: 'content',
+    title: 'Content',
+    fields: [
+      { id: 'title', label: 'Title', type: 'text', value: 'Launch card', validate: (value) => String(value).length < 3 ? 'Use at least 3 characters' : null },
+      { id: 'enabled', label: 'Enabled', type: 'boolean', value: true }
+    ]
+  },
+  {
+    id: 'style',
+    title: 'Style',
+    fields: [
+      { id: 'width', label: 'Width', type: 'number', value: 320, min: 180, max: 520, unit: 'px' },
+      { id: 'tone', label: 'Tone', type: 'select', value: 'Calm', options: [{ label: 'Calm', value: 'Calm' }, { label: 'Bold', value: 'Bold' }] }
+    ]
+  }
+]
+
+export function Example() {
+  const [open, setOpen] = useState(false)
+  const [sections, setSections] = useState(initialSections)
+
+  return (
+    <>
+      <Button variant="contained" onClick={() => setOpen(true)}>Open inspector</Button>
+      <InspectorDrawer
+        open={open}
+        onClose={() => setOpen(false)}
+        sections={sections}
+        onSectionsChange={setSections}
+      />
+    </>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import { Button } from '@mui/material'
+import { InspectorDrawer, type InspectorDrawerSection } from '@mickyballadelli/react-things'
+
+const initialSections: InspectorDrawerSection[] = [
+  {
+    id: 'content',
+    title: 'Content',
+    fields: [
+      { id: 'title', label: 'Title', type: 'text', value: 'Launch card', validate: (value) => String(value).length < 3 ? 'Use at least 3 characters' : null },
+      { id: 'enabled', label: 'Enabled', type: 'boolean', value: true }
+    ]
+  },
+  {
+    id: 'style',
+    title: 'Style',
+    fields: [
+      { id: 'width', label: 'Width', type: 'number', value: 320, min: 180, max: 520, unit: 'px' },
+      { id: 'tone', label: 'Tone', type: 'select', value: 'Calm', options: [{ label: 'Calm', value: 'Calm' }, { label: 'Bold', value: 'Bold' }] }
+    ]
+  }
+]
+
+export function Example() {
+  const [open, setOpen] = useState(false)
+  const [sections, setSections] = useState<InspectorDrawerSection[]>(initialSections)
+
+  return (
+    <>
+      <Button variant="contained" onClick={() => setOpen(true)}>Open inspector</Button>
+      <InspectorDrawer
+        open={open}
+        onClose={() => setOpen(false)}
+        sections={sections}
+        onSectionsChange={setSections}
+      />
+    </>
   )
 }`
       }
@@ -723,6 +881,205 @@ export function Example() {
       onItemMove={(id, position) => console.log(id, position)}
     />
   )
+}`
+      }
+    ],
+    SelectionBox: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import { Box } from '@mui/material'
+import { SelectionBox } from '@mickyballadelli/react-things'
+
+const files = ['Roadmap', 'Assets', 'Launch', 'Billing', 'Research', 'Support']
+
+export function Example() {
+  const [selectedIds, setSelectedIds] = useState([])
+
+  return (
+    <SelectionBox
+      selectedIds={selectedIds}
+      onSelectionChange={(change) => setSelectedIds(change.selectedIds)}
+      sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, p: 2 }}
+    >
+      {files.map((file) => (
+        <Box key={file} data-selection-id={file} sx={{ p: 2, border: 1, borderColor: 'divider', borderRadius: 1 }}>
+          {file}
+        </Box>
+      ))}
+    </SelectionBox>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import { Box } from '@mui/material'
+import { SelectionBox, type SelectionBoxChange } from '@mickyballadelli/react-things'
+
+const files = ['Roadmap', 'Assets', 'Launch', 'Billing', 'Research', 'Support']
+
+export function Example() {
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
+
+  function updateSelection(change: SelectionBoxChange) {
+    setSelectedIds(change.selectedIds)
+  }
+
+  return (
+    <SelectionBox
+      selectedIds={selectedIds}
+      onSelectionChange={updateSelection}
+      sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, p: 2 }}
+    >
+      {files.map((file) => (
+        <Box key={file} data-selection-id={file} sx={{ p: 2, border: 1, borderColor: 'divider', borderRadius: 1 }}>
+          {file}
+        </Box>
+      ))}
+    </SelectionBox>
+  )
+}`
+      }
+    ],
+    BulkActionBar: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useState } from 'react'
+import { Box } from '@mui/material'
+import { BulkActionBar, SelectionBox } from '@mickyballadelli/react-things'
+
+const items = ['Roadmap', 'Assets', 'Launch', 'Billing']
+
+export function Example() {
+  const [selectedIds, setSelectedIds] = useState(['Roadmap'])
+
+  return (
+    <Box>
+      <BulkActionBar
+        selectedIds={selectedIds}
+        totalCount={items.length}
+        onClear={() => setSelectedIds([])}
+        actions={[{ id: 'archive', label: 'Archive' }, { id: 'delete', label: 'Delete', tone: 'danger' }]}
+      />
+      <SelectionBox selectedIds={selectedIds} onSelectionChange={(change) => setSelectedIds(change.selectedIds)}>
+        {items.map((item) => <Box key={item} data-selection-id={item}>{item}</Box>)}
+      </SelectionBox>
+    </Box>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useState } from 'react'
+import { Box } from '@mui/material'
+import { BulkActionBar, SelectionBox, type BulkActionBarAction } from '@mickyballadelli/react-things'
+
+const items = ['Roadmap', 'Assets', 'Launch', 'Billing']
+
+export function Example() {
+  const [selectedIds, setSelectedIds] = useState<string[]>(['Roadmap'])
+  const actions: BulkActionBarAction[] = [
+    { id: 'archive', label: 'Archive' },
+    { id: 'delete', label: 'Delete', tone: 'danger' }
+  ]
+
+  return (
+    <Box>
+      <BulkActionBar selectedIds={selectedIds} totalCount={items.length} actions={actions} onClear={() => setSelectedIds([])} />
+      <SelectionBox selectedIds={selectedIds} onSelectionChange={(change) => setSelectedIds(change.selectedIds)}>
+        {items.map((item) => <Box key={item} data-selection-id={item}>{item}</Box>)}
+      </SelectionBox>
+    </Box>
+  )
+}`
+      }
+    ],
+    PresenceCursors: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { Box } from '@mui/material'
+import { PresenceCursors } from '@mickyballadelli/react-things'
+
+const users = [
+  { id: 'ada', name: 'Ada', x: 24, y: 34, color: '#2563eb', selection: { x: 16, y: 24, width: 28, height: 22, label: 'Editing' } },
+  { id: 'lin', name: 'Lin', x: 68, y: 58, color: '#db2777', status: 'idle' }
+]
+
+export function Example() {
+  return (
+    <PresenceCursors users={users} sx={{ minHeight: 280, bgcolor: 'background.default' }}>
+      <Box sx={{ p: 3 }}>Shared canvas content</Box>
+    </PresenceCursors>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { Box } from '@mui/material'
+import { PresenceCursors, type PresenceCursorUser } from '@mickyballadelli/react-things'
+
+const users: PresenceCursorUser[] = [
+  { id: 'ada', name: 'Ada', x: 24, y: 34, color: '#2563eb', selection: { x: 16, y: 24, width: 28, height: 22, label: 'Editing' } },
+  { id: 'lin', name: 'Lin', x: 68, y: 58, color: '#db2777', status: 'idle' }
+]
+
+export function Example() {
+  return (
+    <PresenceCursors users={users} sx={{ minHeight: 280, bgcolor: 'background.default' }}>
+      <Box sx={{ p: 3 }}>Shared canvas content</Box>
+    </PresenceCursors>
+  )
+}`
+      }
+    ],
+    StatusRail: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { StatusRail } from '@mickyballadelli/react-things'
+
+const groups = [
+  { id: 'api', label: 'API', status: 'operational', uptime: 99.99, latency: 142 },
+  {
+    id: 'jobs',
+    label: 'Workers',
+    status: 'incident',
+    uptime: 98.72,
+    latency: 410,
+    incidents: [{ id: 'queue', title: 'Queue delay', message: 'Backlog above threshold' }]
+  }
+]
+
+export function Example() {
+  return <StatusRail title="Production" groups={groups} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { StatusRail, type StatusRailGroup } from '@mickyballadelli/react-things'
+
+const groups: StatusRailGroup[] = [
+  { id: 'api', label: 'API', status: 'operational', uptime: 99.99, latency: 142 },
+  {
+    id: 'jobs',
+    label: 'Workers',
+    status: 'incident',
+    uptime: 98.72,
+    latency: 410,
+    incidents: [{ id: 'queue', title: 'Queue delay', message: 'Backlog above threshold' }]
+  }
+]
+
+export function Example() {
+  return <StatusRail title="Production" groups={groups} compact />
 }`
       }
     ],
@@ -1078,6 +1435,38 @@ export function Example() {
 }`
       }
     ],
+    LayoutSwitcher: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { LayoutSwitcher } from '@mickyballadelli/react-things'
+
+const items = [
+  { id: 'brief', title: 'Write brief', status: 'Todo', group: 'Todo', date: new Date(), color: '#dbeafe' },
+  { id: 'design', title: 'Design flow', status: 'Doing', group: 'Doing', date: new Date(), color: '#fef3c7' },
+  { id: 'ship', title: 'Ship demo', status: 'Done', group: 'Done', date: new Date(), color: '#dcfce7' }
+]
+
+export function Example() {
+  return <LayoutSwitcher title="Roadmap" items={items} defaultView="cards" />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { LayoutSwitcher, type LayoutSwitcherItem } from '@mickyballadelli/react-things'
+
+const items: LayoutSwitcherItem[] = [
+  { id: 'brief', title: 'Write brief', status: 'Todo', group: 'Todo', date: new Date(), color: '#dbeafe' },
+  { id: 'design', title: 'Design flow', status: 'Doing', group: 'Doing', date: new Date(), color: '#fef3c7' },
+  { id: 'ship', title: 'Ship demo', status: 'Done', group: 'Done', date: new Date(), color: '#dcfce7' }
+]
+
+export function Example() {
+  return <LayoutSwitcher items={items} views={['table', 'cards', 'kanban', 'calendar', 'list']} />
+}`
+      }
+    ],
     KanbanBoard: [
       {
         label: 'JavaScript',
@@ -1391,6 +1780,256 @@ export function Example() {
   }
 
   return <CodeViewer {...props} />
+}`
+      }
+    ]
+  },
+  {
+    name: 'DiffViewer',
+    summary: 'Beautiful text and object diff with inline comments and accept/reject.',
+    description: 'DiffViewer compares plain text or sorted object JSON, groups changes into hunks, supports inline comments, and lets reviewers accept or reject each hunk.',
+    props: [
+      {
+        name: 'before',
+        type: 'string | unknown',
+        defaultValue: '-',
+        possibleValues: 'Text for text mode, any JSON-like value for object mode.',
+        description: 'Original value.'
+      },
+      {
+        name: 'after',
+        type: 'string | unknown',
+        defaultValue: '-',
+        possibleValues: 'Text for text mode, any JSON-like value for object mode.',
+        description: 'Next value.'
+      },
+      {
+        name: 'mode',
+        type: '"text" | "object"',
+        defaultValue: '"text"',
+        possibleValues: 'text or object.',
+        description: 'Chooses raw text diff or stable sorted JSON diff.'
+      },
+      {
+        name: 'comments / defaultComments',
+        type: 'DiffViewerComment[]',
+        defaultValue: '[]',
+        possibleValues: 'Array of { id, hunkId, author, body }.',
+        description: 'Controlled or uncontrolled inline comments.'
+      },
+      {
+        name: 'decisions / defaultDecisions',
+        type: 'Record<string, DiffViewerDecision>',
+        defaultValue: '{}',
+        possibleValues: 'Map hunk id to accepted or rejected.',
+        description: 'Controlled or uncontrolled hunk decisions.'
+      },
+      {
+        name: 'onCommentAdd / onDecisionChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks for reviewer actions.',
+        description: 'Receive inline comments and accept/reject actions.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { DiffViewer } from '@mickyballadelli/react-things'
+
+const before = 'export const status = "draft"\\nexport const retries = 2'
+const after = 'export const status = "ready"\\nexport const retries = 3'
+
+export function Example() {
+  return <DiffViewer before={before} after={after} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { DiffViewer, type DiffViewerComment } from '@mickyballadelli/react-things'
+
+const comments: DiffViewerComment[] = [
+  { id: 'c1', hunkId: 'hunk-1-2-2', author: 'Micky', body: 'Check retry change.' }
+]
+
+export function Example() {
+  return (
+    <DiffViewer
+      mode="object"
+      before={{ status: 'draft', retries: 2 }}
+      after={{ status: 'ready', retries: 3 }}
+      defaultComments={comments}
+    />
+  )
+}`
+      }
+    ]
+  },
+  {
+    name: 'DensityController',
+    summary: 'User-facing compact, cozy, and spacious layout controller with persistence.',
+    description: 'DensityController lets users choose how dense a layout feels, persists the choice with localStorage, and passes spacing tokens to child content.',
+    props: [
+      {
+        name: 'value / defaultValue',
+        type: '"compact" | "cozy" | "spacious"',
+        defaultValue: '"cozy"',
+        possibleValues: 'compact, cozy, or spacious.',
+        description: 'Controlled or initial density value.'
+      },
+      {
+        name: 'persistKey',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any stable localStorage key.',
+        description: 'Saves the selected density between visits.'
+      },
+      {
+        name: 'children',
+        type: 'ReactNode | (state) => ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Static content or a render function receiving density, spacing, padding, radius, and rowHeight.',
+        description: 'Content wrapped in density CSS variables and optional render state.'
+      },
+      {
+        name: 'onChange',
+        type: '(density, state) => void',
+        defaultValue: '-',
+        possibleValues: 'Function called after a density selection.',
+        description: 'Receives the selected density and derived layout tokens.'
+      },
+      {
+        name: 'showSummary / showReset',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Toggles the active-density chip and reset button.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { DensityController } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <DensityController persistKey="demo-density">
+      {({ spacing, padding, rowHeight }) => (
+        <div style={{ display: 'grid', gap: spacing }}>
+          <div style={{ padding, minHeight: rowHeight }}>Inbox</div>
+          <div style={{ padding, minHeight: rowHeight }}>Roadmap</div>
+        </div>
+      )}
+    </DensityController>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { DensityController, type DensityControllerValue } from '@mickyballadelli/react-things'
+
+export function Example() {
+  function saveDensity(density: DensityControllerValue) {
+    console.log(density)
+  }
+
+  return (
+    <DensityController
+      defaultValue="cozy"
+      persistKey="workspace-density"
+      onChange={saveDensity}
+    />
+  )
+}`
+      }
+    ]
+  },
+  {
+    name: 'MiniMapNavigator',
+    summary: 'Overview minimap for long pages, canvases, dashboards, and docs.',
+    description: 'MiniMapNavigator renders a compact overview of measured sections, shows the current viewport, and lets users click or drag to jump through long content.',
+    props: [
+      {
+        name: 'items',
+        type: 'MiniMapNavigatorItem[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, description, targetId, top, height, color }.',
+        description: 'Sections or regions shown in the minimap.'
+      },
+      {
+        name: 'containerRef',
+        type: 'RefObject<HTMLElement | null>',
+        defaultValue: 'document',
+        possibleValues: 'A scroll container ref, or omit for page scrolling.',
+        description: 'Element whose scroll position and target sections are measured.'
+      },
+      {
+        name: 'activeId',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any item id.',
+        description: 'Optional controlled active section.'
+      },
+      {
+        name: 'height',
+        type: 'number',
+        defaultValue: '280',
+        possibleValues: 'Any positive pixel height.',
+        description: 'Height of the minimap track.'
+      },
+      {
+        name: 'showLabels / showProgress / sticky',
+        type: 'boolean',
+        defaultValue: 'true / true / false',
+        possibleValues: 'true or false.',
+        description: 'Controls labels, progress chip, and sticky positioning.'
+      },
+      {
+        name: 'onActiveChange / onNavigate / onMeasureChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks for section changes, jumps, and scroll measurements.',
+        description: 'Receive minimap events.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { useRef } from 'react'
+import { MiniMapNavigator } from '@mickyballadelli/react-things'
+
+const items = [
+  { id: 'intro', label: 'Intro', targetId: 'intro' },
+  { id: 'api', label: 'API', targetId: 'api' },
+  { id: 'examples', label: 'Examples', targetId: 'examples' }
+]
+
+export function Example() {
+  const containerRef = useRef(null)
+
+  return <MiniMapNavigator items={items} containerRef={containerRef} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { useRef } from 'react'
+import { MiniMapNavigator, type MiniMapNavigatorItem } from '@mickyballadelli/react-things'
+
+const items: MiniMapNavigatorItem[] = [
+  { id: 'overview', label: 'Overview', top: 0, height: 280, color: '#2563eb' },
+  { id: 'canvas', label: 'Canvas', top: 320, height: 420, color: '#059669' }
+]
+
+export function Example() {
+  const containerRef = useRef<HTMLDivElement | null>(null)
+
+  return <MiniMapNavigator items={items} containerRef={containerRef} showLabels={false} />
 }`
       }
     ]
@@ -1732,6 +2371,394 @@ export function Example() {
       defaultExpandedGroups={['Components']}
       onSelect={(item) => setSelectedId(item.id)}
     />
+  )
+}`
+      }
+    ]
+  },
+  {
+    name: 'CommandTimeline',
+    summary: 'Undo and redo history as a visual timeline with jump-to-state.',
+    description: 'CommandTimeline shows past, current, and future command states so users can undo, redo, or jump directly to any saved point in history.',
+    props: [
+      {
+        name: 'entries',
+        type: 'CommandTimelineEntry[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, description, timestamp, actor, group, icon, color, data }.',
+        description: 'History states shown in the timeline.'
+      },
+      {
+        name: 'currentId / defaultCurrentId',
+        type: 'string',
+        defaultValue: 'last entry',
+        possibleValues: 'Any entry id.',
+        description: 'Controlled or initial current state.'
+      },
+      {
+        name: 'orientation',
+        type: '"vertical" | "horizontal"',
+        defaultValue: '"vertical"',
+        possibleValues: 'vertical or horizontal.',
+        description: 'Timeline layout direction.'
+      },
+      {
+        name: 'showControls / showMetadata',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Shows undo/redo controls and actor/time metadata.'
+      },
+      {
+        name: 'onChange',
+        type: '(entry, reason) => void',
+        defaultValue: '-',
+        possibleValues: 'Reason is undo, redo, jump, or reset.',
+        description: 'Called when the current state changes.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { CommandTimeline } from '@mickyballadelli/react-things'
+
+const entries = [
+  { id: 'start', label: 'Created board' },
+  { id: 'rename', label: 'Renamed column' },
+  { id: 'move', label: 'Moved card' }
+]
+
+export function Example() {
+  return <CommandTimeline entries={entries} defaultCurrentId="rename" />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { CommandTimeline, type CommandTimelineEntry } from '@mickyballadelli/react-things'
+
+const entries: CommandTimelineEntry[] = [
+  { id: 'one', label: 'Import file', group: 'Setup' },
+  { id: 'two', label: 'Map columns', group: 'Setup' }
+]
+
+export function Example() {
+  return <CommandTimeline entries={entries} orientation="horizontal" />
+}`
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'SpotlightSearch',
+      'Search box with grouped results, previews, fuzzy matching, and inline actions.',
+      'SpotlightSearch is a command-search surface with fuzzy scoring, grouped results, keyboard navigation, a preview pane, and inline item actions for fast navigation or operations.'
+    ),
+    props: [
+      {
+        name: 'items',
+        type: 'SpotlightSearchItem[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, description, group, icon, keywords, preview, actions, data }.',
+        description: 'Searchable results.'
+      },
+      {
+        name: 'selectedId',
+        type: 'string',
+        defaultValue: '-',
+        possibleValues: 'Any item id.',
+        description: 'Controlled active result.'
+      },
+      {
+        name: 'placeholder / emptyText',
+        type: 'ReactNode',
+        defaultValue: 'Search anything / No results',
+        possibleValues: 'Any text or renderable empty state.',
+        description: 'Search input placeholder and empty state.'
+      },
+      {
+        name: 'maxResults',
+        type: 'number',
+        defaultValue: '8',
+        possibleValues: 'Any positive result count.',
+        description: 'Limits shown results.'
+      },
+      {
+        name: 'fuzzy',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Enables fuzzy character matching.'
+      },
+      {
+        name: 'onSelect / onQueryChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks receiving selected item or query.',
+        description: 'Reports selection and query changes.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { SpotlightSearch } from '@mickyballadelli/react-things'
+
+const items = [
+  { id: 'dashboard', label: 'Dashboard', group: 'Navigation', description: 'Open team dashboard', keywords: ['home', 'metrics'] },
+  { id: 'deploy', label: 'Deploy production', group: 'Actions', description: 'Ship latest build', keywords: ['release'] },
+  { id: 'docs', label: 'Docs', group: 'Resources', description: 'Read component docs' }
+]
+
+export function Example() {
+  return <SpotlightSearch items={items} placeholder="Search commands" />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { SpotlightSearch, type SpotlightSearchItem } from '@mickyballadelli/react-things'
+
+const items: SpotlightSearchItem[] = [
+  { id: 'dashboard', label: 'Dashboard', group: 'Navigation', description: 'Open team dashboard', keywords: ['home', 'metrics'] },
+  { id: 'deploy', label: 'Deploy production', group: 'Actions', description: 'Ship latest build', actions: [{ id: 'run', label: 'Run' }] },
+  { id: 'docs', label: 'Docs', group: 'Resources', description: 'Read component docs' }
+]
+
+export function Example() {
+  return <SpotlightSearch items={items} maxResults={6} />
+}`
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'SmartBreadcrumbs',
+      'Breadcrumbs with previews, command actions, and collapsible path search.',
+      'SmartBreadcrumbs turns long paths into an interactive navigation trail with hover previews, action buttons, and searchable collapsed crumbs.'
+    ),
+    props: [
+      {
+        name: 'items',
+        type: 'SmartBreadcrumbItem[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, children, labelText, description, href, icon, preview, actions, keywords }.',
+        description: 'Path items to render.'
+      },
+      {
+        name: 'currentId',
+        type: 'string',
+        defaultValue: 'last item id',
+        possibleValues: 'Any item id.',
+        description: 'Marks the active crumb.'
+      },
+      {
+        name: 'maxVisible',
+        type: 'number',
+        defaultValue: '4',
+        possibleValues: 'Any positive count.',
+        description: 'Collapses middle crumbs when the path is longer.'
+      },
+      {
+        name: 'showPreview',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Enables hover and focus preview popovers.'
+      },
+      {
+        name: 'searchPlaceholder / emptyText',
+        type: 'ReactNode',
+        defaultValue: 'Search path / No matching path',
+        possibleValues: 'Any renderable content.',
+        description: 'Text for collapsed-path search.'
+      },
+      {
+        name: 'onSelect',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Function receiving selected item.',
+        description: 'Called when a breadcrumb or collapsed item is selected.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { Box, Chip, Typography } from '@mui/material'
+import { SmartBreadcrumbs } from '@mickyballadelli/react-things'
+
+const items = [
+  { id: 'workspace', label: 'Workspace', description: 'Team home' },
+  { id: 'product', label: 'Product', description: 'Product area' },
+  { id: 'roadmap', label: 'Roadmap', description: 'Planning board' },
+  {
+    id: 'release',
+    children: (
+      <Box sx={{ display: 'flex', gap: 0.75, alignItems: 'center' }}>
+        Release 2.4
+        <Chip size="small" label="live" color="success" />
+      </Box>
+    ),
+    labelText: 'Release 2.4 live',
+    description: 'Active release train',
+    preview: <Typography color="text.secondary">Ship checklist and rollout health.</Typography>,
+    actions: [{ id: 'brief', label: 'Open brief' }]
+  },
+  {
+    id: 'assets',
+    label: 'Design assets',
+    description: 'Images, tokens, and handoff notes',
+    preview: <Typography color="text.secondary">Brand colors, mockups, and export tokens.</Typography>,
+    actions: [{ id: 'copy', label: 'Copy link' }]
+  }
+]
+
+export function Example() {
+  return <SmartBreadcrumbs items={items} maxVisible={3} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { Box, Chip, Typography } from '@mui/material'
+import { SmartBreadcrumbs, type SmartBreadcrumbItem } from '@mickyballadelli/react-things'
+
+const items: SmartBreadcrumbItem[] = [
+  { id: 'org', label: 'Acme', description: 'Workspace root', keywords: ['team'] },
+  { id: 'product', label: 'Product', description: 'Product area' },
+  { id: 'roadmap', label: 'Roadmap', description: 'Planning board' },
+  {
+    id: 'release',
+    children: (
+      <Box sx={{ display: 'flex', gap: 0.75, alignItems: 'center' }}>
+        Release <strong>2.4</strong>
+        <Chip size="small" label="live" color="success" />
+      </Box>
+    ),
+    labelText: 'Release 2.4 live',
+    description: 'Active release',
+    preview: <Typography color="text.secondary">Rollout checklist and launch owners.</Typography>,
+    actions: [{ id: 'copy', label: 'Copy link' }]
+  },
+  {
+    id: 'assets',
+    label: 'Design assets',
+    description: 'Images, tokens, and handoff notes',
+    preview: <Typography color="text.secondary">Brand colors, mockups, and export tokens.</Typography>,
+    actions: [{ id: 'open', label: 'Open assets' }]
+  }
+]
+
+export function Example() {
+  return <SmartBreadcrumbs items={items} currentId="assets" maxVisible={3} />
+}`
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'PeekPanel',
+      'Hover or click preview panel like IDE peek definition.',
+      'PeekPanel anchors a rich preview to any element so users can inspect definitions, files, records, or references without leaving context.'
+    ),
+    props: [
+      {
+        name: 'children',
+        type: 'ReactElement',
+        defaultValue: '-',
+        possibleValues: 'Any single focusable or inline React element.',
+        description: 'Element that opens the peek panel.'
+      },
+      {
+        name: 'title / subtitle',
+        type: 'ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Any renderable heading content.',
+        description: 'Header text for the panel.'
+      },
+      {
+        name: 'content / preview / footer',
+        type: 'ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Any renderable panel content.',
+        description: 'Body, preview region, and footer content.'
+      },
+      {
+        name: 'actions',
+        type: 'PeekPanelAction[]',
+        defaultValue: '[]',
+        possibleValues: 'Array of { id, label, icon, onClick }.',
+        description: 'Command buttons shown in the footer.'
+      },
+      {
+        name: 'trigger',
+        type: '"hover" | "click" | "both"',
+        defaultValue: 'both',
+        possibleValues: 'hover, click, or both.',
+        description: 'Controls how the panel opens.'
+      },
+      {
+        name: 'placement',
+        type: '"top" | "bottom" | "left" | "right"',
+        defaultValue: 'bottom',
+        possibleValues: 'top, bottom, left, or right.',
+        description: 'Preferred panel position.'
+      },
+      {
+        name: 'open / defaultOpen / onOpenChange',
+        type: 'boolean / function',
+        defaultValue: '-',
+        possibleValues: 'Controlled or uncontrolled open state.',
+        description: 'Lets parent code control the panel.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { Button, Typography } from '@mui/material'
+import { PeekPanel } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <PeekPanel
+      title="useProjectStatus"
+      subtitle="hooks/useProjectStatus.ts:18"
+      content="Peek into a symbol without navigating away."
+      preview={<pre>{'export function useProjectStatus(id) {\\n  return queryClient.getQueryData([\\'project\\', id])\\n}'}</pre>}
+      actions={[{ id: 'open', label: 'Open file' }]}
+    >
+      <Button variant="outlined">Peek definition</Button>
+    </PeekPanel>
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { Button, Typography } from '@mui/material'
+import { PeekPanel, type PeekPanelAction } from '@mickyballadelli/react-things'
+
+const actions: PeekPanelAction[] = [
+  { id: 'open', label: 'Open file' },
+  { id: 'copy', label: 'Copy path' }
+]
+
+export function Example() {
+  return (
+    <PeekPanel
+      trigger="click"
+      placement="right"
+      title="StatusRail"
+      subtitle="components/StatusRail.tsx"
+      content={<Typography variant="body2">Operational health rail with live pulse.</Typography>}
+      preview={<pre>{'<StatusRail groups={groups} compact />'}</pre>}
+      actions={actions}
+    >
+      <Button variant="contained">Inspect component</Button>
+    </PeekPanel>
   )
 }`
       }
@@ -2417,11 +3444,215 @@ export function Example() {
       }
     ]
   },
+  {
+    ...createBasicDoc(
+      'FlowBuilder',
+      'Workflow editor with ports, typed edges, validation, and auto-layout.',
+      'FlowBuilder is a workflow surface for connecting typed ports between nodes, spotting invalid edges, arranging graphs automatically, and editing node positions.'
+    ),
+    props: [
+      {
+        name: 'nodes',
+        type: 'FlowBuilderNode[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, x, y, inputs, outputs, tone, data }.',
+        description: 'Workflow nodes and typed ports.'
+      },
+      {
+        name: 'connections',
+        type: 'FlowBuilderConnection[]',
+        defaultValue: '[]',
+        possibleValues: 'Array of { id, fromNodeId, fromPortId, toNodeId, toPortId, type, label }.',
+        description: 'Typed edges between output and input ports.'
+      },
+      {
+        name: 'portTypes',
+        type: 'string[]',
+        defaultValue: 'event/data/success/error',
+        possibleValues: 'Any list of type names.',
+        description: 'Types available in the connection helper.'
+      },
+      {
+        name: 'validate',
+        type: '(nodes, connections) => FlowBuilderValidation[]',
+        defaultValue: 'built-in typed validation',
+        possibleValues: 'Function returning validation issues.',
+        description: 'Checks missing inputs, invalid ports, or custom workflow rules.'
+      },
+      {
+        name: 'snapToGrid / gridSize',
+        type: 'boolean / number',
+        defaultValue: 'true / 24',
+        possibleValues: 'true or false, and any positive grid size.',
+        description: 'Snaps drag and auto-layout positions.'
+      },
+      {
+        name: 'onNodesChange / onConnectionsChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks receiving updated graph arrays.',
+        description: 'Use for controlled workflow editing.'
+      }
+    ]
+  },
+  {
+    name: 'RuleBuilder',
+    summary: 'No-code condition builder with if, and, or groups, validation, and readable output.',
+    description: 'RuleBuilder lets users compose nested conditions and groups without code, validates missing fields or values, and generates readable rule text.',
+    props: [
+      { name: 'fields', type: 'RuleBuilderField[]', defaultValue: '-', possibleValues: 'Array of { id, label, type, options }.', description: 'Available fields for rule conditions.' },
+      { name: 'value / defaultValue', type: 'RuleBuilderGroup', defaultValue: 'One empty condition', possibleValues: 'Nested group with combinator and rules.', description: 'Controlled or initial rule tree.' },
+      { name: 'maxDepth', type: 'number', defaultValue: '3', possibleValues: 'Any positive group nesting depth.', description: 'Maximum nested group depth.' },
+      { name: 'onChange', type: '(group, readable, errors) => void', defaultValue: '-', possibleValues: 'Callback receiving next tree, readable text, and validation errors.', description: 'Reports rule changes.' }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { RuleBuilder } from '@mickyballadelli/react-things'
+
+const fields = [
+  { id: 'status', label: 'Status', type: 'select', options: [{ label: 'Active', value: 'active' }] },
+  { id: 'score', label: 'Score', type: 'number' }
+]
+
+export function Example() {
+  return <RuleBuilder fields={fields} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { RuleBuilder, type RuleBuilderField } from '@mickyballadelli/react-things'
+
+const fields: RuleBuilderField[] = [
+  { id: 'plan', label: 'Plan', type: 'text' },
+  { id: 'seats', label: 'Seats', type: 'number' }
+]
+
+export function Example() {
+  return <RuleBuilder fields={fields} maxDepth={2} />
+}`
+      }
+    ]
+  },
+  {
+    name: 'FieldComposer',
+    summary: 'Schema form builder with drag fields, validation preview, and generated JSON.',
+    description: 'FieldComposer lets users add and reorder form fields, edit labels and names, preview validation, and inspect generated JSON schema.',
+    props: [
+      { name: 'fields / defaultFields', type: 'FieldComposerField[]', defaultValue: 'Text, email, select', possibleValues: 'Array of { id, label, name, type, required, placeholder, options, min, max }.', description: 'Controlled or initial form fields.' },
+      { name: 'onChange', type: '(fields, schema, errors) => void', defaultValue: '-', possibleValues: 'Callback receiving fields, generated JSON schema, and validation errors.', description: 'Reports field edits and reorder changes.' }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { FieldComposer } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return <FieldComposer />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { FieldComposer, type FieldComposerField } from '@mickyballadelli/react-things'
+
+const fields: FieldComposerField[] = [
+  { id: 'email', label: 'Email', name: 'email', type: 'email', required: true }
+]
+
+export function Example() {
+  return <FieldComposer defaultFields={fields} />
+}`
+      }
+    ]
+  },
   createBasicDoc(
     'BeforeAfterSlider',
     'Compare two panes with draggable slider.',
     'BeforeAfterSlider is a comparison viewer that reveals one layer over another with a draggable dividing handle.'
   ),
+  {
+    name: 'CompareStack',
+    summary: 'Multi-layer before and after viewer with opacity sliders.',
+    description: 'CompareStack stacks visual layers for before/after reviews, design overlays, map states, or dashboard comparisons, with per-layer opacity and visibility controls.',
+    props: [
+      {
+        name: 'layers',
+        type: 'CompareStackLayer[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, content, description, opacity, visible, color, blendMode }.',
+        description: 'Visual layers rendered in stack order.'
+      },
+      {
+        name: 'opacities / defaultOpacities',
+        type: 'Record<string, number>',
+        defaultValue: '-',
+        possibleValues: 'Map layer id to opacity from 0 to 100.',
+        description: 'Controlled or initial opacity values.'
+      },
+      {
+        name: 'visibleLayers / defaultVisibleLayers',
+        type: 'Record<string, boolean>',
+        defaultValue: '-',
+        possibleValues: 'Map layer id to true or false.',
+        description: 'Controlled or initial layer visibility.'
+      },
+      {
+        name: 'minHeight',
+        type: 'number',
+        defaultValue: '340',
+        possibleValues: 'Any positive pixel height.',
+        description: 'Minimum viewer height.'
+      },
+      {
+        name: 'showControls / showLegend',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Shows sliders and layer badges.'
+      },
+      {
+        name: 'onChange',
+        type: '(change, state) => void',
+        defaultValue: '-',
+        possibleValues: 'Callback receiving changed layer and full state.',
+        description: 'Reports opacity and visibility changes.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { CompareStack } from '@mickyballadelli/react-things'
+
+const layers = [
+  { id: 'before', label: 'Before', content: <img src="/before.png" /> },
+  { id: 'after', label: 'After', opacity: 70, content: <img src="/after.png" /> }
+]
+
+export function Example() {
+  return <CompareStack layers={layers} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { CompareStack, type CompareStackLayer } from '@mickyballadelli/react-things'
+
+const layers: CompareStackLayer[] = [
+  { id: 'base', label: 'Base', content: <div>Base map</div>, opacity: 100 },
+  { id: 'changes', label: 'Changes', content: <div>New state</div>, opacity: 64 }
+]
+
+export function Example() {
+  return <CompareStack layers={layers} minHeight={420} />
+}`
+      }
+    ]
+  },
   {
     ...createBasicDoc(
       'InfiniteCanvas',
@@ -2505,6 +3736,203 @@ export function Example() {
         defaultValue: '-',
         possibleValues: 'Function receiving item or null.',
         description: 'Called when selection changes.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'SelectionBox',
+      'Drag selection for grids, lists, and canvases.',
+      'SelectionBox lets users drag a rectangle over any descendants with data-selection-id, supports click selection, modifier-key multi-select, custom visuals, and controlled selection state.'
+    ),
+    props: [
+      {
+        name: 'children',
+        type: 'ReactNode | render function',
+        defaultValue: '-',
+        possibleValues: 'Any content. Selectable descendants need data-selection-id.',
+        description: 'Grid, list, canvas, or render function receiving selectedIds.'
+      },
+      {
+        name: 'selectedIds / defaultSelectedIds',
+        type: 'string[]',
+        defaultValue: '- / []',
+        possibleValues: 'Ids matching data-selection-id.',
+        description: 'Controlled or uncontrolled selected ids.'
+      },
+      {
+        name: 'itemSelector',
+        type: 'string',
+        defaultValue: '[data-selection-id]',
+        possibleValues: 'Any selector for selectable descendants.',
+        description: 'Elements tested against the drag rectangle.'
+      },
+      {
+        name: 'selectionColor',
+        type: 'string',
+        defaultValue: '#2563eb',
+        possibleValues: 'Any CSS color.',
+        description: 'Color for selected outlines and drag rectangle.'
+      },
+      {
+        name: 'selectionRectSx',
+        type: 'BoxProps["sx"]',
+        defaultValue: '-',
+        possibleValues: 'Any MUI sx value.',
+        description: 'Overrides drag rectangle visuals.'
+      },
+      {
+        name: 'onSelectionChange',
+        type: '(change: SelectionBoxChange) => void',
+        defaultValue: '-',
+        possibleValues: 'Callback receiving selectedIds, addedIds, removedIds, and reason.',
+        description: 'Called after click, drag, or clear.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'BulkActionBar',
+      'Selection-aware action bar for tables, grids, and cards.',
+      'BulkActionBar appears when items are selected and gives users fast primary actions, overflow actions, selected counts, clear selection, and inline, sticky, or floating placement.'
+    ),
+    props: [
+      {
+        name: 'selectedIds',
+        type: 'string[]',
+        defaultValue: '-',
+        possibleValues: 'Selected item ids.',
+        description: 'Controls visibility and count.'
+      },
+      {
+        name: 'actions',
+        type: 'BulkActionBarAction[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, icon, tone, disabled, hidden, overflow, onClick }.',
+        description: 'Primary and overflow bulk actions.'
+      },
+      {
+        name: 'totalCount / label',
+        type: 'number / ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Any item count and label.',
+        description: 'Optional context next to selected count.'
+      },
+      {
+        name: 'position',
+        type: '"inline" | "sticky" | "floating"',
+        defaultValue: 'inline',
+        possibleValues: 'inline, sticky, or floating.',
+        description: 'Action bar placement.'
+      },
+      {
+        name: 'maxPrimaryActions',
+        type: 'number',
+        defaultValue: '3',
+        possibleValues: 'Any positive count.',
+        description: 'Actions beyond this move to the overflow menu.'
+      },
+      {
+        name: 'onClear',
+        type: '() => void',
+        defaultValue: '-',
+        possibleValues: 'Clear selection callback.',
+        description: 'Called by the clear selection button.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'PresenceCursors',
+      'Collaborative cursors, selections, names, and idle states.',
+      'PresenceCursors overlays multi-user cursor positions, labeled selections, participant chips, and active or idle states over any shared surface. It is the visual layer only: connect people through your realtime backend, such as WebSocket. Send each local user position and selection to that realtime layer, receive the remote users array, then pass it into users.'
+    ),
+    props: [
+      {
+        name: 'users',
+        type: 'PresenceCursorUser[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, name, x, y, color, status, selection, updatedAt }.',
+        description: 'Remote collaborator positions and selections.'
+      },
+      {
+        name: 'coordinateMode',
+        type: '"percent" | "pixel"',
+        defaultValue: 'percent',
+        possibleValues: 'percent or pixel.',
+        description: 'Interprets cursor and selection coordinates.'
+      },
+      {
+        name: 'showNames / showSelections / showPresenceList',
+        type: 'boolean',
+        defaultValue: 'true / true / true',
+        possibleValues: 'true or false.',
+        description: 'Controls cursor labels, selection boxes, and participant list.'
+      },
+      {
+        name: 'idleAfterMs',
+        type: 'number',
+        defaultValue: '30000',
+        possibleValues: 'Any millisecond delay.',
+        description: 'Marks users idle when updatedAt gets stale.'
+      },
+      {
+        name: 'renderCursor',
+        type: '(user, status) => ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Function returning custom cursor visuals.',
+        description: 'Overrides default pointer shape.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'StatusRail',
+      'Vertical operational health rail with grouped incidents and live pulse.',
+      'StatusRail shows service groups, health tones, grouped incident cards, uptime and latency metrics, and pulsing live alerts for operational dashboards.'
+    ),
+    props: [
+      {
+        name: 'groups',
+        type: 'StatusRailGroup[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, status, uptime, latency, incidents }.',
+        description: 'Operational groups shown in the rail.'
+      },
+      {
+        name: 'title / subtitle',
+        type: 'ReactNode',
+        defaultValue: 'Status / generated summary',
+        possibleValues: 'Any React renderable.',
+        description: 'Header content.'
+      },
+      {
+        name: 'pulse',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Animates non-operational status dots.'
+      },
+      {
+        name: 'compact',
+        type: 'boolean',
+        defaultValue: 'false',
+        possibleValues: 'true or false.',
+        description: 'Uses narrower width and tighter spacing.'
+      },
+      {
+        name: 'maxIncidents / showMetrics',
+        type: 'number / boolean',
+        defaultValue: '3 / true',
+        possibleValues: 'Any count, true or false.',
+        description: 'Controls visible incident count and metric blocks.'
+      },
+      {
+        name: 'onGroupSelect / onIncidentSelect',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks receiving selected group or incident.',
+        description: 'Called when users pick groups or incidents.'
       }
     ]
   },
@@ -2800,6 +4228,57 @@ export function Example() {
   },
   {
     ...createBasicDoc(
+      'LayoutSwitcher',
+      'Animated view switcher for table, cards, kanban, calendar, and list layouts.',
+      'LayoutSwitcher lets one collection move between multiple task and data views with a segmented control, animated transitions, grouping, calendar bucketing, and custom item rendering.'
+    ),
+    props: [
+      {
+        name: 'items',
+        type: 'LayoutSwitcherItem[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, title, subtitle, description, status, group, date, color, data }.',
+        description: 'Items rendered across every layout.'
+      },
+      {
+        name: 'views',
+        type: 'LayoutSwitcherView[]',
+        defaultValue: 'table/cards/kanban/calendar/list',
+        possibleValues: 'Any subset of table, cards, kanban, calendar, list.',
+        description: 'Views available in the switcher.'
+      },
+      {
+        name: 'view / defaultView',
+        type: 'LayoutSwitcherView',
+        defaultValue: '- / cards',
+        possibleValues: 'table, cards, kanban, calendar, or list.',
+        description: 'Controlled or initial active view.'
+      },
+      {
+        name: 'columns',
+        type: 'LayoutSwitcherColumn[]',
+        defaultValue: 'generated',
+        possibleValues: 'Array of { id, label, render }.',
+        description: 'Table columns.'
+      },
+      {
+        name: 'groupOrder / calendarDays',
+        type: 'string[] / number',
+        defaultValue: '- / 7',
+        possibleValues: 'Group labels and any day count.',
+        description: 'Kanban group ordering and calendar range.'
+      },
+      {
+        name: 'renderItem',
+        type: '(item, view) => ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Custom item renderer.',
+        description: 'Overrides card rendering in cards, kanban, and calendar views.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
       'KanbanBoard',
       'Fully editable Kanban board with columns, cards, drag and drop, and card editing.',
       'KanbanBoard is a project workflow surface where users can create columns, add cards, drag cards between stacks, reorder vertically, edit details, and delete work items.'
@@ -2924,6 +4403,57 @@ export function Example() {
     'Schema-driven inspector with grouped controls, reset, color/select fields, and value summary.',
     'InspectorPanel is a compact control surface for editing live component props, design tokens, tool settings, or selected-object attributes.'
   ),
+  {
+    ...createBasicDoc(
+      'InspectorDrawer',
+      'Beautiful property drawer with sections, live validation, and undo.',
+      'InspectorDrawer is a right-side property editor for selected objects with sectioned fields, inline validation, controlled updates, and local undo history.'
+    ),
+    props: [
+      {
+        name: 'open / onClose',
+        type: 'boolean / function',
+        defaultValue: '-',
+        possibleValues: 'MUI Drawer open and close props.',
+        description: 'Controls drawer visibility.'
+      },
+      {
+        name: 'sections',
+        type: 'InspectorDrawerSection[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, title, description, fields }. Fields support text, number, boolean, select, and color.',
+        description: 'Sectioned field schema and current values.'
+      },
+      {
+        name: 'width',
+        type: 'number',
+        defaultValue: '380',
+        possibleValues: 'Any positive pixel width.',
+        description: 'Drawer width above mobile.'
+      },
+      {
+        name: 'density',
+        type: '"comfortable" | "compact"',
+        defaultValue: 'comfortable',
+        possibleValues: 'comfortable or compact.',
+        description: 'Controls spacing and field size.'
+      },
+      {
+        name: 'showUndo',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Shows undo controls and keeps local edit history.'
+      },
+      {
+        name: 'onSectionsChange / onFieldChange',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks receiving next sections or field change details.',
+        description: 'Reports edits and undo changes.'
+      }
+    ]
+  },
   createBasicDoc(
     'ColorPicker',
     'Color picker with swatches and alpha.',
@@ -3071,6 +4601,168 @@ export function Example() {
     'Drag-drop file area with state.',
     'FileDropZone is an upload target that handles drag, hover, and selected file states before handing files back to your app.'
   ),
+  {
+    ...createBasicDoc(
+      'DropComposer',
+      'Upload dropzone with previews, reorder, metadata edit, and progress.',
+      'DropComposer is a composed upload staging area where files can be dropped, previewed, reordered, annotated, and tracked before the real upload happens.'
+    ),
+    props: [
+      {
+        name: 'items / defaultItems',
+        type: 'DropComposerItem[]',
+        defaultValue: '[]',
+        possibleValues: 'Array of { id, name, size, type, previewUrl, title, description, progress, status, metadata }.',
+        description: 'Controlled or uncontrolled upload queue.'
+      },
+      {
+        name: 'accept / multiple',
+        type: 'string / boolean',
+        defaultValue: '- / true',
+        possibleValues: 'Any file input accept string and true or false.',
+        description: 'Controls file picker limits.'
+      },
+      {
+        name: 'metadataFields',
+        type: 'string[]',
+        defaultValue: '["title", "description"]',
+        possibleValues: 'title, description, or custom field names.',
+        description: 'Metadata fields shown for each file.'
+      },
+      {
+        name: 'renderPreview',
+        type: '(item) => ReactNode',
+        defaultValue: '-',
+        possibleValues: 'Custom renderer for file thumbnails.',
+        description: 'Overrides default image/file preview.'
+      },
+      {
+        name: 'onItemsChange / onFiles',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks receiving queue or new files.',
+        description: 'Reports queue changes and dropped files.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { DropComposer } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <DropComposer
+      accept="image/*,.pdf"
+      onItemsChange={(items) => console.log(items)}
+      onFiles={(files) => console.log(files)}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { DropComposer, type DropComposerItem } from '@mickyballadelli/react-things'
+
+const items: DropComposerItem[] = [
+  {
+    id: 'hero',
+    name: 'hero-image.png',
+    size: 428000,
+    type: 'image/png',
+    previewUrl: '/animals-colors.svg',
+    title: 'Hero image',
+    description: 'Landing page visual',
+    progress: 100,
+    status: 'done'
+  }
+]
+
+export function Example() {
+  return (
+    <DropComposer
+      defaultItems={items}
+      metadataFields={['title', 'description']}
+    />
+  )
+}`
+      }
+    ]
+  },
+  {
+    name: 'EntityPicker',
+    summary: 'Rich picker for users, files, and projects with avatars, recent, pinned, and groups.',
+    description: 'EntityPicker is a searchable selection surface for mixed workspace entities, with avatars, group headings, pinned and recent filters, single or multi-select, and selected chips.',
+    props: [
+      {
+        name: 'entities',
+        type: 'EntityPickerEntity[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, type, label, description, group, avatarUrl, avatarText, color, status, recent, pinned, keywords, meta }.',
+        description: 'Entities shown in the picker.'
+      },
+      {
+        name: 'value / defaultValue',
+        type: 'string | string[] | null',
+        defaultValue: 'null',
+        possibleValues: 'Entity id for single select, array of ids for multiple.',
+        description: 'Controlled or uncontrolled selected entities.'
+      },
+      {
+        name: 'multiple',
+        type: 'boolean',
+        defaultValue: 'false',
+        possibleValues: 'true or false.',
+        description: 'Enables checkbox multi-select.'
+      },
+      {
+        name: 'showFilters / showSelected',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true or false.',
+        description: 'Shows recent/pinned filters and selected chips.'
+      },
+      {
+        name: 'onChange / onSelect',
+        type: 'function',
+        defaultValue: '-',
+        possibleValues: 'Callbacks receiving value, selected entities, or clicked entity.',
+        description: 'Reports selection changes.'
+      }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { EntityPicker } from '@mickyballadelli/react-things'
+
+const entities = [
+  { id: 'ada', type: 'user', label: 'Ada Lovelace', group: 'People', pinned: true },
+  { id: 'brief', type: 'file', label: 'Launch brief.pdf', group: 'Files', recent: true },
+  { id: 'atlas', type: 'project', label: 'Atlas', group: 'Projects' }
+]
+
+export function Example() {
+  return <EntityPicker entities={entities} multiple />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { EntityPicker, type EntityPickerEntity } from '@mickyballadelli/react-things'
+
+const entities: EntityPickerEntity[] = [
+  { id: 'micky', type: 'user', label: 'Micky', status: 'online', recent: true },
+  { id: 'tokens', type: 'file', label: 'tokens.json', pinned: true }
+]
+
+export function Example() {
+  return <EntityPicker entities={entities} defaultValue="micky" />
+}`
+      }
+    ]
+  },
 ]
 
 const defaultGlassBoxConfig: GlassBoxConfig = {
@@ -3080,6 +4772,229 @@ const defaultGlassBoxConfig: GlassBoxConfig = {
   glassColor: '#ffffff',
   children: 'Liquid glass content'
 }
+
+const defaultDropComposerItems: DropComposerItem[] = [
+  {
+    id: 'launch-hero',
+    name: 'launch-hero.png',
+    size: 428000,
+    type: 'image/png',
+    previewUrl: '/animals-colors.svg',
+    title: 'Launch hero',
+    description: 'Main campaign visual',
+    progress: 100,
+    status: 'done'
+  },
+  {
+    id: 'release-notes',
+    name: 'release-notes.pdf',
+    size: 218000,
+    type: 'application/pdf',
+    title: 'Release notes',
+    description: 'Customer-facing PDF',
+    progress: 66,
+    status: 'uploading'
+  },
+  {
+    id: 'token-export',
+    name: 'tokens.json',
+    size: 42000,
+    type: 'application/json',
+    title: 'Design tokens',
+    description: 'Theme handoff',
+    progress: 32,
+    status: 'queued'
+  }
+]
+
+const entityPickerEntities = [
+  {
+    id: 'micky',
+    type: 'user' as const,
+    label: 'Micky Balladelli',
+    description: 'Product engineering',
+    group: 'People',
+    avatarText: 'MB',
+    color: '#2563eb',
+    status: 'online',
+    pinned: true,
+    recent: true,
+    keywords: ['owner', 'frontend']
+  },
+  {
+    id: 'ada',
+    type: 'user' as const,
+    label: 'Ada Lovelace',
+    description: 'Systems and analytics',
+    group: 'People',
+    avatarText: 'AL',
+    color: '#7c3aed',
+    recent: true
+  },
+  {
+    id: 'launch-brief',
+    type: 'file' as const,
+    label: 'launch-brief.pdf',
+    description: 'Customer launch narrative',
+    group: 'Files',
+    color: '#059669',
+    status: 'PDF',
+    pinned: true,
+    recent: true
+  },
+  {
+    id: 'tokens',
+    type: 'file' as const,
+    label: 'design-tokens.json',
+    description: 'Theme colors and spacing',
+    group: 'Files',
+    color: '#0ea5e9',
+    status: 'JSON'
+  },
+  {
+    id: 'atlas',
+    type: 'project' as const,
+    label: 'Atlas workspace',
+    description: 'Core planning and dashboards',
+    group: 'Projects',
+    color: '#f59e0b',
+    pinned: true
+  },
+  {
+    id: 'vela',
+    type: 'project' as const,
+    label: 'Vela client',
+    description: 'Interactive canvas workstream',
+    group: 'Projects',
+    color: '#db2777',
+    recent: true
+  }
+]
+
+const commandTimelineEntries = [
+  {
+    id: 'created',
+    label: 'Created workspace',
+    description: 'Started from the default launch template.',
+    group: 'Setup',
+    actor: 'Micky',
+    timestamp: Date.now() - 1000 * 60 * 38,
+    color: '#2563eb'
+  },
+  {
+    id: 'imported',
+    label: 'Imported assets',
+    description: 'Added hero image, release notes, and design tokens.',
+    group: 'Setup',
+    actor: 'Ada',
+    timestamp: Date.now() - 1000 * 60 * 32,
+    color: '#059669'
+  },
+  {
+    id: 'assigned',
+    label: 'Assigned owners',
+    description: 'Mapped owners to launch checklist sections.',
+    group: 'Planning',
+    actor: 'Micky',
+    timestamp: Date.now() - 1000 * 60 * 20,
+    color: '#7c3aed'
+  },
+  {
+    id: 'moved',
+    label: 'Moved launch card',
+    description: 'Card moved from Review to Ready.',
+    group: 'Planning',
+    actor: 'Ada',
+    timestamp: Date.now() - 1000 * 60 * 12,
+    color: '#f59e0b'
+  },
+  {
+    id: 'published',
+    label: 'Published draft',
+    description: 'Shared current draft with stakeholders.',
+    group: 'Release',
+    actor: 'Micky',
+    timestamp: Date.now() - 1000 * 60 * 4,
+    color: '#db2777'
+  }
+]
+
+const compareStackLayers = [
+  {
+    id: 'before',
+    label: 'Before',
+    description: 'Original campaign surface',
+    color: '#2563eb',
+    opacity: 100,
+    content: (
+      <Box sx={{ height: '100%', p: 4, color: '#ffffff', bgcolor: '#2563eb', backgroundImage: 'linear-gradient(135deg, #2563eb, #0f172a)' }}>
+        <Typography variant="h3" fontWeight={950}>Launch plan</Typography>
+        <Typography sx={{ maxWidth: 420, mt: 1 }}>Original layout with strong hero and wide empty space.</Typography>
+        <Box sx={{ mt: 4, display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 2 }}>
+          {[1, 2, 3].map((item) => <Box key={item} sx={{ height: 96, borderRadius: 1, bgcolor: 'rgba(255,255,255,0.18)' }} />)}
+        </Box>
+      </Box>
+    )
+  },
+  {
+    id: 'after',
+    label: 'After',
+    description: 'Reworked hierarchy',
+    color: '#059669',
+    opacity: 72,
+    content: (
+      <Box sx={{ height: '100%', p: 4, color: '#ffffff', bgcolor: '#059669', backgroundImage: 'linear-gradient(135deg, #059669, #052e16)' }}>
+        <Typography variant="h3" fontWeight={950}>Launch plan</Typography>
+        <Typography sx={{ maxWidth: 420, mt: 1 }}>Updated structure with denser cards and clearer status.</Typography>
+        <Box sx={{ mt: 3, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 1.5 }}>
+          {[1, 2, 3, 4].map((item) => <Box key={item} sx={{ height: 70, borderRadius: 1, bgcolor: 'rgba(255,255,255,0.2)', border: 1, borderColor: 'rgba(255,255,255,0.24)' }} />)}
+        </Box>
+      </Box>
+    )
+  },
+  {
+    id: 'notes',
+    label: 'Review notes',
+    description: 'Annotation overlay',
+    color: '#db2777',
+    opacity: 58,
+    content: (
+      <Box sx={{ height: '100%', position: 'relative' }}>
+        {[
+          { left: '58%', top: '22%', text: 'Tighter headline' },
+          { left: '18%', top: '62%', text: 'Cards need status' },
+          { left: '72%', top: '70%', text: 'Ready' }
+        ].map((note) => (
+          <Chip
+            key={note.text}
+            label={note.text}
+            sx={{
+              position: 'absolute',
+              left: note.left,
+              top: note.top,
+              bgcolor: '#db2777',
+              color: '#ffffff',
+              fontWeight: 900
+            }}
+          />
+        ))}
+      </Box>
+    )
+  }
+]
+
+const ruleBuilderFields = [
+  { id: 'plan', label: 'Plan', type: 'select' as const, options: [{ label: 'Free', value: 'free' }, { label: 'Pro', value: 'pro' }, { label: 'Enterprise', value: 'enterprise' }] },
+  { id: 'seats', label: 'Seats', type: 'number' as const },
+  { id: 'region', label: 'Region', type: 'select' as const, options: [{ label: 'US', value: 'us' }, { label: 'EU', value: 'eu' }, { label: 'APAC', value: 'apac' }] },
+  { id: 'owner', label: 'Owner', type: 'text' as const }
+]
+
+const fieldComposerFields = [
+  { id: 'name', label: 'Full name', name: 'full_name', type: 'text' as const, required: true, placeholder: 'Ada Lovelace' },
+  { id: 'email', label: 'Email', name: 'email', type: 'email' as const, required: true, placeholder: 'ada@example.com' },
+  { id: 'plan', label: 'Plan', name: 'plan', type: 'select' as const, required: true, options: ['Free', 'Pro', 'Enterprise'] }
+]
 
 const dataCardGridMetrics: DataCardGridMetric[] = [
   {
@@ -3164,6 +5079,15 @@ const dataLensColumns: DataLensColumn<DataLensService>[] = [
   { id: 'load', label: 'Load', sortable: true, chart: 'bar' },
   { id: 'requests', label: 'Requests', sortable: true, align: 'right', render: (value) => Number(value).toLocaleString() },
   { id: 'trend', label: 'Trend', chart: 'sparkline' }
+]
+
+const layoutSwitcherItems: LayoutSwitcherItem[] = [
+  { id: 'brief', title: 'Write brief', subtitle: 'Frame launch story', status: 'Todo', group: 'Todo', date: new Date(), color: '#dbeafe' },
+  { id: 'design', title: 'Design flow', subtitle: 'Polish key screens', status: 'Doing', group: 'Doing', date: new Date(Date.now() + 86400000), color: '#fef3c7' },
+  { id: 'prototype', title: 'Prototype demo', subtitle: 'Clickable path', status: 'Doing', group: 'Doing', date: new Date(Date.now() + 86400000 * 2), color: '#e0e7ff' },
+  { id: 'review', title: 'Stakeholder review', subtitle: 'Collect notes', status: 'Review', group: 'Review', date: new Date(Date.now() + 86400000 * 3), color: '#fce7f3' },
+  { id: 'ship', title: 'Ship demo', subtitle: 'Publish release', status: 'Done', group: 'Done', date: new Date(Date.now() + 86400000 * 4), color: '#dcfce7' },
+  { id: 'retro', title: 'Retro notes', subtitle: 'Close the loop', status: 'Done', group: 'Done', date: new Date(Date.now() + 86400000 * 5), color: '#ccfbf1' }
 ]
 
 const colorStudioColors: ColorStudioColor[] = [
@@ -3315,8 +5239,8 @@ const dashboardWidgets: ResizableDashboardWidget[] = [
     children: (
       <Stack spacing={1}>
         {[68, 44, 82, 56, 74].map((value, index) => (
-          <Box key={index} sx={{ height: 10, borderRadius: 1, bgcolor: '#dbeafe', overflow: 'hidden' }}>
-            <Box sx={{ width: `${value}%`, height: '100%', bgcolor: '#2563eb' }} />
+          <Box key={index} sx={{ height: 10, borderRadius: 1, bgcolor: 'divider', overflow: 'hidden' }}>
+            <Box sx={{ width: `${value}%`, height: '100%', bgcolor: 'primary.main' }} />
           </Box>
         ))}
       </Stack>
@@ -3373,7 +5297,7 @@ const defaultKanbanColumns: KanbanColumn[] = [
     title: 'Ideas',
     color: '#2563eb',
     cards: [
-      { id: 'k-1', title: 'Customer interviews', description: 'Talk to five active users.', tags: ['Research'], color: '#dbeafe' },
+      { id: 'k-1', title: 'Customer interviews', description: 'Talk to five active users.', tags: ['Research'] },
       { id: 'k-2', title: 'Metric cards', description: 'Show data at a glance.', tags: ['Data'] }
     ]
   },
@@ -3382,7 +5306,7 @@ const defaultKanbanColumns: KanbanColumn[] = [
     title: 'Build',
     color: '#d97706',
     cards: [
-      { id: 'k-3', title: 'Kanban interactions', description: 'Create, drag, edit, and delete.', tags: ['UI'], color: '#fef3c7' }
+      { id: 'k-3', title: 'Kanban interactions', description: 'Create, drag, edit, and delete.', tags: ['UI'] }
     ]
   },
   {
@@ -3390,27 +5314,272 @@ const defaultKanbanColumns: KanbanColumn[] = [
     title: 'Ship',
     color: '#059669',
     cards: [
-      { id: 'k-4', title: 'Docs and examples', description: 'Make the component easy to try.', tags: ['Docs'], color: '#dcfce7' }
+      { id: 'k-4', title: 'Docs and examples', description: 'Make the component easy to try.', tags: ['Docs'] }
+    ]
+  }
+]
+
+const defaultFlowBuilderNodes: FlowBuilderNode[] = [
+  {
+    id: 'trigger',
+    label: 'New signup',
+    x: 48,
+    y: 128,
+    tone: '#2563eb',
+    outputs: [{ id: 'event', label: 'Event', type: 'event' }]
+  },
+  {
+    id: 'enrich',
+    label: 'Enrich user',
+    x: 330,
+    y: 78,
+    tone: '#059669',
+    inputs: [{ id: 'event', label: 'Event', type: 'event' }],
+    outputs: [{ id: 'profile', label: 'Profile', type: 'data' }, { id: 'failed', label: 'Failed', type: 'error' }]
+  },
+  {
+    id: 'email',
+    label: 'Send email',
+    x: 620,
+    y: 110,
+    tone: '#db2777',
+    inputs: [{ id: 'profile', label: 'Profile', type: 'data' }],
+    outputs: [{ id: 'sent', label: 'Sent', type: 'success' }]
+  },
+  {
+    id: 'slack',
+    label: 'Alert team',
+    x: 620,
+    y: 260,
+    tone: '#d97706',
+    inputs: [{ id: 'error', label: 'Error', type: 'error' }]
+  }
+]
+
+const defaultFlowBuilderConnections: FlowBuilderConnection[] = [
+  { id: 'signup-enrich', fromNodeId: 'trigger', fromPortId: 'event', toNodeId: 'enrich', toPortId: 'event', type: 'event', label: 'signup' },
+  { id: 'enrich-email', fromNodeId: 'enrich', fromPortId: 'profile', toNodeId: 'email', toPortId: 'profile', type: 'data', label: 'profile' },
+  { id: 'enrich-slack', fromNodeId: 'enrich', fromPortId: 'failed', toNodeId: 'slack', toPortId: 'error', type: 'error', label: 'failure' }
+]
+
+const selectionBoxItems = [
+  { id: 'roadmap', label: 'Roadmap', type: 'Doc', color: '#2563eb' },
+  { id: 'assets', label: 'Assets', type: 'Folder', color: '#059669' },
+  { id: 'launch', label: 'Launch', type: 'Board', color: '#d97706' },
+  { id: 'billing', label: 'Billing', type: 'Sheet', color: '#dc2626' },
+  { id: 'research', label: 'Research', type: 'Doc', color: '#7c3aed' },
+  { id: 'support', label: 'Support', type: 'Inbox', color: '#db2777' },
+  { id: 'qa', label: 'QA notes', type: 'Doc', color: '#0d9488' },
+  { id: 'metrics', label: 'Metrics', type: 'Chart', color: '#ea580c' }
+]
+
+const bulkActionBarActions: BulkActionBarAction[] = [
+  { id: 'archive', label: 'Archive' },
+  { id: 'assign', label: 'Assign', tone: 'primary' },
+  { id: 'export', label: 'Export', overflow: true },
+  { id: 'delete', label: 'Delete', tone: 'danger', overflow: true }
+]
+
+const presenceCursorUsers: PresenceCursorUser[] = [
+  { id: 'ada', name: 'Ada', x: 22, y: 30, color: '#2563eb', selection: { x: 12, y: 18, width: 26, height: 18, label: 'Editing header' } },
+  { id: 'lin', name: 'Lin', x: 68, y: 52, color: '#db2777', status: 'idle', selection: { x: 58, y: 44, width: 22, height: 24, label: 'Reviewing' } },
+  { id: 'mika', name: 'Mika', x: 44, y: 76, color: '#059669', status: 'active' }
+]
+
+const statusRailGroups: StatusRailGroup[] = [
+  { id: 'api', label: 'API Gateway', status: 'operational', uptime: 99.99, latency: 142 },
+  {
+    id: 'jobs',
+    label: 'Workers',
+    status: 'incident',
+    uptime: 98.72,
+    latency: 410,
+    incidents: [
+      { id: 'queue', title: 'Queue delay', message: 'Backlog above threshold', severity: 'incident', timestamp: Date.now() - 1000 * 60 * 7 },
+      { id: 'retry', title: 'Retry spike', message: 'Payment retries elevated', severity: 'degraded', timestamp: Date.now() - 1000 * 60 * 18 }
+    ]
+  },
+  {
+    id: 'search',
+    label: 'Search',
+    status: 'degraded',
+    uptime: 99.31,
+    latency: 260,
+    incidents: [
+      { id: 'index', title: 'Index lag', message: 'Fresh results delayed', severity: 'degraded', timestamp: Date.now() - 1000 * 60 * 24 }
+    ]
+  },
+  { id: 'deploys', label: 'Deploys', status: 'maintenance', uptime: 99.9, latency: 188, incidents: [{ id: 'window', title: 'Maintenance window', message: 'Deploy lock active', severity: 'maintenance' }] }
+]
+
+const spotlightSearchItems: SpotlightSearchItem[] = [
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    description: 'Open live product metrics',
+    group: 'Navigation',
+    keywords: ['home', 'metrics', 'overview'],
+    preview: <DataCardGrid metrics={dataCardGridMetrics.slice(0, 3)} columns={3} density="compact" />,
+    actions: [{ id: 'open', label: 'Open' }, { id: 'pin', label: 'Pin' }]
+  },
+  {
+    id: 'deploy',
+    label: 'Deploy production',
+    description: 'Release the latest build',
+    group: 'Actions',
+    keywords: ['ship', 'release'],
+    preview: <StatusRail groups={statusRailGroups.slice(0, 3)} title="Deploy health" compact />,
+    actions: [{ id: 'run', label: 'Run deploy' }, { id: 'dry', label: 'Dry run' }]
+  },
+  {
+    id: 'workflow',
+    label: 'Workflow builder',
+    description: 'Edit automation graph',
+    group: 'Components',
+    keywords: ['flow', 'automation'],
+    preview: <FlowBuilder nodes={defaultFlowBuilderNodes.slice(0, 3)} connections={defaultFlowBuilderConnections.slice(0, 2)} sx={{ minHeight: 220 }} />
+  },
+  {
+    id: 'docs',
+    label: 'Docs',
+    description: 'Read component reference',
+    group: 'Resources',
+    keywords: ['help', 'guide'],
+    preview: <Typography color="text.secondary">Jump into API docs, examples, and props.</Typography>,
+    actions: [{ id: 'copy', label: 'Copy link' }]
+  }
+]
+
+const smartBreadcrumbItems: SmartBreadcrumbItem[] = [
+  {
+    id: 'workspace',
+    label: 'Acme',
+    description: 'Workspace root and team overview',
+    icon: <InboxOutlinedIcon fontSize="small" />,
+    keywords: ['team', 'root'],
+    preview: <DataCardGrid metrics={dataCardGridMetrics.slice(0, 3)} columns={3} density="compact" />,
+    actions: [{ id: 'open', label: 'Open workspace' }, { id: 'copy', label: 'Copy link' }]
+  },
+  {
+    id: 'product',
+    label: 'Product',
+    description: 'Product operations and planning',
+    icon: <FolderOutlinedIcon fontSize="small" />,
+    keywords: ['area', 'planning'],
+    preview: <Typography color="text.secondary">Product area contains roadmaps, releases, and customer signals.</Typography>,
+    actions: [{ id: 'pin', label: 'Pin' }]
+  },
+  {
+    id: 'roadmap',
+    label: 'Roadmap',
+    description: 'Quarterly priorities and milestones',
+    icon: <AccountTreeOutlinedIcon fontSize="small" />,
+    keywords: ['plan', 'milestones'],
+    preview: <LayoutSwitcher items={layoutSwitcherItems.slice(0, 4)} defaultView="kanban" dense sx={{ minHeight: 240 }} />
+  },
+  {
+    id: 'release',
+    children: (
+      <Stack direction="row" spacing={0.75} alignItems="center" sx={{ minWidth: 0 }}>
+        <span>Release 2.4</span>
+        <Chip size="small" label="live" color="success" sx={{ height: 18, fontSize: 11, fontWeight: 900 }} />
+      </Stack>
+    ),
+    labelText: 'Release 2.4 live',
+    description: 'Active launch train',
+    icon: <RocketLaunchOutlinedIcon fontSize="small" />,
+    keywords: ['launch', 'ship'],
+    preview: <StatusRail groups={statusRailGroups.slice(0, 3)} title="Release health" compact />,
+    actions: [{ id: 'brief', label: 'Open brief' }, { id: 'status', label: 'Copy status' }]
+  },
+  {
+    id: 'assets',
+    label: 'Design assets',
+    description: 'Images, tokens, and handoff notes',
+    icon: <PaletteOutlinedIcon fontSize="small" />,
+    keywords: ['figma', 'tokens'],
+    preview: <ColorStudio initialColors={colorStudioColors.slice(0, 3)} />
+  },
+  {
+    id: 'handoff',
+    label: 'Engineering handoff',
+    description: 'Current implementation checklist',
+    icon: <BoltOutlinedIcon fontSize="small" />,
+    keywords: ['dev', 'implementation'],
+    preview: <Typography color="text.secondary">Ready for implementation with owners, risks, and linked specs.</Typography>,
+    actions: [{ id: 'assign', label: 'Assign owner' }]
+  }
+]
+
+const defaultInspectorDrawerSections: InspectorDrawerSection[] = [
+  {
+    id: 'content',
+    title: 'Content',
+    description: 'Main copy and visibility',
+    fields: [
+      {
+        id: 'title',
+        label: 'Title',
+        type: 'text',
+        value: 'Launch report',
+        description: 'Shown in the preview card',
+        validate: (value) => String(value).trim().length < 3 ? 'Use at least 3 characters' : null
+      },
+      { id: 'enabled', label: 'Enabled', type: 'boolean', value: true, description: 'Controls active state' }
+    ]
+  },
+  {
+    id: 'layout',
+    title: 'Layout',
+    description: 'Size and visual weight',
+    fields: [
+      { id: 'width', label: 'Width', type: 'number', value: 320, min: 180, max: 520, step: 10, unit: 'px', description: 'Card width' },
+      { id: 'radius', label: 'Radius', type: 'number', value: 8, min: 0, max: 32, step: 1, unit: 'px', description: 'Corner radius' }
+    ]
+  },
+  {
+    id: 'style',
+    title: 'Style',
+    description: 'Presentation controls',
+    fields: [
+      { id: 'tone', label: 'Tone', type: 'select', value: 'Calm', options: [{ label: 'Calm', value: 'Calm' }, { label: 'Bold', value: 'Bold' }, { label: 'Urgent', value: 'Urgent' }] },
+      { id: 'accent', label: 'Accent', type: 'color', value: '#2563eb', validate: (value) => /^#[0-9a-f]{6}$/i.test(String(value)) ? null : 'Use a 6 digit hex color' }
     ]
   }
 ]
 
 const sampleTabs = ['JavaScript', 'TypeScript']
 
+function getInspectorDrawerValue(sections: InspectorDrawerSection[], fieldId: string, fallback: InspectorDrawerFieldValue) {
+  return sections.flatMap((section) => section.fields).find((field) => field.id === fieldId)?.value ?? fallback
+}
+
 function getComponentGroup(name: string) {
-  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'DataCardGrid', 'DataLens', 'DockBar', 'TimelineScrubber'].includes(name)) {
+  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'CompareStack', 'DataCardGrid', 'DataLens', 'DensityController', 'LayoutSwitcher', 'MiniMapNavigator', 'DockBar', 'TimelineScrubber'].includes(name)) {
     return 'Display'
   }
 
-  if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'ResizableDashboard', 'BeforeAfterSlider', 'InfiniteCanvas'].includes(name)) {
+  if (['DraggableBox', 'SplitPane', 'ResizableFrame', 'ResizableDashboard', 'BeforeAfterSlider', 'InfiniteCanvas', 'SelectionBox', 'PresenceCursors'].includes(name)) {
     return 'Layout'
   }
 
-  if (['CommandPalette', 'FloatingToolbar', 'FileDropZone', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
+  if (['BulkActionBar'].includes(name)) {
     return 'Input'
   }
 
-  if (['CommandDock', 'DockTabs', 'MorphMenu'].includes(name)) {
+  if (['StatusRail', 'PeekPanel'].includes(name)) {
+    return 'Display'
+  }
+
+  if (['FlowBuilder', 'FieldComposer', 'RuleBuilder'].includes(name)) {
+    return 'Input'
+  }
+
+  if (['CommandPalette', 'CommandTimeline', 'SpotlightSearch', 'FloatingToolbar', 'FileDropZone', 'DropComposer', 'EntityPicker', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
+    return 'Input'
+  }
+
+  if (['CommandDock', 'DockTabs', 'MorphMenu', 'SmartBreadcrumbs'].includes(name)) {
     return 'Navigation'
   }
 
@@ -3570,6 +5739,7 @@ export function ComponentDocs() {
   const [pickerAlpha, setPickerAlpha] = useState(0.8)
   const [splitSize, setSplitSize] = useState(34)
   const [splitCollapsed, setSplitCollapsed] = useState<'first' | 'second' | null>(null)
+  const [selectionBoxSelectedIds, setSelectionBoxSelectedIds] = useState<string[]>(['roadmap', 'assets'])
   const [inspectorTextTitle, setInspectorTextTitle] = useState('Demo card')
   const [inspectorNumberSize, setInspectorNumberSize] = useState(48)
   const [inspectorFields, setInspectorFields] = useState<InspectorPanelField[]>([
@@ -3628,13 +5798,18 @@ export function ComponentDocs() {
       group: 'State'
     }
   ])
+  const [inspectorDrawerOpen, setInspectorDrawerOpen] = useState(false)
+  const [inspectorDrawerSections, setInspectorDrawerSections] = useState<InspectorDrawerSection[]>(defaultInspectorDrawerSections)
   const floatingToolbarContainerRef = useRef<HTMLDivElement | null>(null)
   const floatingToolbarButtonRef = useRef<HTMLButtonElement | null>(null)
   const floatingToolbarBottomButtonRef = useRef<HTMLButtonElement | null>(null)
+  const miniMapPreviewRef = useRef<HTMLDivElement | null>(null)
   const [floatingToolbarRect, setFloatingToolbarRect] = useState<DOMRect | null>(null)
   const [floatingToolbarElementOpen, setFloatingToolbarElementOpen] = useState(false)
   const [floatingToolbarBottomOpen, setFloatingToolbarBottomOpen] = useState(false)
   const [nodeCanvasSelectedId, setNodeCanvasSelectedId] = useState<string | null>('a')
+  const [flowBuilderNodes, setFlowBuilderNodes] = useState<FlowBuilderNode[]>(defaultFlowBuilderNodes)
+  const [flowBuilderConnections, setFlowBuilderConnections] = useState<FlowBuilderConnection[]>(defaultFlowBuilderConnections)
   const [timelineTime, setTimelineTime] = useState(34)
   const [infiniteCanvasSelectedId, setInfiniteCanvasSelectedId] = useState<string | null>('idea')
   const [kanbanColumns, setKanbanColumns] = useState<KanbanColumn[]>(defaultKanbanColumns)
@@ -3700,7 +5875,7 @@ export function ComponentDocs() {
   function renderPreview() {
     if (selectedComponent.name === 'MagneticCard') {
       return (
-        <Box sx={{ minHeight: 340, display: 'grid', placeItems: 'center', bgcolor: '#eef2ff' }}>
+        <Box sx={{ minHeight: 340, display: 'grid', placeItems: 'center', bgcolor: 'background.default' }}>
           <MagneticCard
             strength={24}
             tilt={16}
@@ -3725,7 +5900,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'MorphMenu') {
       return (
-        <Box sx={{ minHeight: 380, display: 'grid', placeItems: 'center', bgcolor: '#f8fafc', overflow: 'hidden' }}>
+        <Box sx={{ minHeight: 380, display: 'grid', placeItems: 'center', bgcolor: 'background.default', overflow: 'hidden' }}>
           <MorphMenu items={morphMenuItems} radius={126} startAngle={-170} endAngle={-10}>
             <Button variant="contained" size="large">Open radial menu</Button>
           </MorphMenu>
@@ -3739,10 +5914,10 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'NodeCanvas') {
       const nodes = [
-        { id: 'a', label: 'Start', x: 60, y: 80, color: '#dbeafe' },
-        { id: 'b', label: 'Build', x: 280, y: 180, color: '#dcfce7' },
-        { id: 'c', label: 'Review', x: 500, y: 85, color: '#fef3c7' },
-        { id: 'd', label: 'Ship', x: 500, y: 265, color: '#fee2e2' }
+        { id: 'a', label: 'Start', x: 60, y: 80, color: '#2563eb' },
+        { id: 'b', label: 'Build', x: 280, y: 180, color: '#059669' },
+        { id: 'c', label: 'Review', x: 500, y: 85, color: '#d97706' },
+        { id: 'd', label: 'Ship', x: 500, y: 265, color: '#dc2626' }
       ]
 
       return (
@@ -3766,8 +5941,51 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'FlowBuilder') {
+      return (
+        <Box sx={{ minHeight: 540, p: 3, bgcolor: 'background.default' }}>
+          <FlowBuilder
+            nodes={flowBuilderNodes}
+            connections={flowBuilderConnections}
+            onNodesChange={setFlowBuilderNodes}
+            onConnectionsChange={setFlowBuilderConnections}
+            sx={{ minHeight: 500, border: 1, borderColor: 'divider', borderRadius: 1 }}
+          />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'RuleBuilder') {
+      return (
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: 'background.default' }}>
+          <RuleBuilder fields={ruleBuilderFields} sx={{ maxWidth: 900, mx: 'auto' }} />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'FieldComposer') {
+      return (
+        <Box sx={{ minHeight: 620, p: 3, bgcolor: 'background.default' }}>
+          <FieldComposer defaultFields={fieldComposerFields} sx={{ maxWidth: 1040, mx: 'auto' }} />
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'BeforeAfterSlider') {
       return <BeforeAfterSlider sx={{ minHeight: 320 }} before={<Box sx={{ height: '100%', bgcolor: '#2563eb', color: '#fff', p: 4 }}><Typography variant="h4">Before</Typography></Box>} after={<Box sx={{ height: '100%', bgcolor: '#f59e0b', color: '#111827', p: 4 }}><Typography variant="h4">After</Typography></Box>} />
+    }
+
+    if (selectedComponent.name === 'CompareStack') {
+      return (
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: 'background.default' }}>
+          <CompareStack
+            title="Campaign comparison"
+            subtitle="Blend before, after, and annotation layers."
+            layers={compareStackLayers}
+            minHeight={420}
+          />
+        </Box>
+      )
     }
 
     if (selectedComponent.name === 'InfiniteCanvas') {
@@ -3789,13 +6007,179 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'SelectionBox') {
+      return (
+        <Box sx={{ minHeight: 430, p: 3, bgcolor: 'background.default' }}>
+          <Stack spacing={1.5}>
+            <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+              <Typography color="text.secondary">
+                Drag across items. Cmd/Ctrl-click toggles. Shift-click adds.
+              </Typography>
+              <Chip label={`${selectionBoxSelectedIds.length} selected`} />
+            </Stack>
+            <SelectionBox
+              selectedIds={selectionBoxSelectedIds}
+              onSelectionChange={(change) => setSelectionBoxSelectedIds(change.selectedIds)}
+              selectionColor="#db2777"
+              sx={{
+                minHeight: 320,
+                display: 'grid',
+                gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: 'repeat(4, minmax(0, 1fr))' },
+                gap: 1.5,
+                p: 2,
+                border: 1,
+                borderColor: 'divider',
+                borderRadius: 1,
+                bgcolor: 'background.paper'
+              }}
+            >
+              {selectionBoxItems.map((item) => (
+                <Paper
+                  key={item.id}
+                  data-selection-id={item.id}
+                  variant="outlined"
+                  sx={(theme) => ({
+                    position: 'relative',
+                    overflow: 'hidden',
+                    p: 2,
+                    pl: 2.5,
+                    borderRadius: 1,
+                    bgcolor: 'background.paper',
+                    borderColor: alpha(item.color, theme.palette.mode === 'dark' ? 0.34 : 0.22),
+                    minHeight: 96,
+                    display: 'grid',
+                    alignContent: 'space-between',
+                    color: 'text.primary',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      width: 4,
+                      bgcolor: item.color
+                    }
+                  })}
+                >
+                  <Typography fontWeight={950}>{item.label}</Typography>
+                  <Typography variant="caption" color="text.secondary">{item.type}</Typography>
+                </Paper>
+              ))}
+            </SelectionBox>
+          </Stack>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'BulkActionBar') {
+      return (
+        <Box sx={{ minHeight: 430, p: 3, bgcolor: 'background.default' }}>
+          <Stack spacing={1.5}>
+            <BulkActionBar
+              selectedIds={selectionBoxSelectedIds}
+              totalCount={selectionBoxItems.length}
+              actions={bulkActionBarActions}
+              onClear={() => setSelectionBoxSelectedIds([])}
+            />
+            <SelectionBox
+              selectedIds={selectionBoxSelectedIds}
+              onSelectionChange={(change) => setSelectionBoxSelectedIds(change.selectedIds)}
+              selectionColor="#2563eb"
+              sx={{
+                minHeight: 300,
+                display: 'grid',
+                gridTemplateColumns: { xs: 'repeat(2, minmax(0, 1fr))', md: 'repeat(4, minmax(0, 1fr))' },
+                gap: 1.5,
+                p: 2,
+                border: 1,
+                borderColor: 'divider',
+                borderRadius: 1,
+                bgcolor: 'background.paper'
+              }}
+            >
+              {selectionBoxItems.map((item) => (
+                <Paper
+                  key={item.id}
+                  data-selection-id={item.id}
+                  variant="outlined"
+                  sx={(theme) => ({
+                    position: 'relative',
+                    overflow: 'hidden',
+                    p: 2,
+                    pl: 2.5,
+                    borderRadius: 1,
+                    bgcolor: 'background.paper',
+                    borderColor: alpha(item.color, theme.palette.mode === 'dark' ? 0.34 : 0.22),
+                    minHeight: 90,
+                    color: 'text.primary',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      width: 4,
+                      bgcolor: item.color
+                    }
+                  })}
+                >
+                  <Typography fontWeight={950}>{item.label}</Typography>
+                  <Typography variant="caption" color="text.secondary">{item.type}</Typography>
+                </Paper>
+              ))}
+            </SelectionBox>
+          </Stack>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'PresenceCursors') {
+      return (
+        <Box sx={{ minHeight: 430, p: 3, bgcolor: 'background.default' }}>
+          <PresenceCursors
+            users={presenceCursorUsers}
+            sx={{
+              minHeight: 360,
+              border: 1,
+              borderColor: 'divider',
+              borderRadius: 1,
+              bgcolor: 'background.paper',
+              backgroundImage: 'linear-gradient(rgba(148,163,184,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.18) 1px, transparent 1px)',
+              backgroundSize: '32px 32px'
+            }}
+          >
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 2, p: 4, pt: 7 }}>
+              {['Overview', 'Metrics', 'Roadmap', 'Feedback', 'Launch', 'Settings'].map((item) => (
+                <Paper key={item} variant="outlined" sx={{ p: 2, borderRadius: 1, minHeight: 86 }}>
+                  <Typography fontWeight={950}>{item}</Typography>
+                  <Typography variant="body2" color="text.secondary">Shared workspace</Typography>
+                </Paper>
+              ))}
+            </Box>
+          </PresenceCursors>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'StatusRail') {
+      return (
+        <Box sx={{ minHeight: 500, p: 3, bgcolor: 'background.default', display: 'grid', placeItems: 'start center' }}>
+          <StatusRail
+            title="Production health"
+            subtitle="Live operational pulse"
+            groups={statusRailGroups}
+          />
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'ResizableFrame') {
-      return <Box sx={{ minHeight: 340, p: 3, bgcolor: '#f8fafc' }}><ResizableFrame><Box sx={{ p: 2 }}><Typography fontWeight={850}>Resize me</Typography><Typography color="text.secondary">Drag bottom-right corner.</Typography></Box></ResizableFrame></Box>
+      return <Box sx={{ minHeight: 340, p: 3, bgcolor: 'background.default' }}><ResizableFrame><Box sx={{ p: 2 }}><Typography fontWeight={850}>Resize me</Typography><Typography color="text.secondary">Drag bottom-right corner.</Typography></Box></ResizableFrame></Box>
     }
 
     if (selectedComponent.name === 'ResizableDashboard') {
       return (
-        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: 'background.default' }}>
           <ResizableDashboard
             widgets={dashboardWidgets}
             persistKey="react-things-resizable-dashboard-preview"
@@ -3814,7 +6198,7 @@ export function ComponentDocs() {
       const enabled = Boolean(inspectorValue('enabled'))
 
       return (
-        <Box sx={{ p: 3, minHeight: 420, bgcolor: '#f8fafc' }}>
+        <Box sx={{ p: 3, minHeight: 420, bgcolor: 'background.default' }}>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '360px 1fr' }, gap: 3, alignItems: 'start' }}>
             <InspectorPanel
               title="Card inspector"
@@ -3848,6 +6232,49 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'InspectorDrawer') {
+      const title = String(getInspectorDrawerValue(inspectorDrawerSections, 'title', 'Launch report'))
+      const accent = String(getInspectorDrawerValue(inspectorDrawerSections, 'accent', '#2563eb'))
+      const tone = String(getInspectorDrawerValue(inspectorDrawerSections, 'tone', 'Calm'))
+      const width = Number(getInspectorDrawerValue(inspectorDrawerSections, 'width', 320))
+      const radius = Number(getInspectorDrawerValue(inspectorDrawerSections, 'radius', 8))
+      const enabled = Boolean(getInspectorDrawerValue(inspectorDrawerSections, 'enabled', true))
+
+      return (
+        <Box sx={{ p: 3, minHeight: 420, bgcolor: 'background.default' }}>
+          <Stack spacing={2} alignItems="flex-start">
+            <Button variant="contained" onClick={() => setInspectorDrawerOpen(true)}>Open inspector</Button>
+            <Paper
+              variant="outlined"
+              sx={{
+                width,
+                maxWidth: '100%',
+                p: 3,
+                borderRadius: `${radius}px`,
+                borderColor: accent,
+                bgcolor: enabled ? 'background.paper' : '#e5e7eb',
+                boxShadow: tone === 'Bold' ? `0 18px 45px ${accent}44` : 'none'
+              }}
+            >
+              <Typography variant="overline" color="text.secondary" fontWeight={900}>{tone}</Typography>
+              <Typography variant="h4" fontWeight={950} sx={{ color: accent }}>{title}</Typography>
+              <Typography color="text.secondary" sx={{ mt: 1 }}>
+                Drawer edits this card, validates title and color, and can undo changes.
+              </Typography>
+            </Paper>
+          </Stack>
+          <InspectorDrawer
+            open={inspectorDrawerOpen}
+            onClose={() => setInspectorDrawerOpen(false)}
+            title="Card properties"
+            subtitle="Sectioned fields with live validation"
+            sections={inspectorDrawerSections}
+            onSectionsChange={setInspectorDrawerSections}
+          />
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'ColorPicker') {
       return (
         <Box sx={{ p: 3, maxWidth: 460 }}>
@@ -3866,7 +6293,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'ColorStudio') {
       return (
-        <Box sx={{ p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ p: 3, bgcolor: 'background.default' }}>
           <ColorStudio initialColors={colorStudioColors} sx={{ minHeight: 560 }} />
         </Box>
       )
@@ -3895,7 +6322,7 @@ export function ComponentDocs() {
       ]
 
       return (
-        <Box sx={{ p: 4, minHeight: 320, display: 'grid', alignItems: 'center', bgcolor: '#f8fafc' }}>
+        <Box sx={{ p: 4, minHeight: 320, display: 'grid', alignItems: 'center', bgcolor: 'background.default' }}>
           <Box sx={{ maxWidth: 820, width: '100%', mx: 'auto' }}>
             <Typography variant="h5" fontWeight={900} sx={{ mb: 1 }}>
               TimelineScrubber
@@ -3920,9 +6347,38 @@ export function ComponentDocs() {
       return <Box sx={{ p: 3 }}><FileDropZone onFiles={() => {}} /></Box>
     }
 
+    if (selectedComponent.name === 'DropComposer') {
+      return (
+        <Box sx={{ minHeight: 620, p: 3, bgcolor: 'background.default' }}>
+          <DropComposer
+            defaultItems={defaultDropComposerItems}
+            accept="image/*,.pdf,.json"
+            title="Compose launch upload"
+            subtitle="Drop assets, reorder the queue, edit names, and watch upload progress."
+            sx={{ maxWidth: 920, mx: 'auto' }}
+          />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'EntityPicker') {
+      return (
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: 'background.default' }}>
+          <EntityPicker
+            title="Add to workspace"
+            subtitle="Pick people, files, and projects from one surface."
+            entities={entityPickerEntities}
+            defaultValue={['micky', 'launch-brief']}
+            multiple
+            sx={{ maxWidth: 720, mx: 'auto' }}
+          />
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'SmartTooltip') {
       return (
-        <Box sx={{ minHeight: 320, display: 'grid', placeItems: 'center', bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 320, display: 'grid', placeItems: 'center', bgcolor: 'background.default' }}>
           <SmartTooltip
             title="SmartTooltip"
             content="Hover to preview, click to pin, copy the value, or trigger actions."
@@ -3953,7 +6409,7 @@ export function ComponentDocs() {
       }
 
       return (
-        <Box sx={{ position: 'relative', minHeight: 520, p: 3, bgcolor: '#f8fafc', overflow: 'hidden' }}>
+        <Box sx={{ position: 'relative', minHeight: 520, p: 3, bgcolor: 'background.default', overflow: 'hidden' }}>
           <Stack spacing={2} sx={{ maxWidth: 520 }}>
             <Typography variant="h5" fontWeight={900}>ToastCenter</Typography>
             <Typography color="text.secondary">
@@ -3977,7 +6433,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'TourGuide') {
       return (
-        <Box sx={{ position: 'relative', minHeight: 520, p: 3, bgcolor: '#f8fafc', overflow: 'hidden' }}>
+        <Box sx={{ position: 'relative', minHeight: 520, p: 3, bgcolor: 'background.default', overflow: 'hidden' }}>
           <Stack spacing={2} sx={{ maxWidth: 680 }}>
             <Typography variant="h5" fontWeight={900}>TourGuide</Typography>
             <Typography color="text.secondary">
@@ -4011,7 +6467,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'DataCardGrid') {
       return (
-        <Box sx={{ minHeight: 420, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 420, p: 3, bgcolor: 'background.default' }}>
           <DataCardGrid
             title="Store pulse"
             subtitle="Revenue, demand, conversion, and system health in one glance."
@@ -4024,7 +6480,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'DataLens') {
       return (
-        <Box sx={{ minHeight: 460, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 460, p: 3, bgcolor: 'background.default' }}>
           <DataLens<DataLensService>
             title="Service lens"
             subtitle="Filter owners and status, sort load or requests, switch table/card view."
@@ -4036,9 +6492,23 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'LayoutSwitcher') {
+      return (
+        <Box sx={{ minHeight: 520, p: 3, bgcolor: 'background.default' }}>
+          <LayoutSwitcher
+            title="Launch work"
+            subtitle="Same items, animated through table, cards, kanban, calendar, and list."
+            items={layoutSwitcherItems}
+            groupOrder={['Todo', 'Doing', 'Review', 'Done']}
+            defaultView="cards"
+          />
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'KanbanBoard') {
       return (
-        <Box sx={{ minHeight: 520, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 520, p: 3, bgcolor: 'background.default' }}>
           <KanbanBoard
             title="Launch board"
             subtitle="Create columns, add cards, edit details, drag cards, and reorder columns."
@@ -4071,7 +6541,7 @@ export function ComponentDocs() {
             position: 'relative',
             minHeight: 340,
             p: 4,
-            bgcolor: '#f8fafc'
+            bgcolor: 'background.default'
           }}
         >
           <Box
@@ -4084,7 +6554,7 @@ export function ComponentDocs() {
               border: 1,
               borderColor: 'divider',
               borderRadius: 1,
-              bgcolor: '#ffffff',
+              bgcolor: 'background.paper',
               lineHeight: 1.9,
               outline: 'none',
               '&:focus': {
@@ -4137,7 +6607,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'FocusRing') {
       return (
-        <Box sx={{ minHeight: 340, display: 'grid', placeItems: 'center', bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 340, display: 'grid', placeItems: 'center', bgcolor: 'background.default' }}>
           <Stack spacing={3} alignItems="center">
             <FocusRing tone="error" active padding={8} radius={12} pulseSize={focusRingConfig.pulseSize}>
               <Button variant="outlined" color="error">Invalid field</Button>
@@ -4153,7 +6623,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'SplitPane') {
       return (
-        <Box sx={{ minHeight: 420, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 420, bgcolor: 'background.default' }}>
           <Stack direction="row" spacing={1} sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }} alignItems="center">
             <Button size="small" variant="outlined" onClick={() => setSplitCollapsed(splitCollapsed === 'first' ? null : 'first')}>
               Toggle nav
@@ -4180,7 +6650,7 @@ export function ComponentDocs() {
             persistKey="react-things-split-pane-preview"
             sx={{ minHeight: 360 }}
             first={(
-              <Box sx={{ height: '100%', p: 3, bgcolor: '#e0f2fe' }}>
+              <Box sx={{ height: '100%', p: 3, bgcolor: 'background.default' }}>
                 <Typography variant="h6" fontWeight={800}>
                   Navigator
                 </Typography>
@@ -4194,7 +6664,7 @@ export function ComponentDocs() {
               </Box>
             )}
             second={(
-              <Box sx={{ height: '100%', p: 3, bgcolor: '#ffffff' }}>
+              <Box sx={{ height: '100%', p: 3, bgcolor: 'background.paper' }}>
                 <Typography variant="h6" fontWeight={800}>
                   Workspace
                 </Typography>
@@ -4230,7 +6700,7 @@ export function ComponentDocs() {
           sx={{
             minHeight: 360,
             p: 3,
-            bgcolor: '#f8fafc'
+            bgcolor: 'background.default'
           }}
         >
           <CommandPalette
@@ -4242,6 +6712,100 @@ export function ComponentDocs() {
             onSelect={(item) => setCommandPaletteSelectedId(item.id)}
             sx={{ maxWidth: 420 }}
           />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'CommandTimeline') {
+      return (
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: 'background.default' }}>
+          <Box sx={{ maxWidth: 820, mx: 'auto' }}>
+            <CommandTimeline
+              title="Editor history"
+              subtitle="Undo, redo, or jump straight to a previous command state."
+              entries={commandTimelineEntries}
+              defaultCurrentId="moved"
+            />
+          </Box>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'SpotlightSearch') {
+      return (
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: 'background.default' }}>
+          <SpotlightSearch
+            items={spotlightSearchItems}
+            placeholder="Search commands, components, docs"
+            previewTitle="Live preview"
+            sx={{ maxWidth: 920, mx: 'auto' }}
+          />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'SmartBreadcrumbs') {
+      return (
+        <Box sx={{ minHeight: 420, p: 3, bgcolor: 'background.default' }}>
+          <Stack spacing={3}>
+            <SmartBreadcrumbs
+              items={smartBreadcrumbItems}
+              maxVisible={3}
+              sx={{ maxWidth: 760 }}
+            />
+            <Paper variant="outlined" sx={{ p: 3, borderRadius: 1 }}>
+              <Typography variant="overline" color="text.secondary" fontWeight={900}>
+                Collapsed path search
+              </Typography>
+              <Typography variant="h4" fontWeight={950}>
+                Long trails stay usable
+              </Typography>
+              <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 620 }}>
+                Hover crumbs to peek. Click the dots to search hidden path segments and jump there.
+              </Typography>
+            </Paper>
+          </Stack>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'PeekPanel') {
+      return (
+        <Box sx={{ minHeight: 420, p: 3, bgcolor: 'background.default' }}>
+          <Paper variant="outlined" sx={{ p: 3, borderRadius: 1, maxWidth: 760 }}>
+            <Typography variant="overline" color="text.secondary" fontWeight={900}>
+              Editor preview
+            </Typography>
+            <Typography variant="h4" fontWeight={950}>
+              Inspect without leaving place
+            </Typography>
+            <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 620 }}>
+              Hover or click the symbol below to peek at a definition, then jump or copy path from actions.
+            </Typography>
+            <Box sx={{ mt: 3, fontFamily: 'monospace', fontSize: 15, color: 'text.primary' }}>
+              const rail ={' '}
+              <PeekPanel
+                title="StatusRail"
+                subtitle="packages/ui/src/components/StatusRail.tsx"
+                content="Vertical operational health rail with grouped incidents and live pulse."
+                preview={(
+                  <CodeViewer
+                    label="tsx"
+                    language="tsx"
+                    value={'export function StatusRail({ groups, compact }) {\\n  return <Box>{groups.map(renderGroup)}</Box>\\n}'}
+                    onChange={() => {}}
+                    minHeight={150}
+                  />
+                )}
+                footer={<Typography variant="caption" color="text.secondary">Definition preview</Typography>}
+                actions={[{ id: 'open', label: 'Open file' }, { id: 'copy', label: 'Copy path' }]}
+              >
+                <Button size="small" variant="text" sx={{ fontFamily: 'monospace', fontWeight: 900 }}>
+                  StatusRail
+                </Button>
+              </PeekPanel>
+            </Box>
+          </Paper>
         </Box>
       )
     }
@@ -4277,7 +6841,7 @@ export function ComponentDocs() {
       const activeItem = findCommandDockItem(commandDockItems, commandDockSelectedId) ?? commandDockItems[0]
 
       return (
-        <Box sx={{ minHeight: 420, display: 'flex', bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 420, display: 'flex', bgcolor: 'background.default' }}>
           <CommandDock
             items={commandDockItems}
             selectedId={commandDockSelectedId}
@@ -4319,7 +6883,7 @@ export function ComponentDocs() {
       const activeTab = dockTabs.find((tab) => tab.id === activeDockTabId) ?? dockTabs[0]
 
       return (
-        <Box sx={{ minHeight: 380, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 380, bgcolor: 'background.default' }}>
           <Box sx={{ minHeight: 360 }}>
           <DockTabs
             tabs={dockTabs}
@@ -4395,6 +6959,172 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'DiffViewer') {
+      return (
+        <Box sx={{ p: 2, bgcolor: 'background.default' }}>
+          <DiffViewer
+            mode="object"
+            title="Plan review"
+            subtitle="Object keys are sorted, changes are grouped, and reviewers can leave notes."
+            beforeLabel="Current"
+            afterLabel="Proposed"
+            before={{
+              project: 'Atlas',
+              status: 'draft',
+              owners: ['Micky', 'Design'],
+              limits: {
+                retries: 2,
+                timeout: 800
+              },
+              flags: {
+                comments: false,
+                approvals: false
+              }
+            }}
+            after={{
+              project: 'Atlas',
+              status: 'ready',
+              owners: ['Micky', 'Design', 'QA'],
+              limits: {
+                retries: 3,
+                timeout: 1200
+              },
+              flags: {
+                comments: true,
+                approvals: true
+              }
+            }}
+            defaultComments={[
+              {
+                id: 'diff-comment-1',
+                hunkId: 'hunk-1-3-3',
+                author: 'Reviewer',
+                body: 'Timeout and approval flag move together.'
+              }
+            ]}
+          />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'DensityController') {
+      return (
+        <Box sx={{ p: 3, bgcolor: 'background.default' }}>
+          <DensityController
+            title="Workspace density"
+            subtitle="Pick the layout feel once. The value persists in localStorage."
+            persistKey="react-things-density-preview"
+          >
+            {({ density, spacing, padding, rowHeight, radius }) => (
+              <Box sx={{ display: 'grid', gap: `${spacing}px` }}>
+                {[
+                  { title: 'Inbox triage', meta: '12 items', color: '#2563eb' },
+                  { title: 'Roadmap review', meta: '4 owners', color: '#059669' },
+                  { title: 'Launch checklist', meta: density, color: '#d97706' }
+                ].map((item) => (
+                  <Paper
+                    key={item.title}
+                    variant="outlined"
+                    sx={(theme) => ({
+                      position: 'relative',
+                      overflow: 'hidden',
+                      p: `${padding}px`,
+                      pl: `${padding + 6}px`,
+                      minHeight: `${rowHeight}px`,
+                      borderRadius: `${radius}px`,
+                      bgcolor: 'background.paper',
+                      borderColor: alpha(item.color, theme.palette.mode === 'dark' ? 0.32 : 0.2),
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 1.5,
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        width: 4,
+                        bgcolor: item.color
+                      }
+                    })}
+                  >
+                    <Typography fontWeight={950}>{item.title}</Typography>
+                    <Chip size="small" label={item.meta} />
+                  </Paper>
+                ))}
+              </Box>
+            )}
+          </DensityController>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'MiniMapNavigator') {
+      const sections = [
+        { id: 'brief', label: 'Brief', targetId: 'mini-map-brief', color: '#2563eb', description: 'Opening context and goals' },
+        { id: 'metrics', label: 'Metrics', targetId: 'mini-map-metrics', color: '#059669', description: 'Dashboard style section' },
+        { id: 'canvas', label: 'Canvas', targetId: 'mini-map-canvas', color: '#7c3aed', description: 'Large visual workspace' },
+        { id: 'notes', label: 'Notes', targetId: 'mini-map-notes', color: '#f59e0b', description: 'Long docs and decisions' }
+      ]
+
+      return (
+        <Box sx={{ p: 3, bgcolor: 'background.default' }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 260px' }, gap: 2, alignItems: 'start' }}>
+            <Paper
+              ref={miniMapPreviewRef}
+              variant="outlined"
+              sx={{
+                height: 520,
+                overflow: 'auto',
+                borderRadius: 1,
+                bgcolor: 'background.paper'
+              }}
+            >
+              {sections.map((section, index) => (
+                <Box
+                  key={section.id}
+                  id={section.targetId}
+                  sx={{
+                    minHeight: index === 2 ? 520 : 360,
+                    p: 3,
+                    borderBottom: 1,
+                    borderColor: 'divider',
+                    bgcolor: index % 2 === 0 ? 'background.paper' : 'background.default'
+                  }}
+                >
+                  <Typography variant="overline" color="text.secondary" fontWeight={900}>
+                    {section.label}
+                  </Typography>
+                  <Typography variant="h4" fontWeight={950} sx={{ color: section.color }}>
+                    {section.description}
+                  </Typography>
+                  <Box sx={{ mt: 3, display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, minmax(0, 1fr))' }, gap: 1.5 }}>
+                    {Array.from({ length: index === 2 ? 6 : 4 }, (_, cardIndex) => (
+                      <Paper key={cardIndex} variant="outlined" sx={{ p: 2, borderRadius: 1, minHeight: 96 }}>
+                        <Typography fontWeight={900}>Block {cardIndex + 1}</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          Click the minimap or drag its viewport to move through this long surface.
+                        </Typography>
+                      </Paper>
+                    ))}
+                  </Box>
+                </Box>
+              ))}
+            </Paper>
+
+            <MiniMapNavigator
+              title="Document map"
+              subtitle="Click bars or drag viewport"
+              items={sections}
+              containerRef={miniMapPreviewRef}
+              sticky
+            />
+          </Box>
+        </Box>
+      )
+    }
+
     return (
       <DraggableGlassBoxPreview
         transparency={glassBoxConfig.transparency}
@@ -4440,14 +7170,24 @@ export function ComponentDocs() {
         renderVariantCard('Interactive', <Box sx={{ height: 220 }}><DraggableGlassBoxPreview transparency={0.42} fill={0.7} liquidColor="#39b8ff" glassColor="#ffffff">Drag liquid glass</DraggableGlassBoxPreview></Box>)
       ],
       DraggableBox: [
-        renderVariantCard('Simple', <DraggableBox sx={{ minHeight: 150, bgcolor: '#f8fafc' }}><Paper sx={{ p: 1.5 }}>Drag</Paper></DraggableBox>),
-        renderVariantCard('Sized Child', <DraggableBox initialPosition={{ x: 30, y: 55 }} dragSx={{ width: 140 }} sx={{ minHeight: 150, bgcolor: '#eef2ff' }}><Paper sx={{ p: 2 }}>Panel</Paper></DraggableBox>),
+        renderVariantCard('Simple', <DraggableBox sx={{ minHeight: 150, bgcolor: 'background.default' }}><Paper sx={{ p: 1.5 }}>Drag</Paper></DraggableBox>),
+        renderVariantCard('Sized Child', <DraggableBox initialPosition={{ x: 30, y: 55 }} dragSx={{ width: 140 }} sx={{ minHeight: 150, bgcolor: 'background.default' }}><Paper sx={{ p: 2 }}>Panel</Paper></DraggableBox>),
         renderVariantCard('Canvas', <DraggableBox initialPosition={{ x: 70, y: 45 }} sx={{ minHeight: 150, backgroundImage: 'url(/animals-colors.svg)', backgroundSize: 'cover' }}><Paper sx={{ p: 1.5 }}>Over image</Paper></DraggableBox>)
       ],
       CodeViewer: [
         renderVariantCard('JavaScript', <CodeViewer label="JS" language="javascript" value={'const name = "Ada"'} onChange={() => {}} minHeight={120} />),
         renderVariantCard('Rust', <CodeViewer label="Rust" language="rust" value={'fn main() {\n  println!("hello");\n}'} onChange={() => {}} minHeight={120} />),
         renderVariantCard('SQL', <CodeViewer label="SQL" language="sql" value={"select * from users\nwhere status = 'active';"} onChange={() => {}} minHeight={120} />)
+      ],
+      DensityController: [
+        renderVariantCard('Compact', <DensityController defaultValue="compact" showReset={false}><Typography>Dense rows for high-volume tools.</Typography></DensityController>),
+        renderVariantCard('Cozy', <DensityController defaultValue="cozy" showReset={false}><Typography>Balanced default for daily work.</Typography></DensityController>),
+        renderVariantCard('Spacious', <DensityController defaultValue="spacious" showReset={false}><Typography>Touch-friendly breathing room.</Typography></DensityController>)
+      ],
+      MiniMapNavigator: [
+        renderVariantCard('Page', <MiniMapNavigator height={170} showLabels={false} items={[{ id: 'a', label: 'Intro', top: 0, height: 240, color: '#2563eb' }, { id: 'b', label: 'API', top: 280, height: 360, color: '#059669' }, { id: 'c', label: 'Examples', top: 720, height: 300, color: '#f59e0b' }]} />),
+        renderVariantCard('Labels', <MiniMapNavigator height={150} items={[{ id: 'a', label: 'Overview', top: 0, height: 160 }, { id: 'b', label: 'Canvas', top: 220, height: 380 }, { id: 'c', label: 'Notes', top: 660, height: 220 }]} />),
+        renderVariantCard('Dashboard', <MiniMapNavigator height={180} showProgress={false} items={[{ id: 'kpi', label: 'KPIs', top: 0, height: 180, color: '#2563eb' }, { id: 'table', label: 'Table', top: 220, height: 420, color: '#059669' }, { id: 'logs', label: 'Logs', top: 700, height: 260, color: '#dc2626' }]} />)
       ],
       DockBar: [
         renderVariantCard('Small', <DockBar items={[{ id: 'a', label: 'A', icon: 'A' }, { id: 'b', label: 'B', icon: 'B' }]} iconSize={40} />),
@@ -4470,16 +7210,36 @@ export function ComponentDocs() {
         renderVariantCard('Dense List', <CommandPalette dense items={commandItems} selectedId={commandPaletteSelectedId} onSelect={(item) => setCommandPaletteSelectedId(item.id)} sx={{ minHeight: 220 }} />),
         renderVariantCard('Tree', <CommandPalette variant="tree" items={commandItems} selectedId={commandPaletteSelectedId} defaultExpandedGroups={['Docs', 'Components']} onSelect={(item) => setCommandPaletteSelectedId(item.id)} sx={{ minHeight: 220 }} />)
       ],
+      CommandTimeline: [
+        renderVariantCard('Vertical', <CommandTimeline entries={commandTimelineEntries.slice(0, 4)} defaultCurrentId="assigned" />),
+        renderVariantCard('Horizontal', <CommandTimeline entries={commandTimelineEntries.slice(0, 4)} defaultCurrentId="moved" orientation="horizontal" />),
+        renderVariantCard('No Controls', <CommandTimeline entries={commandTimelineEntries.slice(0, 3)} showControls={false} showMetadata={false} />)
+      ],
+      SpotlightSearch: [
+        renderVariantCard('Grouped', <SpotlightSearch items={spotlightSearchItems} maxResults={4} sx={{ minHeight: 260 }} />),
+        renderVariantCard('Exact', <SpotlightSearch items={spotlightSearchItems} fuzzy={false} sx={{ minHeight: 260 }} />),
+        renderVariantCard('Actions', <SpotlightSearch items={spotlightSearchItems.slice(0, 2)} previewTitle="Action preview" sx={{ minHeight: 260 }} />)
+      ],
+      SmartBreadcrumbs: [
+        renderVariantCard('Collapsed', <SmartBreadcrumbs items={smartBreadcrumbItems} maxVisible={3} />),
+        renderVariantCard('Full Path', <SmartBreadcrumbs items={smartBreadcrumbItems.slice(0, 4)} maxVisible={6} />),
+        renderVariantCard('No Preview', <SmartBreadcrumbs items={smartBreadcrumbItems} maxVisible={3} showPreview={false} />)
+      ],
+      PeekPanel: [
+        renderVariantCard('Hover', <Box sx={{ minHeight: 170, display: 'grid', placeItems: 'center' }}><PeekPanel trigger="hover" title="Hover peek" content="Opens after a short delay." preview={<Box sx={{ p: 2, fontFamily: 'monospace' }}>const value = read()</Box>}><Button variant="outlined">Hover symbol</Button></PeekPanel></Box>),
+        renderVariantCard('Click', <Box sx={{ minHeight: 170, display: 'grid', placeItems: 'center' }}><PeekPanel trigger="click" title="Click peek" subtitle="Pinned until closed" content="Useful on touch and dense tools." actions={[{ id: 'open', label: 'Open' }]}><Button variant="contained">Click target</Button></PeekPanel></Box>),
+        renderVariantCard('Right Side', <Box sx={{ minHeight: 170, display: 'grid', placeItems: 'center' }}><PeekPanel placement="right" title="Side peek" preview={<Box sx={{ p: 2, fontFamily: 'monospace' }}>{'<PeekPanel placement="right" />'}</Box>}><Button variant="outlined">Right peek</Button></PeekPanel></Box>)
+      ],
       SplitPane: [
         renderVariantCard('Simple', <SplitPane sx={{ minHeight: 150 }} first={<Box sx={{ p: 2 }}>Left</Box>} second={<Box sx={{ p: 2 }}>Right</Box>} />),
-        renderVariantCard('Snapping', <SplitPane initialSize={32} snapPoints={[25, 50, 75]} sx={{ minHeight: 150 }} first={<Box sx={{ p: 2, bgcolor: '#e0f2fe' }}>Snap nav</Box>} second={<Box sx={{ p: 2 }}>Drag near 25, 50, 75</Box>} />),
-        renderVariantCard('Controlled', <SplitPane size={splitSize} onSizeChange={setSplitSize} collapsed={splitCollapsed} onCollapsedChange={setSplitCollapsed} resetSize={34} sx={{ minHeight: 160 }} first={<Box sx={{ p: 2, bgcolor: '#dcfce7' }}>Size {Math.round(splitSize)}%</Box>} second={<Box sx={{ p: 2 }}>Home/End collapse</Box>} />),
-        renderVariantCard('Vertical', <SplitPane orientation="vertical" initialSize={35} snapPoints={[35, 65]} sx={{ minHeight: 190 }} first={<Box sx={{ p: 2, bgcolor: '#fef3c7' }}>Top</Box>} second={<Box sx={{ p: 2 }}>Bottom</Box>} />),
+        renderVariantCard('Snapping', <SplitPane initialSize={32} snapPoints={[25, 50, 75]} sx={{ minHeight: 150 }} first={<Box sx={{ p: 2, bgcolor: 'background.default' }}>Snap nav</Box>} second={<Box sx={{ p: 2 }}>Drag near 25, 50, 75</Box>} />),
+        renderVariantCard('Controlled', <SplitPane size={splitSize} onSizeChange={setSplitSize} collapsed={splitCollapsed} onCollapsedChange={setSplitCollapsed} resetSize={34} sx={{ minHeight: 160 }} first={<Box sx={{ p: 2, bgcolor: 'background.default' }}>Size {Math.round(splitSize)}%</Box>} second={<Box sx={{ p: 2 }}>Home/End collapse</Box>} />),
+        renderVariantCard('Vertical', <SplitPane orientation="vertical" initialSize={35} snapPoints={[35, 65]} sx={{ minHeight: 190 }} first={<Box sx={{ p: 2, bgcolor: 'background.default' }}>Top</Box>} second={<Box sx={{ p: 2 }}>Bottom</Box>} />),
         renderVariantCard('Persistent', <SplitPane defaultSize={45} persistKey="react-things-split-pane-variant" sx={{ minHeight: 150 }} first={<Box sx={{ p: 2 }}>Saved size</Box>} second={<Box sx={{ p: 2 }}>Refresh keeps it</Box>} />),
         renderVariantCard('IDE Layout', <SplitPane initialSize={24} minSize={15} maxSize={45} dividerSize={10} snapPoints={[20, 33]} sx={{ minHeight: 190, bgcolor: '#0f172a', color: '#e5e7eb' }} first={<Box sx={{ p: 2 }}>Files<br />src<br />demo</Box>} second={<Box sx={{ p: 2, fontFamily: 'monospace' }}>function build() {'{'}<br />  return 'wow'<br />{'}'}</Box>} />)
       ],
       FloatingToolbar: [
-        renderVariantCard('Selection', <Box sx={{ minHeight: 130, p: 2, bgcolor: '#f8fafc' }}><Typography color="text.secondary">Select text in the main preview to see it anchor to a selection rectangle.</Typography></Box>),
+        renderVariantCard('Selection', <Box sx={{ minHeight: 130, p: 2, bgcolor: 'background.default' }}><Typography color="text.secondary">Select text in the main preview to see it anchor to a selection rectangle.</Typography></Box>),
         renderVariantCard('Element Anchor', <Box sx={{ position: 'relative', minHeight: 130, display: 'grid', placeItems: 'center' }}><Button ref={floatingToolbarButtonRef} variant="contained" onClick={() => setFloatingToolbarElementOpen((open) => !open)}>Anchor</Button><FloatingToolbar open={floatingToolbarElementOpen} anchorEl={floatingToolbarButtonRef.current}><Button size="small" color="inherit">Edit</Button><Button size="small" color="inherit">Copy</Button></FloatingToolbar></Box>),
         renderVariantCard('Bottom Tools', <Box sx={{ position: 'relative', minHeight: 130, display: 'grid', placeItems: 'center' }}><Button variant="outlined" ref={floatingToolbarBottomButtonRef} onClick={() => setFloatingToolbarBottomOpen((open) => !open)}>Open</Button><FloatingToolbar open={floatingToolbarBottomOpen} anchorEl={floatingToolbarBottomButtonRef.current} placement="bottom" offset={10}><Button size="small" color="inherit">Pin</Button><Button size="small" color="inherit">Share</Button></FloatingToolbar></Box>)
       ],
@@ -4505,7 +7265,7 @@ export function ComponentDocs() {
       ],
       MagneticCard: [
         renderVariantCard('Soft', <MagneticCard strength={10} tilt={4} sx={{ p: 2, border: 1, borderColor: 'divider', borderRadius: 1 }}>Soft pull</MagneticCard>),
-        renderVariantCard('Tilt', <MagneticCard strength={18} tilt={12} lift={10} sx={{ p: 2, borderRadius: 2, bgcolor: '#dbeafe' }}>Tilt card</MagneticCard>),
+        renderVariantCard('Tilt', <MagneticCard strength={18} tilt={12} lift={10} sx={{ p: 2, borderRadius: 2, bgcolor: 'background.paper', border: 1, borderColor: 'divider' }}>Tilt card</MagneticCard>),
         renderVariantCard('Glare', <MagneticCard strength={24} tilt={16} lift={16} glare sx={{ p: 3, borderRadius: 2, color: '#fff', background: 'linear-gradient(135deg,#2563eb,#db2777)' }}>Premium card</MagneticCard>)
       ],
       MorphMenu: [
@@ -4521,20 +7281,60 @@ export function ComponentDocs() {
       NodeCanvas: [
         renderVariantCard('Free Drag', <NodeCanvas nodes={[{ id: 'a', label: 'A', x: 24, y: 38 }, { id: 'b', label: 'B', x: 190, y: 72 }]} connections={[{ from: 'a', to: 'b' }]} sx={{ minHeight: 180 }} />),
         renderVariantCard('Grid Snap', <NodeCanvas showGrid snapToGrid gridSize={24} connectionStyle="step" nodes={[{ id: 'a', label: 'Input', x: 24, y: 48 }, { id: 'b', label: 'Output', x: 216, y: 96 }]} connections={[{ from: 'a', to: 'b', color: '#2563eb' }]} sx={{ minHeight: 180 }} />),
-        renderVariantCard('Readonly Map', <NodeCanvas mode="readonly" selectedNodeId="b" connectionStyle="curved" nodes={[{ id: 'a', label: 'Plan', x: 20, y: 30, color: '#dbeafe' }, { id: 'b', label: 'Build', x: 170, y: 90, color: '#dcfce7' }, { id: 'c', label: 'Ship', x: 320, y: 35, color: '#fee2e2' }]} connections={[{ from: 'a', to: 'b' }, { from: 'b', to: 'c' }]} sx={{ minHeight: 180 }} />),
+        renderVariantCard('Readonly Map', <NodeCanvas mode="readonly" selectedNodeId="b" connectionStyle="curved" nodes={[{ id: 'a', label: 'Plan', x: 20, y: 30, color: '#2563eb' }, { id: 'b', label: 'Build', x: 170, y: 90, color: '#059669' }, { id: 'c', label: 'Ship', x: 320, y: 35, color: '#dc2626' }]} connections={[{ from: 'a', to: 'b' }, { from: 'b', to: 'c' }]} sx={{ minHeight: 180 }} />),
         renderVariantCard('Compact Nodes', <NodeCanvas nodeWidth={96} nodeHeight={42} nodes={[{ id: 'a', label: 'In', x: 30, y: 50 }, { id: 'b', label: 'Out', x: 170, y: 50 }]} connections={[{ from: 'a', to: 'b' }]} sx={{ minHeight: 170 }} />),
-        renderVariantCard('Custom Render', <NodeCanvas nodeWidth={150} nodeHeight={68} connectionStyle="curved" nodes={[{ id: 'a', label: 'API', x: 20, y: 40, color: '#eff6ff' }, { id: 'b', label: 'Worker', x: 220, y: 90, color: '#f0fdf4' }]} connections={[{ from: 'a', to: 'b', color: '#059669' }]} renderNode={(node, selected) => <Box sx={{ textAlign: 'center' }}><Typography fontWeight={900}>{node.label}</Typography><Typography variant="caption" color={selected ? 'primary.main' : 'text.secondary'}>{selected ? 'selected' : 'service'}</Typography></Box>} sx={{ minHeight: 190 }} />),
-        renderVariantCard('Editor Tools', <NodeCanvas editableTools showGrid snapToGrid linkTypes={['line', 'curved', 'step', 'ellipse']} nodes={[{ id: 'a', label: 'Box A', x: 24, y: 44, color: '#dbeafe' }, { id: 'b', label: 'Box B', x: 196, y: 100, color: '#dcfce7' }]} connections={[{ from: 'a', to: 'b', type: 'curved', label: 'uses', color: '#2563eb' }]} sx={{ minHeight: 260 }} />)
+        renderVariantCard('Custom Render', <NodeCanvas nodeWidth={150} nodeHeight={68} connectionStyle="curved" nodes={[{ id: 'a', label: 'API', x: 20, y: 40, color: '#2563eb' }, { id: 'b', label: 'Worker', x: 220, y: 90, color: '#059669' }]} connections={[{ from: 'a', to: 'b', color: '#059669' }]} renderNode={(node, selected) => <Box sx={{ textAlign: 'center' }}><Typography fontWeight={900}>{node.label}</Typography><Typography variant="caption" color={selected ? 'primary.main' : 'text.secondary'}>{selected ? 'selected' : 'service'}</Typography></Box>} sx={{ minHeight: 190 }} />),
+        renderVariantCard('Editor Tools', <NodeCanvas editableTools showGrid snapToGrid linkTypes={['line', 'curved', 'step', 'ellipse']} nodes={[{ id: 'a', label: 'Box A', x: 24, y: 44, color: '#2563eb' }, { id: 'b', label: 'Box B', x: 196, y: 100, color: '#059669' }]} connections={[{ from: 'a', to: 'b', type: 'curved', label: 'uses', color: '#2563eb' }]} sx={{ minHeight: 260 }} />)
+      ],
+      FlowBuilder: [
+        renderVariantCard('Typed Flow', <FlowBuilder nodes={defaultFlowBuilderNodes.slice(0, 3)} connections={defaultFlowBuilderConnections.slice(0, 2)} sx={{ minHeight: 260 }} />),
+        renderVariantCard('Invalid Edge', <FlowBuilder nodes={defaultFlowBuilderNodes.slice(0, 3)} connections={[...defaultFlowBuilderConnections.slice(0, 1), { id: 'bad', fromNodeId: 'trigger', fromPortId: 'event', toNodeId: 'email', toPortId: 'profile', type: 'event' }]} sx={{ minHeight: 260 }} />),
+        renderVariantCard('No Grid', <FlowBuilder showGrid={false} nodes={defaultFlowBuilderNodes} connections={defaultFlowBuilderConnections} sx={{ minHeight: 260 }} />)
+      ],
+      RuleBuilder: [
+        renderVariantCard('Simple', <RuleBuilder fields={ruleBuilderFields.slice(0, 2)} maxDepth={1} />),
+        renderVariantCard('Nested', <RuleBuilder fields={ruleBuilderFields} maxDepth={3} />),
+        renderVariantCard('Segments', <RuleBuilder fields={ruleBuilderFields.slice(1)} title="Audience rule" />)
+      ],
+      FieldComposer: [
+        renderVariantCard('Default', <FieldComposer defaultFields={fieldComposerFields.slice(0, 2)} />),
+        renderVariantCard('Select', <FieldComposer defaultFields={fieldComposerFields.slice(2)} />),
+        renderVariantCard('Empty', <FieldComposer defaultFields={[]} />)
       ],
       BeforeAfterSlider: [
         renderVariantCard('50/50', <BeforeAfterSlider sx={{ minHeight: 140 }} before={<Box sx={{ height: '100%', bgcolor: '#2563eb' }} />} after={<Box sx={{ height: '100%', bgcolor: '#f59e0b' }} />} />),
         renderVariantCard('Before Heavy', <BeforeAfterSlider initialPosition={70} sx={{ minHeight: 140 }} before={<Box sx={{ height: '100%', bgcolor: '#059669' }} />} after={<Box sx={{ height: '100%', bgcolor: '#db2777' }} />} />),
-        renderVariantCard('Content', <BeforeAfterSlider initialPosition={35} sx={{ minHeight: 140 }} before={<Box sx={{ p: 2, height: '100%', bgcolor: '#dbeafe' }}>Before</Box>} after={<Box sx={{ p: 2, height: '100%', bgcolor: '#fee2e2' }}>After</Box>} />)
+        renderVariantCard('Content', <BeforeAfterSlider initialPosition={35} sx={{ minHeight: 140 }} before={<Box sx={{ p: 2, height: '100%', bgcolor: 'background.default' }}>Before</Box>} after={<Box sx={{ p: 2, height: '100%', bgcolor: 'background.paper' }}>After</Box>} />)
+      ],
+      CompareStack: [
+        renderVariantCard('Layers', <CompareStack layers={compareStackLayers.slice(0, 2)} minHeight={180} showLegend={false} />),
+        renderVariantCard('Notes', <CompareStack layers={compareStackLayers} minHeight={180} showLegend={false} />),
+        renderVariantCard('Preview Only', <CompareStack layers={compareStackLayers.slice(0, 2)} minHeight={180} showControls={false} />)
       ],
       InfiniteCanvas: [
         renderVariantCard('Pan Zoom', <InfiniteCanvas items={[{ id: 'a', label: 'A', x: 20, y: 40 }, { id: 'b', label: 'B', x: 240, y: 120, color: '#dcfce7' }]} sx={{ minHeight: 220 }} />),
         renderVariantCard('No Minimap', <InfiniteCanvas showMinimap={false} items={[{ id: 'a', label: 'Card', x: 40, y: 40, color: '#dbeafe' }, { id: 'b', label: 'Note', x: 260, y: 160, color: '#fef3c7' }]} sx={{ minHeight: 220 }} />),
         renderVariantCard('Custom Items', <InfiniteCanvas defaultViewport={{ x: 30, y: 30, zoom: 0.9 }} items={[{ id: 'a', label: 'API', x: 40, y: 50, color: '#eff6ff' }, { id: 'b', label: 'Worker', x: 290, y: 160, color: '#f0fdf4' }]} renderItem={(item, selected) => <Box sx={{ textAlign: 'center' }}><Typography fontWeight={900}>{item.label}</Typography><Typography variant="caption" color={selected ? 'primary.main' : 'text.secondary'}>{selected ? 'selected' : 'drag me'}</Typography></Box>} sx={{ minHeight: 240 }} />)
+      ],
+      SelectionBox: [
+        renderVariantCard('Grid', <SelectionBox defaultSelectedIds={['roadmap']} sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1, p: 1 }} selectionColor="#2563eb">{selectionBoxItems.slice(0, 4).map((item) => <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}>{item.label}</Paper>)}</SelectionBox>),
+        renderVariantCard('List', <SelectionBox defaultSelectedIds={['support']} selectionColor="#059669" sx={{ display: 'grid', gap: 1, p: 1 }}>{selectionBoxItems.slice(4).map((item) => <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 1.25, borderRadius: 1 }}>{item.label}</Paper>)}</SelectionBox>),
+        renderVariantCard('Custom Box', <SelectionBox selectionColor="#db2777" selectionRectSx={{ borderStyle: 'dashed', bgcolor: '#db277733' }} sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, p: 1 }}>{selectionBoxItems.slice(0, 6).map((item) => <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 1, borderRadius: 1 }}>{item.label}</Paper>)}</SelectionBox>)
+      ],
+      BulkActionBar: [
+        renderVariantCard('Inline', <BulkActionBar selectedIds={['a', 'b']} totalCount={8} actions={bulkActionBarActions} onClear={() => {}} />),
+        renderVariantCard('Sticky', <BulkActionBar selectedIds={['a', 'b', 'c']} position="sticky" actions={bulkActionBarActions} onClear={() => {}} />),
+        renderVariantCard('Overflow', <BulkActionBar selectedIds={['a']} maxPrimaryActions={1} actions={bulkActionBarActions} onClear={() => {}} />)
+      ],
+      PresenceCursors: [
+        renderVariantCard('Canvas', <PresenceCursors users={presenceCursorUsers.slice(0, 2)} sx={{ minHeight: 170, bgcolor: 'background.default', borderRadius: 1 }}><Box sx={{ p: 2 }}>Canvas</Box></PresenceCursors>),
+        renderVariantCard('No Names', <PresenceCursors users={presenceCursorUsers} showNames={false} sx={{ minHeight: 170, bgcolor: 'background.default', borderRadius: 1 }} />),
+        renderVariantCard('Pixels', <PresenceCursors coordinateMode="pixel" users={[{ id: 'px', name: 'Pixel', x: 80, y: 64, color: '#7c3aed', selection: { x: 42, y: 90, width: 130, height: 46, label: 'Pixel rect' } }]} sx={{ minHeight: 170, bgcolor: 'background.default', borderRadius: 1 }} />)
+      ],
+      StatusRail: [
+        renderVariantCard('Live Pulse', <StatusRail groups={statusRailGroups} title="Ops" compact />),
+        renderVariantCard('No Pulse', <StatusRail groups={statusRailGroups.slice(0, 3)} pulse={false} title="Quiet" compact />),
+        renderVariantCard('Metrics Off', <StatusRail groups={statusRailGroups} showMetrics={false} title="Incidents" compact />)
       ],
       ResizableFrame: [
         renderVariantCard('Small', <ResizableFrame initialWidth={180} initialHeight={120}>Small</ResizableFrame>),
@@ -4550,6 +7350,11 @@ export function ComponentDocs() {
         renderVariantCard('Text', <Stack spacing={1.5}><InspectorPanel title="Text prop" density="compact" showValueSummary={false} fields={[{ id: 'title', label: 'Title', type: 'text', value: inspectorTextTitle, defaultValue: 'Demo card' }]} onChange={(_, value) => setInspectorTextTitle(String(value))} /><Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}><Typography fontWeight={900}>{inspectorTextTitle}</Typography></Paper></Stack>),
         renderVariantCard('Number', <Stack spacing={1.5}><InspectorPanel title="Number prop" density="compact" showValueSummary={false} fields={[{ id: 'size', label: 'Size', type: 'number', value: inspectorNumberSize, defaultValue: 48, min: 24, max: 72, step: 2, unit: 'px' }]} onChange={(_, value) => setInspectorNumberSize(Number(value))} /><Paper variant="outlined" sx={{ p: 1.5, borderRadius: 1 }}><Typography fontWeight={900} sx={{ fontSize: inspectorNumberSize, lineHeight: 1 }}>Aa</Typography></Paper></Stack>),
         renderVariantCard('Mixed', <InspectorPanel fields={inspectorFields} onChange={(id, value) => setInspectorFields((fields) => fields.map((field) => field.id === id ? { ...field, value } : field))} />)
+      ],
+      InspectorDrawer: [
+        renderVariantCard('Sections', <Stack spacing={1.5}><Typography color="text.secondary">Content, layout, and style fields.</Typography><Button variant="contained" onClick={() => setInspectorDrawerOpen(true)}>Open drawer</Button></Stack>),
+        renderVariantCard('Validation', <Stack spacing={1.5}><Typography color="text.secondary">Title and color validate live.</Typography><Button variant="outlined" onClick={() => setInspectorDrawerOpen(true)}>Edit values</Button></Stack>),
+        renderVariantCard('Undo', <Stack spacing={1.5}><Typography color="text.secondary">Changes can be undone from header or footer.</Typography><Button variant="outlined" onClick={() => setInspectorDrawerOpen(true)}>Try undo</Button></Stack>)
       ],
       ColorPicker: [
         renderVariantCard('Simple', <ColorPicker value={pickerColor} onChange={setPickerColor} showValue={false} />),
@@ -4570,7 +7375,17 @@ export function ComponentDocs() {
       FileDropZone: [
         renderVariantCard('Default', <FileDropZone />),
         renderVariantCard('Callback', <FileDropZone onFiles={() => {}} />),
-        renderVariantCard('Styled', <FileDropZone sx={{ bgcolor: '#eef2ff', borderColor: '#6366f1' }} />)
+        renderVariantCard('Styled', <FileDropZone sx={{ bgcolor: 'background.default', borderColor: '#6366f1' }} />)
+      ],
+      DropComposer: [
+        renderVariantCard('Queue', <DropComposer defaultItems={defaultDropComposerItems.slice(0, 2)} title="Upload queue" sx={{ minHeight: 360 }} />),
+        renderVariantCard('Images Only', <DropComposer defaultItems={defaultDropComposerItems.slice(0, 1)} accept="image/*" title="Image assets" sx={{ minHeight: 320 }} />),
+        renderVariantCard('Custom Preview', <DropComposer defaultItems={defaultDropComposerItems.slice(1)} renderPreview={(item) => <Box sx={{ p: 1, textAlign: 'center' }}><Typography fontWeight={900}>{item.name.split('.').pop()?.toUpperCase()}</Typography></Box>} sx={{ minHeight: 320 }} />)
+      ],
+      EntityPicker: [
+        renderVariantCard('Mixed', <EntityPicker entities={entityPickerEntities} defaultValue="micky" maxHeight={220} />),
+        renderVariantCard('Multiple', <EntityPicker entities={entityPickerEntities} multiple defaultValue={['micky', 'atlas']} maxHeight={220} />),
+        renderVariantCard('Pinned', <EntityPicker entities={entityPickerEntities} defaultValue="atlas" showSelected={false} maxHeight={220} />)
       ],
       DataCardGrid: [
         renderVariantCard('Revenue', <DataCardGrid metrics={[dataCardGridMetrics[0]]} showProgress={false} />),
@@ -4581,6 +7396,11 @@ export function ComponentDocs() {
         renderVariantCard('Table', <DataLens<DataLensService> rows={dataLensRows.slice(0, 4)} columns={dataLensColumns} dense />),
         renderVariantCard('Cards', <DataLens<DataLensService> rows={dataLensRows.slice(0, 4)} columns={dataLensColumns.slice(0, 4)} defaultView="cards" />),
         renderVariantCard('Sorted', <DataLens<DataLensService> rows={dataLensRows} columns={dataLensColumns} initialSort={{ columnId: 'requests', direction: 'desc' }} />)
+      ],
+      LayoutSwitcher: [
+        renderVariantCard('Cards', <LayoutSwitcher items={layoutSwitcherItems.slice(0, 4)} defaultView="cards" views={['cards', 'list']} dense />),
+        renderVariantCard('Kanban', <LayoutSwitcher items={layoutSwitcherItems} defaultView="kanban" views={['kanban', 'table']} groupOrder={['Todo', 'Doing', 'Review', 'Done']} dense />),
+        renderVariantCard('Calendar', <LayoutSwitcher items={layoutSwitcherItems} defaultView="calendar" views={['calendar', 'list']} calendarDays={6} dense />)
       ],
       KanbanBoard: [
         renderVariantCard('Compact', <KanbanBoard title="Sprint" columns={kanbanColumns.slice(0, 2)} onChange={(nextColumns) => setKanbanColumns([...nextColumns, ...kanbanColumns.slice(2)])} density="compact" />),
@@ -4597,7 +7417,7 @@ export function ComponentDocs() {
       sx={{
         height: '100vh',
         display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '260px 1fr' },
+        gridTemplateColumns: { xs: '1fr', md: '310px 1fr' },
         gridTemplateRows: { xs: 'auto 1fr', md: '1fr' },
         overflow: 'hidden',
         bgcolor: 'background.default'
@@ -4657,6 +7477,8 @@ export function ComponentDocs() {
           selectedId={selectedComponent.name}
           placeholder="Search components"
           defaultExpandedGroups={['Display', 'Layout', 'Input', 'Navigation', 'Effects']}
+          descriptionDisplay="tooltip"
+          sx={{ gap: 1.25 }}
           onSelect={(item) => {
             setSelectedComponentName(item.id)
             setSelectedSampleLabel(sampleTabs[0])

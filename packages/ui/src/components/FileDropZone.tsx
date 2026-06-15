@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import type { BoxProps } from '@mui/material/Box'
 
 export type FileDropZoneProps = BoxProps & {
@@ -30,15 +31,15 @@ export function FileDropZone({ onFiles, sx, ...props }: FileDropZoneProps) {
         handleFiles(event.dataTransfer.files)
       }}
       sx={[
-        {
+        (theme) => ({
           p: 4,
           border: 2,
           borderStyle: 'dashed',
           borderColor: dragging ? 'primary.main' : 'divider',
           borderRadius: 1,
           textAlign: 'center',
-          bgcolor: dragging ? 'primary.50' : 'background.paper'
-        },
+          bgcolor: dragging ? alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.18 : 0.08) : 'background.paper'
+        }),
         ...(Array.isArray(sx) ? sx : sx ? [sx] : [])
       ]}
     >

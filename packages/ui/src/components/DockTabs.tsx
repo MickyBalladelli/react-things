@@ -7,6 +7,7 @@ import Paper from '@mui/material/Paper'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import type { BoxProps } from '@mui/material/Box'
 import type { DragEvent, ReactNode } from 'react'
 
@@ -222,7 +223,7 @@ export function DockTabs({
             }}
             onClick={() => activate(tab)}
             variant="outlined"
-            sx={{
+            sx={(theme) => ({
               height: 38,
               width: vertical ? '100%' : 148,
               maxWidth: vertical ? 'none' : 190,
@@ -233,12 +234,12 @@ export function DockTabs({
               px: 1,
               borderRadius: vertical ? '8px 0 0 8px' : '8px 8px 0 0',
               borderColor: selected ? 'primary.main' : 'divider',
-              bgcolor: selected ? 'background.paper' : '#f8fafc',
-              boxShadow: selected ? '0 10px 22px rgba(15,23,42,0.12)' : 'none',
+              bgcolor: selected ? 'background.paper' : alpha(theme.palette.text.primary, theme.palette.mode === 'dark' ? 0.06 : 0.03),
+              boxShadow: selected ? `0 10px 22px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.34 : 0.12)}` : 'none',
               opacity: tab.disabled ? 0.5 : dragState?.tabId === tab.id ? 0.46 : 1,
               cursor: allowDrag ? 'grab' : 'default',
               userSelect: 'none'
-            }}
+            })}
           >
             <Box sx={{ display: 'grid', placeItems: 'center', width: 22 }}>
               {tab.icon ?? String(tab.label).slice(0, 1)}
@@ -262,7 +263,7 @@ export function DockTabs({
           gridTemplateColumns: leftTabs.length || dragState ? `${leftDockWidth}px 1fr` : '0 1fr',
           minWidth: 0,
           minHeight: 0,
-          bgcolor: '#eef2f7'
+          bgcolor: 'background.default'
         },
         ...(Array.isArray(sx) ? sx : sx ? [sx] : [])
       ]}

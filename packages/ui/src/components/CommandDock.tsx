@@ -267,7 +267,7 @@ export function CommandDock({
       </Box>
 
       {!collapsed ? (
-        <Box sx={{ mx: 1.25, mb: 1, display: 'flex', alignItems: 'center', gap: 1, px: 1, py: 0.75, border: 1, borderColor: 'divider', borderRadius: 1, bgcolor: '#f8fafc' }}>
+        <Box sx={{ mx: 1.25, mb: 1, display: 'flex', alignItems: 'center', gap: 1, px: 1, py: 0.75, border: 1, borderColor: 'divider', borderRadius: 1, bgcolor: 'background.default' }}>
           <SearchIcon fontSize="small" color="disabled" />
           <InputBase value={query} onChange={(event) => setQuery(event.target.value)} placeholder={placeholder} sx={{ flex: 1, fontSize: 14 }} />
         </Box>

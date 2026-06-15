@@ -1,69 +1,11 @@
-Good ideas:
-SpotlightSearch: search box with command results, previews, fuzzy groups, actions.
-FlowBuilder: better NodeCanvas for workflows: ports, typed edges, validation, auto-layout.
-InfiniteCanvas: pan/zoom canvas with minimap, grid, selection box.
-InspectorDrawer: beautiful property editor with sections, live validation, undo.
-DropComposer: drag/drop upload zone with previews, reorder, metadata edit.
-SelectionBox: drag-select items on canvas/list/grid.
-CompareStack: before/after but for many layers, with opacity sliders.
-GesturePad: trackpad-like component for zoom, pan, rotate gestures.
-KeyboardHintOverlay: hold key to show available shortcuts over UI.
+KeyboardHintOverlay
+Hold a key to reveal contextual shortcuts over UI.
 
+GesturePad
+Trackpad-like surface for zoom, pan, rotate, scrub gestures.
 
-InfiniteCanvas
+DensityController
+User-facing compact/cozy/spacious layout controller with persistence.
 
-
-## Current Components (30 total):
-1. BeforeAfterSlider
-2. CodeViewer
-3. ColorPicker
-4. ColorStudio
-5. CommandDock
-6. CommandPalette
-7. ComponentExample
-8. DataCardGrid
-9. DataLens
-10. DockBar
-11. DockTabs
-12. DraggableBox
-13. FileDropZone
-14. FocusRing
-15. FloatingToolbar
-16. GlassBox
-17. InfiniteCanvas
-18. InspectorPanel
-19. KanbanBoard
-20. MagneticCard
-21. MorphMenu
-22. NodeCanvas
-23. ResizableFrame
-24. ResizableDashboard
-25. SmartTooltip
-26. SplitPane
-27. SpotlightPanel
-28. TimelineScrubber
-29. ToastCenter
-30. TourGuide
-
-## New Component Suggestions:
-
-### 1. **GesturePad** - Trackpad-like Gesture Component
-- Multi-touch gesture recognition
-- Zoom, pan, rotate gestures
-- Customizable gesture thresholds
-- Visual feedback during gestures
-- Perfect for touch interfaces and creative apps
-
-### 2. **KeyboardHintOverlay** - Shortcut Discovery
-- Hold key to reveal available shortcuts
-- Contextual hints based on current view
-- Animated overlay with keyboard icons
-- Customizable hotkey detection
-- Material-UI doesn't have built-in keyboard hint systems
-
-### 3. **SelectionBox** - Drag Selection Component
-- Drag to select multiple items
-- Works with grids, lists, or canvases
-- Customizable selection visuals
-- Multi-selection with modifier keys
-- Useful for data tables, canvases, file managers
+ActionInspector
+Command palette meets inspector: selected object actions + editable props.
