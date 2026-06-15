@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import type { BoxProps } from '@mui/material/Box'
 import type { ReactNode } from 'react'
 
@@ -198,19 +199,19 @@ export function TimelineScrubber({
             event.preventDefault()
           }
         }}
-        sx={{
+        sx={(theme) => ({
           position: 'relative',
           height: 86,
           cursor: disabled ? 'default' : 'pointer',
           outline: 'none',
           '&:focus-visible .TimelineScrubber-track': {
-            boxShadow: '0 0 0 3px rgba(37,99,235,0.28)'
+            boxShadow: `0 0 0 3px ${alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.36 : 0.28)}`
           }
-        }}
+        })}
       >
         {preview && hoverTime !== null ? (
           <Box
-            sx={{
+            sx={(theme) => ({
               position: 'absolute',
               left: `${hoverPercent}%`,
               top: 0,
@@ -221,12 +222,12 @@ export function TimelineScrubber({
               borderColor: 'divider',
               borderRadius: 1,
               bgcolor: 'background.paper',
-              boxShadow: '0 14px 34px rgba(15,23,42,0.18)',
+              boxShadow: `0 14px 34px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.34 : 0.18)}`,
               pointerEvents: 'none',
               zIndex: 2
-            }}
+            })}
           >
-            <Box sx={{ height: 56, borderRadius: 0.75, overflow: 'hidden', bgcolor: '#e5e7eb' }}>
+            <Box sx={{ height: 56, borderRadius: 0.75, overflow: 'hidden', bgcolor: 'divider' }}>
               {closestThumbnail?.thumbnail ?? (
                 <Box sx={{ height: '100%', display: 'grid', placeItems: 'center', bgcolor: '#0f172a', color: '#fff' }}>
                   <Typography variant="caption" fontWeight={900}>
@@ -250,7 +251,7 @@ export function TimelineScrubber({
             bottom: 18,
             height: 12,
             borderRadius: 999,
-            bgcolor: '#e5e7eb',
+            bgcolor: 'divider',
             overflow: 'hidden',
             transition: 'box-shadow 120ms ease'
           }}
@@ -295,7 +296,7 @@ export function TimelineScrubber({
         })}
 
         <Box
-          sx={{
+          sx={(theme) => ({
             position: 'absolute',
             left: `${activePercent}%`,
             bottom: 5,
@@ -305,9 +306,11 @@ export function TimelineScrubber({
             transform: 'translateX(-50%)',
             bgcolor: 'background.paper',
             border: 3,
-            borderColor: '#2563eb',
-            boxShadow: dragging ? '0 12px 30px rgba(37,99,235,0.36)' : '0 8px 20px rgba(15,23,42,0.2)'
-          }}
+            borderColor: 'primary.main',
+            boxShadow: dragging
+              ? `0 12px 30px ${alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.42 : 0.36)}`
+              : `0 8px 20px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.34 : 0.2)}`
+          })}
         />
       </Box>
     </Box>

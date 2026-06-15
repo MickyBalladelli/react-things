@@ -264,7 +264,7 @@ export function RuleBuilder({
 
   function renderGroup(ruleGroup: RuleBuilderGroup, depth = 0) {
     return (
-      <Paper key={ruleGroup.id} variant="outlined" sx={{ p: 1.25, borderRadius: 1, bgcolor: depth === 0 ? '#f8fafc' : 'background.paper' }}>
+      <Paper key={ruleGroup.id} variant="outlined" sx={{ p: 1.25, borderRadius: 1, bgcolor: depth === 0 ? 'background.default' : 'background.paper' }}>
         <Stack spacing={1.25}>
           <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
             <Stack direction="row" spacing={1} alignItems="center">

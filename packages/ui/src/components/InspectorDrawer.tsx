@@ -284,7 +284,7 @@ export function InspectorDrawer({
           {
             width: { xs: '100%', sm: width },
             maxWidth: '100%',
-            bgcolor: '#f8fafc'
+            bgcolor: 'background.default'
           },
           ...(Array.isArray(PaperProps?.sx) ? PaperProps.sx : PaperProps?.sx ? [PaperProps.sx] : [])
         ]

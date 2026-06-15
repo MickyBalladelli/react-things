@@ -4,6 +4,7 @@ import OpenWithIcon from '@mui/icons-material/OpenWith'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import type { BoxProps } from '@mui/material/Box'
 import type { PointerEvent, ReactNode } from 'react'
 
@@ -316,18 +317,18 @@ export function ResizableDashboard({
       {...props}
       ref={containerRef}
       sx={[
-        {
+        (theme) => ({
           position: 'relative',
           minHeight: dashboardHeight,
           touchAction: 'none',
           userSelect: dragState ? 'none' : undefined,
           opacity: width > 0 ? 1 : 0,
           backgroundImage: showGuides
-            ? `linear-gradient(to right, rgba(37,99,235,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(37,99,235,0.08) 1px, transparent 1px)`
+            ? `linear-gradient(to right, ${alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.16 : 0.08)} 1px, transparent 1px), linear-gradient(to bottom, ${alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.16 : 0.08)} 1px, transparent 1px)`
             : undefined,
           backgroundSize: showGuides ? `${columnWidth + gap}px ${rowHeight + gap}px` : undefined,
           backgroundPosition: showGuides ? `0 0` : undefined
-        },
+        }),
         ...(Array.isArray(sx) ? sx : sx ? [sx] : [])
       ]}
       onPointerMove={(event) => updateActive(event.clientX, event.clientY)}
@@ -361,7 +362,7 @@ export function ResizableDashboard({
           <Paper
             key={widget.id}
             variant="outlined"
-            sx={{
+            sx={(theme) => ({
               position: 'absolute',
               left: item.x * (columnWidth + gap),
               top: item.y * (rowHeight + gap),
@@ -370,10 +371,12 @@ export function ResizableDashboard({
               borderRadius: 1,
               overflow: 'hidden',
               bgcolor: 'background.paper',
-              boxShadow: dragState?.id === item.id ? '0 18px 40px rgba(15,23,42,0.18)' : '0 8px 22px rgba(15,23,42,0.08)',
+              boxShadow: dragState?.id === item.id
+                ? `0 18px 40px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.42 : 0.18)}`
+                : `0 8px 22px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.32 : 0.08)}`,
               transition: dragState ? 'none' : 'left 160ms ease, top 160ms ease, width 160ms ease, height 160ms ease, box-shadow 160ms ease',
               zIndex: dragState?.id === item.id ? 2 : 0
-            }}
+            })}
           >
             <Box
               sx={{

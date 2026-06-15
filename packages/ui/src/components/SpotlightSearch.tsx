@@ -210,7 +210,7 @@ export function SpotlightSearch({
           </List>
         </Box>
 
-        <Box sx={{ minWidth: 0, p: 2, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minWidth: 0, p: 2, bgcolor: 'background.default' }}>
           {activeItem ? (
             <Stack spacing={2}>
               <Box>

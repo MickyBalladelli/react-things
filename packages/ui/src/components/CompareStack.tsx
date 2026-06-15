@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography'
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined'
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
+import { alpha } from '@mui/material/styles'
 import type { PaperProps } from '@mui/material/Paper'
 import type { CSSProperties, ReactNode } from 'react'
 
@@ -202,12 +203,12 @@ export function CompareStack({
                   key={layer.id}
                   size="small"
                   label={layer.label}
-                  sx={{
+                  sx={(theme) => ({
                     bgcolor: layer.color ?? 'rgba(255,255,255,0.92)',
                     color: layer.color ? '#ffffff' : 'text.primary',
                     fontWeight: 900,
-                    boxShadow: '0 10px 26px rgba(15,23,42,0.18)'
-                  }}
+                    boxShadow: `0 10px 26px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.34 : 0.18)}`
+                  })}
                 />
               ))}
             </Stack>
@@ -215,7 +216,7 @@ export function CompareStack({
         </Box>
 
         {showControls ? (
-          <Box sx={{ p: 1.5, borderLeft: { lg: 1 }, borderTop: { xs: 1, lg: 0 }, borderColor: 'divider', bgcolor: '#f8fafc' }}>
+          <Box sx={{ p: 1.5, borderLeft: { lg: 1 }, borderTop: { xs: 1, lg: 0 }, borderColor: 'divider', bgcolor: 'background.default' }}>
             <Stack spacing={1.25}>
               {layers.map((layer, index) => {
                 const layerState = state[layer.id]

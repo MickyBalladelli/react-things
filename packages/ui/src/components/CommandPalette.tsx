@@ -8,6 +8,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import type { BoxProps } from '@mui/material/Box'
 import type { ReactNode } from 'react'
 
@@ -124,7 +125,7 @@ export function CommandPalette({
         selected={selected}
         dense={dense}
         onClick={() => selectItem(item)}
-        sx={{
+        sx={(theme) => ({
           borderRadius: 1,
           alignItems: showInlineDescription ? 'flex-start' : 'center',
           gap: 0.75,
@@ -133,17 +134,19 @@ export function CommandPalette({
           pl: 1.25 + depth * 1.5,
           pr: 1,
           border: 1,
-          borderColor: selected ? 'primary.light' : 'transparent',
+          borderColor: selected ? alpha(theme.palette.primary.main, 0.48) : 'transparent',
           borderLeftWidth: selected ? 3 : 1,
-          bgcolor: selected ? 'rgba(37, 99, 235, 0.08)' : 'transparent',
+          bgcolor: selected ? alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.18 : 0.08) : 'transparent',
           '&.Mui-selected': {
-            bgcolor: 'rgba(37, 99, 235, 0.08)',
+            bgcolor: alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.18 : 0.08),
             color: 'primary.main'
           },
           '&.Mui-selected:hover, &:hover': {
-            bgcolor: selected ? 'rgba(37, 99, 235, 0.12)' : 'rgba(15, 23, 42, 0.04)'
+            bgcolor: selected
+              ? alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.26 : 0.12)
+              : alpha(theme.palette.text.primary, theme.palette.mode === 'dark' ? 0.08 : 0.04)
           }
-        }}
+        })}
       >
         {item.icon ? (
           <ListItemIcon sx={{ minWidth: 30, mt: showInlineDescription ? 0.25 : 0, color: 'inherit' }}>

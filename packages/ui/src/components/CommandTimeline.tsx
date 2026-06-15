@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography'
 import RedoOutlinedIcon from '@mui/icons-material/RedoOutlined'
 import RestoreOutlinedIcon from '@mui/icons-material/RestoreOutlined'
 import UndoOutlinedIcon from '@mui/icons-material/UndoOutlined'
+import { alpha } from '@mui/material/styles'
 import type { PaperProps } from '@mui/material/Paper'
 import type { ReactNode } from 'react'
 
@@ -165,20 +166,24 @@ export function CommandTimeline({
                 height: selected ? 18 : 12,
                 borderRadius: 99,
                 bgcolor: color,
-                boxShadow: selected ? `0 0 0 5px ${color}22` : 'none'
+                boxShadow: selected ? `0 0 0 5px ${alpha(color, 0.18)}` : 'none'
               }}
             />
           </Box>
 
           <Paper
             variant="outlined"
-            sx={{
+            sx={(theme) => ({
               p: 1.25,
               borderRadius: 1,
               borderColor: selected ? color : 'divider',
-              bgcolor: selected ? `${color}12` : status === 'future' ? '#f8fafc' : 'background.paper',
+              bgcolor: selected
+                ? alpha(color, theme.palette.mode === 'dark' ? 0.22 : 0.08)
+                : status === 'future'
+                  ? alpha(theme.palette.text.primary, theme.palette.mode === 'dark' ? 0.06 : 0.03)
+                  : 'background.paper',
               opacity: status === 'future' ? 0.74 : 1
-            }}
+            })}
           >
             {renderEntry ? renderEntry(entry, status) : (
               <Stack spacing={0.5}>
@@ -281,7 +286,7 @@ export function CommandTimeline({
           }}
         >
           {orientation === 'vertical' ? (
-            <Box sx={{ position: 'absolute', left: 13, top: 8, bottom: 8, width: 2, bgcolor: '#e5e7eb' }} />
+            <Box sx={{ position: 'absolute', left: 13, top: 8, bottom: 8, width: 2, bgcolor: 'divider' }} />
           ) : null}
 
           {Object.entries(groups).map(([group, groupEntries]) => (

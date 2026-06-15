@@ -208,7 +208,7 @@ export function FieldComposer({
       </Box>
 
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '1fr 340px' }, minHeight: 480 }}>
-        <Box sx={{ p: 1.5, bgcolor: '#f8fafc' }}>
+        <Box sx={{ p: 1.5, bgcolor: 'background.default' }}>
           <Stack spacing={1.25}>
             <Stack direction="row" spacing={1} flexWrap="wrap">
               {(['text', 'number', 'email', 'select', 'checkbox', 'date'] as FieldComposerType[]).map((type) => (

@@ -278,7 +278,7 @@ export function SmartBreadcrumbs({
             {previewItem.preview && (
               <>
                 <Divider />
-                <Box sx={{ p: 1.5, bgcolor: '#f8fafc' }}>{previewItem.preview}</Box>
+                <Box sx={{ p: 1.5, bgcolor: 'background.default' }}>{previewItem.preview}</Box>
               </>
             )}
             {previewItem.actions?.length ? (

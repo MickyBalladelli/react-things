@@ -320,7 +320,7 @@ export function FlowBuilder({
           position: 'relative',
           minHeight: 460,
           overflow: 'hidden',
-          bgcolor: '#f8fafc',
+          bgcolor: 'background.default',
           backgroundImage: showGrid
             ? `linear-gradient(rgba(148,163,184,0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.22) 1px, transparent 1px)`
             : undefined,
@@ -392,27 +392,45 @@ export function FlowBuilder({
       {canvasNodes.map((node) => {
         const selected = activeNodeId === node.id
         const nodeIssues = nodeIssueMap[node.id] ?? []
-        const tone = node.tone ?? '#ffffff'
+        const tone = node.tone ?? '#2563eb'
 
         return (
           <Paper
             key={node.id}
             variant="outlined"
             onPointerDown={(event) => moveNode(event, node)}
-            sx={{
+            sx={(theme) => ({
               position: 'absolute',
+              overflow: 'hidden',
               left: node.x,
               top: node.y,
               width: nodeWidth,
               minHeight: nodeMinHeight,
               p: 1.25,
+              pl: 1.5,
               borderRadius: 1,
-              borderColor: nodeIssues.some((issue) => issue.tone === 'error') ? 'error.main' : selected ? 'primary.main' : 'divider',
-              boxShadow: selected ? `0 0 0 3px ${alpha('#2563eb', 0.16)}` : '0 10px 28px rgba(15,23,42,0.08)',
-              bgcolor: tone,
+              borderColor: nodeIssues.some((issue) => issue.tone === 'error')
+                ? 'error.main'
+                : selected
+                  ? 'primary.main'
+                  : alpha(tone, theme.palette.mode === 'dark' ? 0.34 : 0.22),
+              boxShadow: selected
+                ? `0 0 0 3px ${alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.28 : 0.16)}`
+                : `0 10px 28px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.32 : 0.08)}`,
+              bgcolor: 'background.paper',
+              color: 'text.primary',
               cursor: 'grab',
-              zIndex: selected ? 4 : 2
-            }}
+              zIndex: selected ? 4 : 2,
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                width: 4,
+                bgcolor: tone
+              }
+            })}
           >
             {renderNode ? (
               renderNode(node, selected, nodeIssues)

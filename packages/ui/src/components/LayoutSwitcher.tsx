@@ -259,7 +259,7 @@ export function LayoutSwitcher({
       return (
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: `repeat(${Math.min(groups.length, 4)}, minmax(180px, 1fr))` }, gap: 1.5 }}>
           {groups.map(({ group, items: groupItems }) => (
-            <Paper key={group} variant="outlined" sx={{ p: 1.25, borderRadius: 1, bgcolor: '#f8fafc' }}>
+            <Paper key={group} variant="outlined" sx={{ p: 1.25, borderRadius: 1, bgcolor: 'background.default' }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
                 <Typography fontWeight={950}>{group}</Typography>
                 <Chip size="small" label={groupItems.length} />

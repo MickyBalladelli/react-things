@@ -11,6 +11,7 @@ import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import type { BoxProps } from '@mui/material/Box'
 import type { ReactNode } from 'react'
 
@@ -185,7 +186,7 @@ export function NodeCanvas({
       label: `Box ${nextIndex}`,
       x: 48 + nextIndex * 18,
       y: 48 + nextIndex * 18,
-      color: '#ffffff'
+      color: '#2563eb'
     }
 
     commitNodes([...canvasNodes, node])
@@ -266,16 +267,16 @@ export function NodeCanvas({
     <Box
       {...props}
       sx={[
-        {
+        (theme) => ({
           position: 'relative',
           minHeight: 360,
           overflow: 'hidden',
-          bgcolor: '#f8fafc',
+          bgcolor: 'background.default',
           backgroundImage: showGrid
-            ? `linear-gradient(rgba(148,163,184,0.24) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.24) 1px, transparent 1px)`
+            ? `linear-gradient(${alpha(theme.palette.text.primary, theme.palette.mode === 'dark' ? 0.14 : 0.16)} 1px, transparent 1px), linear-gradient(90deg, ${alpha(theme.palette.text.primary, theme.palette.mode === 'dark' ? 0.14 : 0.16)} 1px, transparent 1px)`
             : undefined,
           backgroundSize: showGrid ? `${gridSize}px ${gridSize}px` : undefined
-        },
+        }),
         ...(Array.isArray(sx) ? sx : sx ? [sx] : [])
       ]}
     >
@@ -314,7 +315,7 @@ export function NodeCanvas({
             key={node.id}
             role="button"
             tabIndex={0}
-            sx={{
+            sx={(theme) => ({
               position: 'absolute',
               left: position.x,
               top: position.y,
@@ -323,14 +324,27 @@ export function NodeCanvas({
               display: 'grid',
               placeItems: 'center',
               border: selected ? 2 : 1,
-              borderColor: selected ? 'primary.main' : 'divider',
+              borderColor: selected ? 'primary.main' : node.color ? alpha(node.color, theme.palette.mode === 'dark' ? 0.34 : 0.22) : 'divider',
               borderRadius: 1,
-              bgcolor: node.color ?? 'background.paper',
+              bgcolor: 'background.paper',
+              color: 'text.primary',
               cursor: mode === 'edit' ? 'grab' : 'pointer',
               userSelect: 'none',
-              boxShadow: selected ? '0 18px 34px rgba(37,99,235,0.22)' : '0 12px 28px rgba(15,23,42,0.12)',
-              touchAction: 'none'
-            }}
+              overflow: 'hidden',
+              boxShadow: selected
+                ? `0 18px 34px ${alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.32 : 0.22)}`
+                : `0 12px 28px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.32 : 0.12)}`,
+              touchAction: 'none',
+              '&::before': node.color ? {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                width: 4,
+                bgcolor: node.color
+              } : undefined
+            })}
             onPointerDown={(event) => {
               setInternalSelectedNodeId(node.id)
               setSelectedLinkIndex(null)

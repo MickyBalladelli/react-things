@@ -186,15 +186,15 @@ function DropSlot({
     <Box
       onDragOver={onDragOver}
       onDrop={onDrop}
-      sx={{
+      sx={(theme) => ({
         height: compact ? 44 : 56,
         border: 1,
         borderStyle: 'dashed',
         borderColor: 'primary.main',
         borderRadius: 1,
-        bgcolor: alpha('#2563eb', 0.08),
+        bgcolor: alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.18 : 0.08),
         transition: 'height 120ms ease, background-color 120ms ease'
-      }}
+      })}
     />
   )
 }
@@ -483,13 +483,26 @@ export function KanbanBoard({
             }}
             onDrop={(event) => handleColumnDrop(event, column.id)}
             onDragEnd={clearDragState}
-            sx={{
+            sx={(theme) => ({
+              position: 'relative',
+              overflow: 'hidden',
               p: compact ? 1.25 : 1.5,
+              pt: compact ? 1.5 : 1.75,
               borderRadius: 1,
               minHeight: 260,
-              bgcolor: alpha(column.color ?? '#64748b', 0.06),
-              borderColor: alpha(column.color ?? '#64748b', 0.28)
-            }}
+              bgcolor: 'background.paper',
+              borderColor: alpha(column.color ?? theme.palette.text.secondary, theme.palette.mode === 'dark' ? 0.32 : 0.22),
+              boxShadow: `0 12px 28px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.24 : 0.06)}`,
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 4,
+                bgcolor: column.color ?? 'text.secondary'
+              }
+            })}
           >
             <Stack spacing={compact ? 1 : 1.25}>
               <Stack direction="row" spacing={1} alignItems="center">
@@ -576,16 +589,41 @@ export function KanbanBoard({
                         onDrop={(event) => handleCardDrop(event, column.id, cardIndex)}
                         onDragEnd={clearDragState}
                         onClick={() => onCardSelect?.(card, column)}
-                        sx={{
-                          p: compact ? 1.25 : 1.5,
-                          borderRadius: 1,
-                          cursor: draggingCard ? 'grabbing' : 'grab',
-                          bgcolor: card.color ?? 'background.paper',
-                          borderColor: draggingCard ? 'primary.main' : 'divider',
-                          opacity: draggingCard ? 0.42 : 1,
-                          transform: draggingCard ? 'scale(0.98)' : 'scale(1)',
-                          transition: 'transform 120ms ease, opacity 120ms ease, border-color 120ms ease',
-                          boxShadow: draggingCard ? '0 18px 40px rgba(37,99,235,0.22)' : undefined
+                        sx={(theme) => {
+                          const cardAccent = card.color && card.color.toLowerCase() !== '#ffffff'
+                            ? card.color
+                            : column.color ?? theme.palette.primary.main
+
+                          return {
+                            position: 'relative',
+                            overflow: 'hidden',
+                            p: compact ? 1.25 : 1.5,
+                            pl: compact ? 1.5 : 1.75,
+                            borderRadius: 1,
+                            cursor: draggingCard ? 'grabbing' : 'grab',
+                            bgcolor: 'background.paper',
+                            borderColor: draggingCard ? 'primary.main' : alpha(cardAccent, theme.palette.mode === 'dark' ? 0.28 : 0.18),
+                            color: 'text.primary',
+                            opacity: draggingCard ? 0.5 : 1,
+                            transform: draggingCard ? 'scale(0.98)' : 'scale(1)',
+                            transition: 'transform 120ms ease, opacity 120ms ease, border-color 120ms ease, box-shadow 120ms ease',
+                            boxShadow: draggingCard
+                              ? `0 18px 40px ${alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.32 : 0.22)}`
+                              : `0 8px 20px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.26 : 0.08)}`,
+                            '&::before': {
+                              content: '""',
+                              position: 'absolute',
+                              top: 0,
+                              bottom: 0,
+                              left: 0,
+                              width: 4,
+                              bgcolor: cardAccent
+                            },
+                            '&:hover': {
+                              borderColor: alpha(cardAccent, theme.palette.mode === 'dark' ? 0.52 : 0.38),
+                              boxShadow: `0 12px 28px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.34 : 0.12)}`
+                            }
+                          }
                         }}
                       >
                         <Stack spacing={1}>

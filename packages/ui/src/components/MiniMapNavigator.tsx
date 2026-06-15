@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper'
 import Stack from '@mui/material/Stack'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import type { RefObject } from 'react'
 import type { PaperProps } from '@mui/material/Paper'
 
@@ -231,18 +232,18 @@ export function MiniMapNavigator({
               handleMapPointer(event.clientY)
             }
           }}
-          sx={{
+          sx={(theme) => ({
             position: 'relative',
             height,
             border: 1,
             borderColor: 'divider',
             borderRadius: 1,
-            bgcolor: '#f8fafc',
+            bgcolor: theme.palette.mode === 'dark' ? alpha(theme.palette.common.white, 0.03) : '#f8fafc',
             overflow: 'hidden',
             cursor: 'pointer',
-            backgroundImage: 'linear-gradient(rgba(148,163,184,0.16) 1px, transparent 1px)',
+            backgroundImage: `linear-gradient(${alpha(theme.palette.text.primary, theme.palette.mode === 'dark' ? 0.14 : 0.12)} 1px, transparent 1px)`,
             backgroundSize: '100% 24px'
-          }}
+          })}
         >
           {measuredItems.map((item) => {
             const top = `${(item.top / measure.contentHeight) * 100}%`
@@ -280,7 +281,7 @@ export function MiniMapNavigator({
           })}
 
           <Box
-            sx={{
+            sx={(theme) => ({
               position: 'absolute',
               left: 4,
               right: 4,
@@ -289,9 +290,9 @@ export function MiniMapNavigator({
               border: 2,
               borderColor: 'primary.main',
               borderRadius: 0.75,
-              bgcolor: 'rgba(37, 99, 235, 0.08)',
+              bgcolor: alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.18 : 0.08),
               pointerEvents: 'none'
-            }}
+            })}
           />
         </Box>
 
@@ -303,7 +304,7 @@ export function MiniMapNavigator({
                 component="button"
                 type="button"
                 onClick={() => navigateToItem(item)}
-                sx={{
+                sx={(theme) => ({
                   border: 0,
                   p: 0.75,
                   borderRadius: 1,
@@ -311,13 +312,13 @@ export function MiniMapNavigator({
                   alignItems: 'center',
                   gap: 0.75,
                   textAlign: 'left',
-                  bgcolor: item.id === resolvedActiveId ? 'rgba(37, 99, 235, 0.08)' : 'transparent',
+                  bgcolor: item.id === resolvedActiveId ? alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.18 : 0.08) : 'transparent',
                   color: item.id === resolvedActiveId ? 'primary.main' : 'text.primary',
                   cursor: 'pointer',
                   '&:hover': {
-                    bgcolor: 'rgba(15, 23, 42, 0.04)'
+                    bgcolor: alpha(theme.palette.text.primary, theme.palette.mode === 'dark' ? 0.08 : 0.04)
                   }
-                }}
+                })}
               >
                 <Box sx={{ width: 8, height: 8, borderRadius: 99, bgcolor: item.color ?? '#94a3b8', flex: '0 0 auto' }} />
                 <Typography variant="caption" fontWeight={item.id === resolvedActiveId ? 950 : 800} noWrap>

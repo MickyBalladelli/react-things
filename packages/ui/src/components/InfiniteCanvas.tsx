@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import type { BoxProps } from '@mui/material/Box'
 import type { ReactNode } from 'react'
 
@@ -153,14 +154,14 @@ export function InfiniteCanvas({
         window.addEventListener('pointerup', up)
       }}
       sx={[
-        {
+        (theme) => ({
           position: 'relative',
           minHeight: 420,
           overflow: 'hidden',
-          bgcolor: '#f8fafc',
+          bgcolor: 'background.default',
           cursor: 'grab',
           touchAction: 'none'
-        },
+        }),
         ...(Array.isArray(sx) ? sx : sx ? [sx] : [])
       ]}
     >
@@ -222,7 +223,7 @@ export function InfiniteCanvas({
                 window.addEventListener('pointermove', move)
                 window.addEventListener('pointerup', up)
               }}
-              sx={{
+              sx={(theme) => ({
                 position: 'absolute',
                 left: position.x,
                 top: position.y,
@@ -234,10 +235,12 @@ export function InfiniteCanvas({
                 borderColor: selected ? 'primary.main' : 'divider',
                 borderRadius: 1,
                 bgcolor: item.color ?? 'background.paper',
-                boxShadow: selected ? '0 18px 40px rgba(37,99,235,0.24)' : '0 12px 28px rgba(15,23,42,0.13)',
+                boxShadow: selected
+                  ? `0 18px 40px ${alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.32 : 0.24)}`
+                  : `0 12px 28px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.32 : 0.13)}`,
                 cursor: 'grab',
                 userSelect: 'none'
-              }}
+              })}
             >
               {renderItem ? renderItem(item, selected) : <Typography fontWeight={900}>{item.label ?? item.id}</Typography>}
             </Box>
@@ -246,7 +249,7 @@ export function InfiniteCanvas({
       </Box>
 
       <Box
-        sx={{
+        sx={(theme) => ({
           position: 'absolute',
           left: 12,
           bottom: 12,
@@ -256,19 +259,19 @@ export function InfiniteCanvas({
           px: 1,
           py: 0.5,
           borderRadius: 1,
-          bgcolor: 'rgba(255,255,255,0.92)',
+          bgcolor: alpha(theme.palette.background.paper, theme.palette.mode === 'dark' ? 0.88 : 0.92),
           border: 1,
           borderColor: 'divider',
           fontSize: 12,
           fontWeight: 800
-        }}
+        })}
       >
         {Math.round(view.zoom * 100)}%
       </Box>
 
       {showMinimap ? (
         <Box
-          sx={{
+          sx={(theme) => ({
             position: 'absolute',
             right: 12,
             bottom: 12,
@@ -277,9 +280,9 @@ export function InfiniteCanvas({
             border: 1,
             borderColor: 'divider',
             borderRadius: 1,
-            bgcolor: 'rgba(255,255,255,0.9)',
+            bgcolor: alpha(theme.palette.background.paper, theme.palette.mode === 'dark' ? 0.88 : 0.9),
             overflow: 'hidden'
-          }}
+          })}
         >
           {items.map((item) => {
             const position = itemPositions[item.id] ?? { x: item.x, y: item.y }

@@ -6,6 +6,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined'
 import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined'
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined'
 import SwapHorizOutlinedIcon from '@mui/icons-material/SwapHorizOutlined'
+import { alpha } from '@mui/material/styles'
 import type { ReactNode } from 'react'
 import type { BoxProps } from '@mui/material'
 
@@ -433,11 +434,11 @@ export function DiffViewer({
       sx={{
         borderRadius: 1,
         overflow: 'hidden',
-        bgcolor: '#f8fafc',
+        bgcolor: 'background.default',
         ...sx
       }}
     >
-      <Box sx={{ p: 2, bgcolor: '#ffffff', borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ p: 2, bgcolor: 'background.paper', borderBottom: 1, borderColor: 'divider' }}>
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5} alignItems={{ xs: 'flex-start', md: 'center' }} justifyContent="space-between">
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
@@ -489,7 +490,7 @@ export function DiffViewer({
 
       <Stack spacing={1.5} sx={{ p: 1.5 }}>
         {!hunks.length ? (
-          <Box sx={{ p: 4, textAlign: 'center', bgcolor: '#ffffff', borderRadius: 1 }}>
+          <Box sx={{ p: 4, textAlign: 'center', bgcolor: 'background.paper', borderRadius: 1 }}>
             <Typography fontWeight={900}>No changes</Typography>
             <Typography variant="body2" color="text.secondary">Both sides match.</Typography>
           </Box>
@@ -498,8 +499,8 @@ export function DiffViewer({
           const decision = visibleDecisions[hunk.id]
 
           return (
-            <Paper key={hunk.id} variant="outlined" sx={{ borderRadius: 1, overflow: 'hidden', borderColor: decision === 'accepted' ? '#86efac' : decision === 'rejected' ? '#fecaca' : 'divider' }}>
-              <Box sx={{ px: 1.5, py: 1, bgcolor: '#ffffff', borderBottom: 1, borderColor: 'divider' }}>
+            <Paper key={hunk.id} variant="outlined" sx={{ borderRadius: 1, overflow: 'hidden', borderColor: decision === 'accepted' ? 'success.main' : decision === 'rejected' ? 'error.main' : 'divider' }}>
+              <Box sx={{ px: 1.5, py: 1, bgcolor: 'background.paper', borderBottom: 1, borderColor: 'divider' }}>
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ xs: 'stretch', sm: 'center' }} justifyContent="space-between">
                   <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
                     <Chip size="small" label={`-${hunk.beforeStart} +${hunk.afterStart}`} />
@@ -540,7 +541,7 @@ export function DiffViewer({
                         display: 'grid',
                         gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' },
                         borderBottom: 1,
-                        borderColor: '#e5e7eb',
+                        borderColor: 'divider',
                         '&:last-child': {
                           borderBottom: 0
                         }
@@ -564,10 +565,10 @@ export function DiffViewer({
               </Box>
 
               {(activeCommentHunkId === hunk.id || hunkComments.length > 0) && (
-                <Box sx={{ p: 1.5, bgcolor: '#ffffff', borderTop: 1, borderColor: 'divider' }}>
+                <Box sx={{ p: 1.5, bgcolor: 'background.paper', borderTop: 1, borderColor: 'divider' }}>
                   <Stack spacing={1.25}>
                     {hunkComments.map((comment) => (
-                      <Box key={comment.id} sx={{ p: 1.25, borderRadius: 1, bgcolor: '#f8fafc', border: 1, borderColor: '#e5e7eb' }}>
+                      <Box key={comment.id} sx={{ p: 1.25, borderRadius: 1, bgcolor: 'background.default', border: 1, borderColor: 'divider' }}>
                         {renderComment ? renderComment(comment) : (
                           <>
                             <Typography variant="caption" fontWeight={900} color="text.secondary">
@@ -618,29 +619,27 @@ function DiffCell({
   marker: string
   value?: ReactNode
 }) {
-  const colors = {
-    equal: '#ffffff',
-    add: '#ecfdf5',
-    remove: '#fff1f2',
-    change: '#fffbeb',
-    empty: '#f8fafc'
-  }
-
   return (
     <Box
-      sx={{
+      sx={(theme) => ({
         display: 'grid',
         gridTemplateColumns: '52px 24px minmax(0, 1fr)',
         minHeight: 34,
-        bgcolor: colors[kind],
+        bgcolor: {
+          equal: theme.palette.background.paper,
+          add: alpha(theme.palette.success.main, theme.palette.mode === 'dark' ? 0.18 : 0.1),
+          remove: alpha(theme.palette.error.main, theme.palette.mode === 'dark' ? 0.18 : 0.1),
+          change: alpha(theme.palette.warning.main, theme.palette.mode === 'dark' ? 0.18 : 0.12),
+          empty: theme.palette.background.default
+        }[kind],
         borderRight: { lg: 1 },
-        borderColor: '#e5e7eb'
-      }}
+        borderColor: 'divider'
+      })}
     >
-      <Box sx={{ px: 1, py: 0.75, color: '#94a3b8', bgcolor: 'rgba(15, 23, 42, 0.04)', fontFamily: codeFont, fontSize: 12, textAlign: 'right', userSelect: 'none' }}>
+      <Box sx={(theme) => ({ px: 1, py: 0.75, color: 'text.secondary', bgcolor: alpha(theme.palette.text.primary, theme.palette.mode === 'dark' ? 0.08 : 0.04), fontFamily: codeFont, fontSize: 12, textAlign: 'right', userSelect: 'none' })}>
         {lineNumber ?? ''}
       </Box>
-      <Box sx={{ py: 0.75, color: kind === 'add' ? '#059669' : kind === 'remove' ? '#dc2626' : '#64748b', fontFamily: codeFont, fontSize: 13, textAlign: 'center', userSelect: 'none' }}>
+      <Box sx={{ py: 0.75, color: kind === 'add' ? 'success.main' : kind === 'remove' ? 'error.main' : 'text.secondary', fontFamily: codeFont, fontSize: 13, textAlign: 'center', userSelect: 'none' }}>
         {marker}
       </Box>
       <Box
@@ -651,7 +650,7 @@ function DiffCell({
           py: 0.75,
           minWidth: 0,
           overflowX: 'auto',
-          color: '#0f172a',
+          color: 'text.primary',
           fontFamily: codeFont,
           fontSize: 13,
           lineHeight: 1.55,

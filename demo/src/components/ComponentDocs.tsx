@@ -16,6 +16,7 @@ import {
   Tabs,
   Typography
 } from '@mui/material'
+import { alpha } from '@mui/material/styles'
 import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined'
 import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined'
 import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined'
@@ -1012,7 +1013,7 @@ const users = [
 
 export function Example() {
   return (
-    <PresenceCursors users={users} sx={{ minHeight: 280, bgcolor: '#f8fafc' }}>
+    <PresenceCursors users={users} sx={{ minHeight: 280, bgcolor: 'background.default' }}>
       <Box sx={{ p: 3 }}>Shared canvas content</Box>
     </PresenceCursors>
   )
@@ -1031,7 +1032,7 @@ const users: PresenceCursorUser[] = [
 
 export function Example() {
   return (
-    <PresenceCursors users={users} sx={{ minHeight: 280, bgcolor: '#f8fafc' }}>
+    <PresenceCursors users={users} sx={{ minHeight: 280, bgcolor: 'background.default' }}>
       <Box sx={{ p: 3 }}>Shared canvas content</Box>
     </PresenceCursors>
   )
@@ -4942,11 +4943,11 @@ const compareStackLayers = [
     color: '#059669',
     opacity: 72,
     content: (
-      <Box sx={{ height: '100%', p: 4, color: '#052e16', bgcolor: '#bbf7d0', backgroundImage: 'linear-gradient(135deg, #bbf7d0, #fef3c7)' }}>
+      <Box sx={{ height: '100%', p: 4, color: '#ffffff', bgcolor: '#059669', backgroundImage: 'linear-gradient(135deg, #059669, #052e16)' }}>
         <Typography variant="h3" fontWeight={950}>Launch plan</Typography>
         <Typography sx={{ maxWidth: 420, mt: 1 }}>Updated structure with denser cards and clearer status.</Typography>
         <Box sx={{ mt: 3, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 1.5 }}>
-          {[1, 2, 3, 4].map((item) => <Box key={item} sx={{ height: 70, borderRadius: 1, bgcolor: 'rgba(255,255,255,0.72)', border: 1, borderColor: 'rgba(5,46,22,0.12)' }} />)}
+          {[1, 2, 3, 4].map((item) => <Box key={item} sx={{ height: 70, borderRadius: 1, bgcolor: 'rgba(255,255,255,0.2)', border: 1, borderColor: 'rgba(255,255,255,0.24)' }} />)}
         </Box>
       </Box>
     )
@@ -5238,8 +5239,8 @@ const dashboardWidgets: ResizableDashboardWidget[] = [
     children: (
       <Stack spacing={1}>
         {[68, 44, 82, 56, 74].map((value, index) => (
-          <Box key={index} sx={{ height: 10, borderRadius: 1, bgcolor: '#dbeafe', overflow: 'hidden' }}>
-            <Box sx={{ width: `${value}%`, height: '100%', bgcolor: '#2563eb' }} />
+          <Box key={index} sx={{ height: 10, borderRadius: 1, bgcolor: 'divider', overflow: 'hidden' }}>
+            <Box sx={{ width: `${value}%`, height: '100%', bgcolor: 'primary.main' }} />
           </Box>
         ))}
       </Stack>
@@ -5296,7 +5297,7 @@ const defaultKanbanColumns: KanbanColumn[] = [
     title: 'Ideas',
     color: '#2563eb',
     cards: [
-      { id: 'k-1', title: 'Customer interviews', description: 'Talk to five active users.', tags: ['Research'], color: '#dbeafe' },
+      { id: 'k-1', title: 'Customer interviews', description: 'Talk to five active users.', tags: ['Research'] },
       { id: 'k-2', title: 'Metric cards', description: 'Show data at a glance.', tags: ['Data'] }
     ]
   },
@@ -5305,7 +5306,7 @@ const defaultKanbanColumns: KanbanColumn[] = [
     title: 'Build',
     color: '#d97706',
     cards: [
-      { id: 'k-3', title: 'Kanban interactions', description: 'Create, drag, edit, and delete.', tags: ['UI'], color: '#fef3c7' }
+      { id: 'k-3', title: 'Kanban interactions', description: 'Create, drag, edit, and delete.', tags: ['UI'] }
     ]
   },
   {
@@ -5313,7 +5314,7 @@ const defaultKanbanColumns: KanbanColumn[] = [
     title: 'Ship',
     color: '#059669',
     cards: [
-      { id: 'k-4', title: 'Docs and examples', description: 'Make the component easy to try.', tags: ['Docs'], color: '#dcfce7' }
+      { id: 'k-4', title: 'Docs and examples', description: 'Make the component easy to try.', tags: ['Docs'] }
     ]
   }
 ]
@@ -5324,7 +5325,7 @@ const defaultFlowBuilderNodes: FlowBuilderNode[] = [
     label: 'New signup',
     x: 48,
     y: 128,
-    tone: '#eff6ff',
+    tone: '#2563eb',
     outputs: [{ id: 'event', label: 'Event', type: 'event' }]
   },
   {
@@ -5332,7 +5333,7 @@ const defaultFlowBuilderNodes: FlowBuilderNode[] = [
     label: 'Enrich user',
     x: 330,
     y: 78,
-    tone: '#f0fdf4',
+    tone: '#059669',
     inputs: [{ id: 'event', label: 'Event', type: 'event' }],
     outputs: [{ id: 'profile', label: 'Profile', type: 'data' }, { id: 'failed', label: 'Failed', type: 'error' }]
   },
@@ -5341,7 +5342,7 @@ const defaultFlowBuilderNodes: FlowBuilderNode[] = [
     label: 'Send email',
     x: 620,
     y: 110,
-    tone: '#fdf2f8',
+    tone: '#db2777',
     inputs: [{ id: 'profile', label: 'Profile', type: 'data' }],
     outputs: [{ id: 'sent', label: 'Sent', type: 'success' }]
   },
@@ -5350,7 +5351,7 @@ const defaultFlowBuilderNodes: FlowBuilderNode[] = [
     label: 'Alert team',
     x: 620,
     y: 260,
-    tone: '#fef3c7',
+    tone: '#d97706',
     inputs: [{ id: 'error', label: 'Error', type: 'error' }]
   }
 ]
@@ -5362,14 +5363,14 @@ const defaultFlowBuilderConnections: FlowBuilderConnection[] = [
 ]
 
 const selectionBoxItems = [
-  { id: 'roadmap', label: 'Roadmap', type: 'Doc', color: '#dbeafe' },
-  { id: 'assets', label: 'Assets', type: 'Folder', color: '#dcfce7' },
-  { id: 'launch', label: 'Launch', type: 'Board', color: '#fef3c7' },
-  { id: 'billing', label: 'Billing', type: 'Sheet', color: '#fee2e2' },
-  { id: 'research', label: 'Research', type: 'Doc', color: '#e0e7ff' },
-  { id: 'support', label: 'Support', type: 'Inbox', color: '#fce7f3' },
-  { id: 'qa', label: 'QA notes', type: 'Doc', color: '#ccfbf1' },
-  { id: 'metrics', label: 'Metrics', type: 'Chart', color: '#ffedd5' }
+  { id: 'roadmap', label: 'Roadmap', type: 'Doc', color: '#2563eb' },
+  { id: 'assets', label: 'Assets', type: 'Folder', color: '#059669' },
+  { id: 'launch', label: 'Launch', type: 'Board', color: '#d97706' },
+  { id: 'billing', label: 'Billing', type: 'Sheet', color: '#dc2626' },
+  { id: 'research', label: 'Research', type: 'Doc', color: '#7c3aed' },
+  { id: 'support', label: 'Support', type: 'Inbox', color: '#db2777' },
+  { id: 'qa', label: 'QA notes', type: 'Doc', color: '#0d9488' },
+  { id: 'metrics', label: 'Metrics', type: 'Chart', color: '#ea580c' }
 ]
 
 const bulkActionBarActions: BulkActionBarAction[] = [
@@ -5874,7 +5875,7 @@ export function ComponentDocs() {
   function renderPreview() {
     if (selectedComponent.name === 'MagneticCard') {
       return (
-        <Box sx={{ minHeight: 340, display: 'grid', placeItems: 'center', bgcolor: '#eef2ff' }}>
+        <Box sx={{ minHeight: 340, display: 'grid', placeItems: 'center', bgcolor: 'background.default' }}>
           <MagneticCard
             strength={24}
             tilt={16}
@@ -5899,7 +5900,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'MorphMenu') {
       return (
-        <Box sx={{ minHeight: 380, display: 'grid', placeItems: 'center', bgcolor: '#f8fafc', overflow: 'hidden' }}>
+        <Box sx={{ minHeight: 380, display: 'grid', placeItems: 'center', bgcolor: 'background.default', overflow: 'hidden' }}>
           <MorphMenu items={morphMenuItems} radius={126} startAngle={-170} endAngle={-10}>
             <Button variant="contained" size="large">Open radial menu</Button>
           </MorphMenu>
@@ -5913,10 +5914,10 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'NodeCanvas') {
       const nodes = [
-        { id: 'a', label: 'Start', x: 60, y: 80, color: '#dbeafe' },
-        { id: 'b', label: 'Build', x: 280, y: 180, color: '#dcfce7' },
-        { id: 'c', label: 'Review', x: 500, y: 85, color: '#fef3c7' },
-        { id: 'd', label: 'Ship', x: 500, y: 265, color: '#fee2e2' }
+        { id: 'a', label: 'Start', x: 60, y: 80, color: '#2563eb' },
+        { id: 'b', label: 'Build', x: 280, y: 180, color: '#059669' },
+        { id: 'c', label: 'Review', x: 500, y: 85, color: '#d97706' },
+        { id: 'd', label: 'Ship', x: 500, y: 265, color: '#dc2626' }
       ]
 
       return (
@@ -5942,7 +5943,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'FlowBuilder') {
       return (
-        <Box sx={{ minHeight: 540, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 540, p: 3, bgcolor: 'background.default' }}>
           <FlowBuilder
             nodes={flowBuilderNodes}
             connections={flowBuilderConnections}
@@ -5956,7 +5957,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'RuleBuilder') {
       return (
-        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: 'background.default' }}>
           <RuleBuilder fields={ruleBuilderFields} sx={{ maxWidth: 900, mx: 'auto' }} />
         </Box>
       )
@@ -5964,7 +5965,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'FieldComposer') {
       return (
-        <Box sx={{ minHeight: 620, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 620, p: 3, bgcolor: 'background.default' }}>
           <FieldComposer defaultFields={fieldComposerFields} sx={{ maxWidth: 1040, mx: 'auto' }} />
         </Box>
       )
@@ -5976,7 +5977,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'CompareStack') {
       return (
-        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: 'background.default' }}>
           <CompareStack
             title="Campaign comparison"
             subtitle="Blend before, after, and annotation layers."
@@ -6008,7 +6009,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'SelectionBox') {
       return (
-        <Box sx={{ minHeight: 430, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 430, p: 3, bgcolor: 'background.default' }}>
           <Stack spacing={1.5}>
             <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
               <Typography color="text.secondary">
@@ -6037,14 +6038,28 @@ export function ComponentDocs() {
                   key={item.id}
                   data-selection-id={item.id}
                   variant="outlined"
-                  sx={{
+                  sx={(theme) => ({
+                    position: 'relative',
+                    overflow: 'hidden',
                     p: 2,
+                    pl: 2.5,
                     borderRadius: 1,
-                    bgcolor: item.color,
+                    bgcolor: 'background.paper',
+                    borderColor: alpha(item.color, theme.palette.mode === 'dark' ? 0.34 : 0.22),
                     minHeight: 96,
                     display: 'grid',
-                    alignContent: 'space-between'
-                  }}
+                    alignContent: 'space-between',
+                    color: 'text.primary',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      width: 4,
+                      bgcolor: item.color
+                    }
+                  })}
                 >
                   <Typography fontWeight={950}>{item.label}</Typography>
                   <Typography variant="caption" color="text.secondary">{item.type}</Typography>
@@ -6058,7 +6073,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'BulkActionBar') {
       return (
-        <Box sx={{ minHeight: 430, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 430, p: 3, bgcolor: 'background.default' }}>
           <Stack spacing={1.5}>
             <BulkActionBar
               selectedIds={selectionBoxSelectedIds}
@@ -6083,7 +6098,31 @@ export function ComponentDocs() {
               }}
             >
               {selectionBoxItems.map((item) => (
-                <Paper key={item.id} data-selection-id={item.id} variant="outlined" sx={{ p: 2, borderRadius: 1, bgcolor: item.color, minHeight: 90 }}>
+                <Paper
+                  key={item.id}
+                  data-selection-id={item.id}
+                  variant="outlined"
+                  sx={(theme) => ({
+                    position: 'relative',
+                    overflow: 'hidden',
+                    p: 2,
+                    pl: 2.5,
+                    borderRadius: 1,
+                    bgcolor: 'background.paper',
+                    borderColor: alpha(item.color, theme.palette.mode === 'dark' ? 0.34 : 0.22),
+                    minHeight: 90,
+                    color: 'text.primary',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      width: 4,
+                      bgcolor: item.color
+                    }
+                  })}
+                >
                   <Typography fontWeight={950}>{item.label}</Typography>
                   <Typography variant="caption" color="text.secondary">{item.type}</Typography>
                 </Paper>
@@ -6096,7 +6135,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'PresenceCursors') {
       return (
-        <Box sx={{ minHeight: 430, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 430, p: 3, bgcolor: 'background.default' }}>
           <PresenceCursors
             users={presenceCursorUsers}
             sx={{
@@ -6124,7 +6163,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'StatusRail') {
       return (
-        <Box sx={{ minHeight: 500, p: 3, bgcolor: '#f8fafc', display: 'grid', placeItems: 'start center' }}>
+        <Box sx={{ minHeight: 500, p: 3, bgcolor: 'background.default', display: 'grid', placeItems: 'start center' }}>
           <StatusRail
             title="Production health"
             subtitle="Live operational pulse"
@@ -6135,12 +6174,12 @@ export function ComponentDocs() {
     }
 
     if (selectedComponent.name === 'ResizableFrame') {
-      return <Box sx={{ minHeight: 340, p: 3, bgcolor: '#f8fafc' }}><ResizableFrame><Box sx={{ p: 2 }}><Typography fontWeight={850}>Resize me</Typography><Typography color="text.secondary">Drag bottom-right corner.</Typography></Box></ResizableFrame></Box>
+      return <Box sx={{ minHeight: 340, p: 3, bgcolor: 'background.default' }}><ResizableFrame><Box sx={{ p: 2 }}><Typography fontWeight={850}>Resize me</Typography><Typography color="text.secondary">Drag bottom-right corner.</Typography></Box></ResizableFrame></Box>
     }
 
     if (selectedComponent.name === 'ResizableDashboard') {
       return (
-        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: 'background.default' }}>
           <ResizableDashboard
             widgets={dashboardWidgets}
             persistKey="react-things-resizable-dashboard-preview"
@@ -6159,7 +6198,7 @@ export function ComponentDocs() {
       const enabled = Boolean(inspectorValue('enabled'))
 
       return (
-        <Box sx={{ p: 3, minHeight: 420, bgcolor: '#f8fafc' }}>
+        <Box sx={{ p: 3, minHeight: 420, bgcolor: 'background.default' }}>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '360px 1fr' }, gap: 3, alignItems: 'start' }}>
             <InspectorPanel
               title="Card inspector"
@@ -6202,7 +6241,7 @@ export function ComponentDocs() {
       const enabled = Boolean(getInspectorDrawerValue(inspectorDrawerSections, 'enabled', true))
 
       return (
-        <Box sx={{ p: 3, minHeight: 420, bgcolor: '#f8fafc' }}>
+        <Box sx={{ p: 3, minHeight: 420, bgcolor: 'background.default' }}>
           <Stack spacing={2} alignItems="flex-start">
             <Button variant="contained" onClick={() => setInspectorDrawerOpen(true)}>Open inspector</Button>
             <Paper
@@ -6254,7 +6293,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'ColorStudio') {
       return (
-        <Box sx={{ p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ p: 3, bgcolor: 'background.default' }}>
           <ColorStudio initialColors={colorStudioColors} sx={{ minHeight: 560 }} />
         </Box>
       )
@@ -6283,7 +6322,7 @@ export function ComponentDocs() {
       ]
 
       return (
-        <Box sx={{ p: 4, minHeight: 320, display: 'grid', alignItems: 'center', bgcolor: '#f8fafc' }}>
+        <Box sx={{ p: 4, minHeight: 320, display: 'grid', alignItems: 'center', bgcolor: 'background.default' }}>
           <Box sx={{ maxWidth: 820, width: '100%', mx: 'auto' }}>
             <Typography variant="h5" fontWeight={900} sx={{ mb: 1 }}>
               TimelineScrubber
@@ -6310,7 +6349,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'DropComposer') {
       return (
-        <Box sx={{ minHeight: 620, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 620, p: 3, bgcolor: 'background.default' }}>
           <DropComposer
             defaultItems={defaultDropComposerItems}
             accept="image/*,.pdf,.json"
@@ -6324,7 +6363,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'EntityPicker') {
       return (
-        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: 'background.default' }}>
           <EntityPicker
             title="Add to workspace"
             subtitle="Pick people, files, and projects from one surface."
@@ -6339,7 +6378,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'SmartTooltip') {
       return (
-        <Box sx={{ minHeight: 320, display: 'grid', placeItems: 'center', bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 320, display: 'grid', placeItems: 'center', bgcolor: 'background.default' }}>
           <SmartTooltip
             title="SmartTooltip"
             content="Hover to preview, click to pin, copy the value, or trigger actions."
@@ -6370,7 +6409,7 @@ export function ComponentDocs() {
       }
 
       return (
-        <Box sx={{ position: 'relative', minHeight: 520, p: 3, bgcolor: '#f8fafc', overflow: 'hidden' }}>
+        <Box sx={{ position: 'relative', minHeight: 520, p: 3, bgcolor: 'background.default', overflow: 'hidden' }}>
           <Stack spacing={2} sx={{ maxWidth: 520 }}>
             <Typography variant="h5" fontWeight={900}>ToastCenter</Typography>
             <Typography color="text.secondary">
@@ -6394,7 +6433,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'TourGuide') {
       return (
-        <Box sx={{ position: 'relative', minHeight: 520, p: 3, bgcolor: '#f8fafc', overflow: 'hidden' }}>
+        <Box sx={{ position: 'relative', minHeight: 520, p: 3, bgcolor: 'background.default', overflow: 'hidden' }}>
           <Stack spacing={2} sx={{ maxWidth: 680 }}>
             <Typography variant="h5" fontWeight={900}>TourGuide</Typography>
             <Typography color="text.secondary">
@@ -6428,7 +6467,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'DataCardGrid') {
       return (
-        <Box sx={{ minHeight: 420, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 420, p: 3, bgcolor: 'background.default' }}>
           <DataCardGrid
             title="Store pulse"
             subtitle="Revenue, demand, conversion, and system health in one glance."
@@ -6441,7 +6480,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'DataLens') {
       return (
-        <Box sx={{ minHeight: 460, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 460, p: 3, bgcolor: 'background.default' }}>
           <DataLens<DataLensService>
             title="Service lens"
             subtitle="Filter owners and status, sort load or requests, switch table/card view."
@@ -6455,7 +6494,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'LayoutSwitcher') {
       return (
-        <Box sx={{ minHeight: 520, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 520, p: 3, bgcolor: 'background.default' }}>
           <LayoutSwitcher
             title="Launch work"
             subtitle="Same items, animated through table, cards, kanban, calendar, and list."
@@ -6469,7 +6508,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'KanbanBoard') {
       return (
-        <Box sx={{ minHeight: 520, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 520, p: 3, bgcolor: 'background.default' }}>
           <KanbanBoard
             title="Launch board"
             subtitle="Create columns, add cards, edit details, drag cards, and reorder columns."
@@ -6502,7 +6541,7 @@ export function ComponentDocs() {
             position: 'relative',
             minHeight: 340,
             p: 4,
-            bgcolor: '#f8fafc'
+            bgcolor: 'background.default'
           }}
         >
           <Box
@@ -6515,7 +6554,7 @@ export function ComponentDocs() {
               border: 1,
               borderColor: 'divider',
               borderRadius: 1,
-              bgcolor: '#ffffff',
+              bgcolor: 'background.paper',
               lineHeight: 1.9,
               outline: 'none',
               '&:focus': {
@@ -6568,7 +6607,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'FocusRing') {
       return (
-        <Box sx={{ minHeight: 340, display: 'grid', placeItems: 'center', bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 340, display: 'grid', placeItems: 'center', bgcolor: 'background.default' }}>
           <Stack spacing={3} alignItems="center">
             <FocusRing tone="error" active padding={8} radius={12} pulseSize={focusRingConfig.pulseSize}>
               <Button variant="outlined" color="error">Invalid field</Button>
@@ -6584,7 +6623,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'SplitPane') {
       return (
-        <Box sx={{ minHeight: 420, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 420, bgcolor: 'background.default' }}>
           <Stack direction="row" spacing={1} sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }} alignItems="center">
             <Button size="small" variant="outlined" onClick={() => setSplitCollapsed(splitCollapsed === 'first' ? null : 'first')}>
               Toggle nav
@@ -6611,7 +6650,7 @@ export function ComponentDocs() {
             persistKey="react-things-split-pane-preview"
             sx={{ minHeight: 360 }}
             first={(
-              <Box sx={{ height: '100%', p: 3, bgcolor: '#e0f2fe' }}>
+              <Box sx={{ height: '100%', p: 3, bgcolor: 'background.default' }}>
                 <Typography variant="h6" fontWeight={800}>
                   Navigator
                 </Typography>
@@ -6625,7 +6664,7 @@ export function ComponentDocs() {
               </Box>
             )}
             second={(
-              <Box sx={{ height: '100%', p: 3, bgcolor: '#ffffff' }}>
+              <Box sx={{ height: '100%', p: 3, bgcolor: 'background.paper' }}>
                 <Typography variant="h6" fontWeight={800}>
                   Workspace
                 </Typography>
@@ -6661,7 +6700,7 @@ export function ComponentDocs() {
           sx={{
             minHeight: 360,
             p: 3,
-            bgcolor: '#f8fafc'
+            bgcolor: 'background.default'
           }}
         >
           <CommandPalette
@@ -6679,7 +6718,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'CommandTimeline') {
       return (
-        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: 'background.default' }}>
           <Box sx={{ maxWidth: 820, mx: 'auto' }}>
             <CommandTimeline
               title="Editor history"
@@ -6694,7 +6733,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'SpotlightSearch') {
       return (
-        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: 'background.default' }}>
           <SpotlightSearch
             items={spotlightSearchItems}
             placeholder="Search commands, components, docs"
@@ -6707,7 +6746,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'SmartBreadcrumbs') {
       return (
-        <Box sx={{ minHeight: 420, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 420, p: 3, bgcolor: 'background.default' }}>
           <Stack spacing={3}>
             <SmartBreadcrumbs
               items={smartBreadcrumbItems}
@@ -6732,7 +6771,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'PeekPanel') {
       return (
-        <Box sx={{ minHeight: 420, p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 420, p: 3, bgcolor: 'background.default' }}>
           <Paper variant="outlined" sx={{ p: 3, borderRadius: 1, maxWidth: 760 }}>
             <Typography variant="overline" color="text.secondary" fontWeight={900}>
               Editor preview
@@ -6743,7 +6782,7 @@ export function ComponentDocs() {
             <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 620 }}>
               Hover or click the symbol below to peek at a definition, then jump or copy path from actions.
             </Typography>
-            <Box sx={{ mt: 3, fontFamily: 'monospace', fontSize: 15, color: '#0f172a' }}>
+            <Box sx={{ mt: 3, fontFamily: 'monospace', fontSize: 15, color: 'text.primary' }}>
               const rail ={' '}
               <PeekPanel
                 title="StatusRail"
@@ -6802,7 +6841,7 @@ export function ComponentDocs() {
       const activeItem = findCommandDockItem(commandDockItems, commandDockSelectedId) ?? commandDockItems[0]
 
       return (
-        <Box sx={{ minHeight: 420, display: 'flex', bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 420, display: 'flex', bgcolor: 'background.default' }}>
           <CommandDock
             items={commandDockItems}
             selectedId={commandDockSelectedId}
@@ -6844,7 +6883,7 @@ export function ComponentDocs() {
       const activeTab = dockTabs.find((tab) => tab.id === activeDockTabId) ?? dockTabs[0]
 
       return (
-        <Box sx={{ minHeight: 380, bgcolor: '#f8fafc' }}>
+        <Box sx={{ minHeight: 380, bgcolor: 'background.default' }}>
           <Box sx={{ minHeight: 360 }}>
           <DockTabs
             tabs={dockTabs}
@@ -6922,7 +6961,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'DiffViewer') {
       return (
-        <Box sx={{ p: 2, bgcolor: '#f8fafc' }}>
+        <Box sx={{ p: 2, bgcolor: 'background.default' }}>
           <DiffViewer
             mode="object"
             title="Plan review"
@@ -6970,7 +7009,7 @@ export function ComponentDocs() {
 
     if (selectedComponent.name === 'DensityController') {
       return (
-        <Box sx={{ p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ p: 3, bgcolor: 'background.default' }}>
           <DensityController
             title="Workspace density"
             subtitle="Pick the layout feel once. The value persists in localStorage."
@@ -6979,23 +7018,36 @@ export function ComponentDocs() {
             {({ density, spacing, padding, rowHeight, radius }) => (
               <Box sx={{ display: 'grid', gap: `${spacing}px` }}>
                 {[
-                  { title: 'Inbox triage', meta: '12 items', color: '#dbeafe' },
-                  { title: 'Roadmap review', meta: '4 owners', color: '#dcfce7' },
-                  { title: 'Launch checklist', meta: density, color: '#fef3c7' }
+                  { title: 'Inbox triage', meta: '12 items', color: '#2563eb' },
+                  { title: 'Roadmap review', meta: '4 owners', color: '#059669' },
+                  { title: 'Launch checklist', meta: density, color: '#d97706' }
                 ].map((item) => (
                   <Paper
                     key={item.title}
                     variant="outlined"
-                    sx={{
+                    sx={(theme) => ({
+                      position: 'relative',
+                      overflow: 'hidden',
                       p: `${padding}px`,
+                      pl: `${padding + 6}px`,
                       minHeight: `${rowHeight}px`,
                       borderRadius: `${radius}px`,
-                      bgcolor: item.color,
+                      bgcolor: 'background.paper',
+                      borderColor: alpha(item.color, theme.palette.mode === 'dark' ? 0.32 : 0.2),
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      gap: 1.5
-                    }}
+                      gap: 1.5,
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        width: 4,
+                        bgcolor: item.color
+                      }
+                    })}
                   >
                     <Typography fontWeight={950}>{item.title}</Typography>
                     <Chip size="small" label={item.meta} />
@@ -7017,7 +7069,7 @@ export function ComponentDocs() {
       ]
 
       return (
-        <Box sx={{ p: 3, bgcolor: '#f8fafc' }}>
+        <Box sx={{ p: 3, bgcolor: 'background.default' }}>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 260px' }, gap: 2, alignItems: 'start' }}>
             <Paper
               ref={miniMapPreviewRef}
@@ -7026,7 +7078,7 @@ export function ComponentDocs() {
                 height: 520,
                 overflow: 'auto',
                 borderRadius: 1,
-                bgcolor: '#ffffff'
+                bgcolor: 'background.paper'
               }}
             >
               {sections.map((section, index) => (
@@ -7038,7 +7090,7 @@ export function ComponentDocs() {
                     p: 3,
                     borderBottom: 1,
                     borderColor: 'divider',
-                    bgcolor: index % 2 === 0 ? '#ffffff' : '#f8fafc'
+                    bgcolor: index % 2 === 0 ? 'background.paper' : 'background.default'
                   }}
                 >
                   <Typography variant="overline" color="text.secondary" fontWeight={900}>
@@ -7118,8 +7170,8 @@ export function ComponentDocs() {
         renderVariantCard('Interactive', <Box sx={{ height: 220 }}><DraggableGlassBoxPreview transparency={0.42} fill={0.7} liquidColor="#39b8ff" glassColor="#ffffff">Drag liquid glass</DraggableGlassBoxPreview></Box>)
       ],
       DraggableBox: [
-        renderVariantCard('Simple', <DraggableBox sx={{ minHeight: 150, bgcolor: '#f8fafc' }}><Paper sx={{ p: 1.5 }}>Drag</Paper></DraggableBox>),
-        renderVariantCard('Sized Child', <DraggableBox initialPosition={{ x: 30, y: 55 }} dragSx={{ width: 140 }} sx={{ minHeight: 150, bgcolor: '#eef2ff' }}><Paper sx={{ p: 2 }}>Panel</Paper></DraggableBox>),
+        renderVariantCard('Simple', <DraggableBox sx={{ minHeight: 150, bgcolor: 'background.default' }}><Paper sx={{ p: 1.5 }}>Drag</Paper></DraggableBox>),
+        renderVariantCard('Sized Child', <DraggableBox initialPosition={{ x: 30, y: 55 }} dragSx={{ width: 140 }} sx={{ minHeight: 150, bgcolor: 'background.default' }}><Paper sx={{ p: 2 }}>Panel</Paper></DraggableBox>),
         renderVariantCard('Canvas', <DraggableBox initialPosition={{ x: 70, y: 45 }} sx={{ minHeight: 150, backgroundImage: 'url(/animals-colors.svg)', backgroundSize: 'cover' }}><Paper sx={{ p: 1.5 }}>Over image</Paper></DraggableBox>)
       ],
       CodeViewer: [
@@ -7135,7 +7187,7 @@ export function ComponentDocs() {
       MiniMapNavigator: [
         renderVariantCard('Page', <MiniMapNavigator height={170} showLabels={false} items={[{ id: 'a', label: 'Intro', top: 0, height: 240, color: '#2563eb' }, { id: 'b', label: 'API', top: 280, height: 360, color: '#059669' }, { id: 'c', label: 'Examples', top: 720, height: 300, color: '#f59e0b' }]} />),
         renderVariantCard('Labels', <MiniMapNavigator height={150} items={[{ id: 'a', label: 'Overview', top: 0, height: 160 }, { id: 'b', label: 'Canvas', top: 220, height: 380 }, { id: 'c', label: 'Notes', top: 660, height: 220 }]} />),
-        renderVariantCard('Dashboard', <MiniMapNavigator height={180} showProgress={false} items={[{ id: 'kpi', label: 'KPIs', top: 0, height: 180, color: '#dbeafe' }, { id: 'table', label: 'Table', top: 220, height: 420, color: '#dcfce7' }, { id: 'logs', label: 'Logs', top: 700, height: 260, color: '#fee2e2' }]} />)
+        renderVariantCard('Dashboard', <MiniMapNavigator height={180} showProgress={false} items={[{ id: 'kpi', label: 'KPIs', top: 0, height: 180, color: '#2563eb' }, { id: 'table', label: 'Table', top: 220, height: 420, color: '#059669' }, { id: 'logs', label: 'Logs', top: 700, height: 260, color: '#dc2626' }]} />)
       ],
       DockBar: [
         renderVariantCard('Small', <DockBar items={[{ id: 'a', label: 'A', icon: 'A' }, { id: 'b', label: 'B', icon: 'B' }]} iconSize={40} />),
@@ -7180,14 +7232,14 @@ export function ComponentDocs() {
       ],
       SplitPane: [
         renderVariantCard('Simple', <SplitPane sx={{ minHeight: 150 }} first={<Box sx={{ p: 2 }}>Left</Box>} second={<Box sx={{ p: 2 }}>Right</Box>} />),
-        renderVariantCard('Snapping', <SplitPane initialSize={32} snapPoints={[25, 50, 75]} sx={{ minHeight: 150 }} first={<Box sx={{ p: 2, bgcolor: '#e0f2fe' }}>Snap nav</Box>} second={<Box sx={{ p: 2 }}>Drag near 25, 50, 75</Box>} />),
-        renderVariantCard('Controlled', <SplitPane size={splitSize} onSizeChange={setSplitSize} collapsed={splitCollapsed} onCollapsedChange={setSplitCollapsed} resetSize={34} sx={{ minHeight: 160 }} first={<Box sx={{ p: 2, bgcolor: '#dcfce7' }}>Size {Math.round(splitSize)}%</Box>} second={<Box sx={{ p: 2 }}>Home/End collapse</Box>} />),
-        renderVariantCard('Vertical', <SplitPane orientation="vertical" initialSize={35} snapPoints={[35, 65]} sx={{ minHeight: 190 }} first={<Box sx={{ p: 2, bgcolor: '#fef3c7' }}>Top</Box>} second={<Box sx={{ p: 2 }}>Bottom</Box>} />),
+        renderVariantCard('Snapping', <SplitPane initialSize={32} snapPoints={[25, 50, 75]} sx={{ minHeight: 150 }} first={<Box sx={{ p: 2, bgcolor: 'background.default' }}>Snap nav</Box>} second={<Box sx={{ p: 2 }}>Drag near 25, 50, 75</Box>} />),
+        renderVariantCard('Controlled', <SplitPane size={splitSize} onSizeChange={setSplitSize} collapsed={splitCollapsed} onCollapsedChange={setSplitCollapsed} resetSize={34} sx={{ minHeight: 160 }} first={<Box sx={{ p: 2, bgcolor: 'background.default' }}>Size {Math.round(splitSize)}%</Box>} second={<Box sx={{ p: 2 }}>Home/End collapse</Box>} />),
+        renderVariantCard('Vertical', <SplitPane orientation="vertical" initialSize={35} snapPoints={[35, 65]} sx={{ minHeight: 190 }} first={<Box sx={{ p: 2, bgcolor: 'background.default' }}>Top</Box>} second={<Box sx={{ p: 2 }}>Bottom</Box>} />),
         renderVariantCard('Persistent', <SplitPane defaultSize={45} persistKey="react-things-split-pane-variant" sx={{ minHeight: 150 }} first={<Box sx={{ p: 2 }}>Saved size</Box>} second={<Box sx={{ p: 2 }}>Refresh keeps it</Box>} />),
         renderVariantCard('IDE Layout', <SplitPane initialSize={24} minSize={15} maxSize={45} dividerSize={10} snapPoints={[20, 33]} sx={{ minHeight: 190, bgcolor: '#0f172a', color: '#e5e7eb' }} first={<Box sx={{ p: 2 }}>Files<br />src<br />demo</Box>} second={<Box sx={{ p: 2, fontFamily: 'monospace' }}>function build() {'{'}<br />  return 'wow'<br />{'}'}</Box>} />)
       ],
       FloatingToolbar: [
-        renderVariantCard('Selection', <Box sx={{ minHeight: 130, p: 2, bgcolor: '#f8fafc' }}><Typography color="text.secondary">Select text in the main preview to see it anchor to a selection rectangle.</Typography></Box>),
+        renderVariantCard('Selection', <Box sx={{ minHeight: 130, p: 2, bgcolor: 'background.default' }}><Typography color="text.secondary">Select text in the main preview to see it anchor to a selection rectangle.</Typography></Box>),
         renderVariantCard('Element Anchor', <Box sx={{ position: 'relative', minHeight: 130, display: 'grid', placeItems: 'center' }}><Button ref={floatingToolbarButtonRef} variant="contained" onClick={() => setFloatingToolbarElementOpen((open) => !open)}>Anchor</Button><FloatingToolbar open={floatingToolbarElementOpen} anchorEl={floatingToolbarButtonRef.current}><Button size="small" color="inherit">Edit</Button><Button size="small" color="inherit">Copy</Button></FloatingToolbar></Box>),
         renderVariantCard('Bottom Tools', <Box sx={{ position: 'relative', minHeight: 130, display: 'grid', placeItems: 'center' }}><Button variant="outlined" ref={floatingToolbarBottomButtonRef} onClick={() => setFloatingToolbarBottomOpen((open) => !open)}>Open</Button><FloatingToolbar open={floatingToolbarBottomOpen} anchorEl={floatingToolbarBottomButtonRef.current} placement="bottom" offset={10}><Button size="small" color="inherit">Pin</Button><Button size="small" color="inherit">Share</Button></FloatingToolbar></Box>)
       ],
@@ -7213,7 +7265,7 @@ export function ComponentDocs() {
       ],
       MagneticCard: [
         renderVariantCard('Soft', <MagneticCard strength={10} tilt={4} sx={{ p: 2, border: 1, borderColor: 'divider', borderRadius: 1 }}>Soft pull</MagneticCard>),
-        renderVariantCard('Tilt', <MagneticCard strength={18} tilt={12} lift={10} sx={{ p: 2, borderRadius: 2, bgcolor: '#dbeafe' }}>Tilt card</MagneticCard>),
+        renderVariantCard('Tilt', <MagneticCard strength={18} tilt={12} lift={10} sx={{ p: 2, borderRadius: 2, bgcolor: 'background.paper', border: 1, borderColor: 'divider' }}>Tilt card</MagneticCard>),
         renderVariantCard('Glare', <MagneticCard strength={24} tilt={16} lift={16} glare sx={{ p: 3, borderRadius: 2, color: '#fff', background: 'linear-gradient(135deg,#2563eb,#db2777)' }}>Premium card</MagneticCard>)
       ],
       MorphMenu: [
@@ -7229,10 +7281,10 @@ export function ComponentDocs() {
       NodeCanvas: [
         renderVariantCard('Free Drag', <NodeCanvas nodes={[{ id: 'a', label: 'A', x: 24, y: 38 }, { id: 'b', label: 'B', x: 190, y: 72 }]} connections={[{ from: 'a', to: 'b' }]} sx={{ minHeight: 180 }} />),
         renderVariantCard('Grid Snap', <NodeCanvas showGrid snapToGrid gridSize={24} connectionStyle="step" nodes={[{ id: 'a', label: 'Input', x: 24, y: 48 }, { id: 'b', label: 'Output', x: 216, y: 96 }]} connections={[{ from: 'a', to: 'b', color: '#2563eb' }]} sx={{ minHeight: 180 }} />),
-        renderVariantCard('Readonly Map', <NodeCanvas mode="readonly" selectedNodeId="b" connectionStyle="curved" nodes={[{ id: 'a', label: 'Plan', x: 20, y: 30, color: '#dbeafe' }, { id: 'b', label: 'Build', x: 170, y: 90, color: '#dcfce7' }, { id: 'c', label: 'Ship', x: 320, y: 35, color: '#fee2e2' }]} connections={[{ from: 'a', to: 'b' }, { from: 'b', to: 'c' }]} sx={{ minHeight: 180 }} />),
+        renderVariantCard('Readonly Map', <NodeCanvas mode="readonly" selectedNodeId="b" connectionStyle="curved" nodes={[{ id: 'a', label: 'Plan', x: 20, y: 30, color: '#2563eb' }, { id: 'b', label: 'Build', x: 170, y: 90, color: '#059669' }, { id: 'c', label: 'Ship', x: 320, y: 35, color: '#dc2626' }]} connections={[{ from: 'a', to: 'b' }, { from: 'b', to: 'c' }]} sx={{ minHeight: 180 }} />),
         renderVariantCard('Compact Nodes', <NodeCanvas nodeWidth={96} nodeHeight={42} nodes={[{ id: 'a', label: 'In', x: 30, y: 50 }, { id: 'b', label: 'Out', x: 170, y: 50 }]} connections={[{ from: 'a', to: 'b' }]} sx={{ minHeight: 170 }} />),
-        renderVariantCard('Custom Render', <NodeCanvas nodeWidth={150} nodeHeight={68} connectionStyle="curved" nodes={[{ id: 'a', label: 'API', x: 20, y: 40, color: '#eff6ff' }, { id: 'b', label: 'Worker', x: 220, y: 90, color: '#f0fdf4' }]} connections={[{ from: 'a', to: 'b', color: '#059669' }]} renderNode={(node, selected) => <Box sx={{ textAlign: 'center' }}><Typography fontWeight={900}>{node.label}</Typography><Typography variant="caption" color={selected ? 'primary.main' : 'text.secondary'}>{selected ? 'selected' : 'service'}</Typography></Box>} sx={{ minHeight: 190 }} />),
-        renderVariantCard('Editor Tools', <NodeCanvas editableTools showGrid snapToGrid linkTypes={['line', 'curved', 'step', 'ellipse']} nodes={[{ id: 'a', label: 'Box A', x: 24, y: 44, color: '#dbeafe' }, { id: 'b', label: 'Box B', x: 196, y: 100, color: '#dcfce7' }]} connections={[{ from: 'a', to: 'b', type: 'curved', label: 'uses', color: '#2563eb' }]} sx={{ minHeight: 260 }} />)
+        renderVariantCard('Custom Render', <NodeCanvas nodeWidth={150} nodeHeight={68} connectionStyle="curved" nodes={[{ id: 'a', label: 'API', x: 20, y: 40, color: '#2563eb' }, { id: 'b', label: 'Worker', x: 220, y: 90, color: '#059669' }]} connections={[{ from: 'a', to: 'b', color: '#059669' }]} renderNode={(node, selected) => <Box sx={{ textAlign: 'center' }}><Typography fontWeight={900}>{node.label}</Typography><Typography variant="caption" color={selected ? 'primary.main' : 'text.secondary'}>{selected ? 'selected' : 'service'}</Typography></Box>} sx={{ minHeight: 190 }} />),
+        renderVariantCard('Editor Tools', <NodeCanvas editableTools showGrid snapToGrid linkTypes={['line', 'curved', 'step', 'ellipse']} nodes={[{ id: 'a', label: 'Box A', x: 24, y: 44, color: '#2563eb' }, { id: 'b', label: 'Box B', x: 196, y: 100, color: '#059669' }]} connections={[{ from: 'a', to: 'b', type: 'curved', label: 'uses', color: '#2563eb' }]} sx={{ minHeight: 260 }} />)
       ],
       FlowBuilder: [
         renderVariantCard('Typed Flow', <FlowBuilder nodes={defaultFlowBuilderNodes.slice(0, 3)} connections={defaultFlowBuilderConnections.slice(0, 2)} sx={{ minHeight: 260 }} />),
@@ -7252,7 +7304,7 @@ export function ComponentDocs() {
       BeforeAfterSlider: [
         renderVariantCard('50/50', <BeforeAfterSlider sx={{ minHeight: 140 }} before={<Box sx={{ height: '100%', bgcolor: '#2563eb' }} />} after={<Box sx={{ height: '100%', bgcolor: '#f59e0b' }} />} />),
         renderVariantCard('Before Heavy', <BeforeAfterSlider initialPosition={70} sx={{ minHeight: 140 }} before={<Box sx={{ height: '100%', bgcolor: '#059669' }} />} after={<Box sx={{ height: '100%', bgcolor: '#db2777' }} />} />),
-        renderVariantCard('Content', <BeforeAfterSlider initialPosition={35} sx={{ minHeight: 140 }} before={<Box sx={{ p: 2, height: '100%', bgcolor: '#dbeafe' }}>Before</Box>} after={<Box sx={{ p: 2, height: '100%', bgcolor: '#fee2e2' }}>After</Box>} />)
+        renderVariantCard('Content', <BeforeAfterSlider initialPosition={35} sx={{ minHeight: 140 }} before={<Box sx={{ p: 2, height: '100%', bgcolor: 'background.default' }}>Before</Box>} after={<Box sx={{ p: 2, height: '100%', bgcolor: 'background.paper' }}>After</Box>} />)
       ],
       CompareStack: [
         renderVariantCard('Layers', <CompareStack layers={compareStackLayers.slice(0, 2)} minHeight={180} showLegend={false} />),
@@ -7275,9 +7327,9 @@ export function ComponentDocs() {
         renderVariantCard('Overflow', <BulkActionBar selectedIds={['a']} maxPrimaryActions={1} actions={bulkActionBarActions} onClear={() => {}} />)
       ],
       PresenceCursors: [
-        renderVariantCard('Canvas', <PresenceCursors users={presenceCursorUsers.slice(0, 2)} sx={{ minHeight: 170, bgcolor: '#f8fafc', borderRadius: 1 }}><Box sx={{ p: 2 }}>Canvas</Box></PresenceCursors>),
-        renderVariantCard('No Names', <PresenceCursors users={presenceCursorUsers} showNames={false} sx={{ minHeight: 170, bgcolor: '#f8fafc', borderRadius: 1 }} />),
-        renderVariantCard('Pixels', <PresenceCursors coordinateMode="pixel" users={[{ id: 'px', name: 'Pixel', x: 80, y: 64, color: '#7c3aed', selection: { x: 42, y: 90, width: 130, height: 46, label: 'Pixel rect' } }]} sx={{ minHeight: 170, bgcolor: '#f8fafc', borderRadius: 1 }} />)
+        renderVariantCard('Canvas', <PresenceCursors users={presenceCursorUsers.slice(0, 2)} sx={{ minHeight: 170, bgcolor: 'background.default', borderRadius: 1 }}><Box sx={{ p: 2 }}>Canvas</Box></PresenceCursors>),
+        renderVariantCard('No Names', <PresenceCursors users={presenceCursorUsers} showNames={false} sx={{ minHeight: 170, bgcolor: 'background.default', borderRadius: 1 }} />),
+        renderVariantCard('Pixels', <PresenceCursors coordinateMode="pixel" users={[{ id: 'px', name: 'Pixel', x: 80, y: 64, color: '#7c3aed', selection: { x: 42, y: 90, width: 130, height: 46, label: 'Pixel rect' } }]} sx={{ minHeight: 170, bgcolor: 'background.default', borderRadius: 1 }} />)
       ],
       StatusRail: [
         renderVariantCard('Live Pulse', <StatusRail groups={statusRailGroups} title="Ops" compact />),
@@ -7323,7 +7375,7 @@ export function ComponentDocs() {
       FileDropZone: [
         renderVariantCard('Default', <FileDropZone />),
         renderVariantCard('Callback', <FileDropZone onFiles={() => {}} />),
-        renderVariantCard('Styled', <FileDropZone sx={{ bgcolor: '#eef2ff', borderColor: '#6366f1' }} />)
+        renderVariantCard('Styled', <FileDropZone sx={{ bgcolor: 'background.default', borderColor: '#6366f1' }} />)
       ],
       DropComposer: [
         renderVariantCard('Queue', <DropComposer defaultItems={defaultDropComposerItems.slice(0, 2)} title="Upload queue" sx={{ minHeight: 360 }} />),

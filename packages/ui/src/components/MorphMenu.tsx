@@ -5,6 +5,7 @@ import Fade from '@mui/material/Fade'
 import IconButton from '@mui/material/IconButton'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
+import { alpha } from '@mui/material/styles'
 import type { BoxProps } from '@mui/material/Box'
 import type { KeyboardEvent, ReactElement, ReactNode } from 'react'
 
@@ -238,18 +239,20 @@ export function MorphMenu({
                       disabled={item.disabled}
                       onClick={() => selectItem(item)}
                       onFocus={() => setFocusedIndex(index)}
-                      sx={{
+                      sx={(theme) => ({
                         width: itemSize,
                         height: itemSize,
                         border: 1,
                         borderColor: focused ? 'primary.main' : 'divider',
                         bgcolor: 'background.paper',
-                        boxShadow: focused ? '0 0 0 4px rgba(37,99,235,0.16), 0 18px 38px rgba(15,23,42,0.18)' : '0 12px 28px rgba(15,23,42,0.16)',
+                        boxShadow: focused
+                          ? `0 0 0 4px ${alpha(theme.palette.primary.main, theme.palette.mode === 'dark' ? 0.28 : 0.16)}, 0 18px 38px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.34 : 0.18)}`
+                          : `0 12px 28px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.3 : 0.16)}`,
                         '&:hover': {
                           bgcolor: 'primary.main',
                           color: 'primary.contrastText'
                         }
-                      }}
+                      })}
                     >
                       {item.icon ?? String(item.label).slice(0, 1)}
                     </IconButton>
