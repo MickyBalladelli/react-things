@@ -26,6 +26,7 @@ import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
 import {
+  ActionInspector,
   BeforeAfterSlider,
   BulkActionBar,
   CodeViewer,
@@ -50,10 +51,12 @@ import {
   FloatingToolbar,
   FlowBuilder,
   GlassBox,
+  GesturePad,
   InfiniteCanvas,
   InspectorDrawer,
   InspectorPanel,
   KanbanBoard,
+  KeyboardHintOverlay,
   LayoutSwitcher,
   MagneticCard,
   MiniMapNavigator,
@@ -1945,6 +1948,96 @@ export function Example() {
     />
   )
 }`
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'KeyboardHintOverlay',
+      'Hold a key to reveal contextual shortcuts over UI.',
+      'KeyboardHintOverlay wraps a surface and displays positioned shortcut callouts while a hold key is pressed or when controlled open.'
+    ),
+    props: [
+      {
+        name: 'hints',
+        type: 'KeyboardHint[]',
+        defaultValue: '-',
+        possibleValues: 'Array of { id, label, shortcut, description, x, y, group }.',
+        description: 'Shortcut badges positioned as percentages over the wrapped UI.'
+      },
+      {
+        name: 'holdKey',
+        type: 'string',
+        defaultValue: '?',
+        possibleValues: 'Any KeyboardEvent key.',
+        description: 'Key held to show hints when uncontrolled.'
+      },
+      {
+        name: 'open / defaultOpen',
+        type: 'boolean',
+        defaultValue: '- / false',
+        possibleValues: 'true or false.',
+        description: 'Controlled or initial visibility.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'GesturePad',
+      'Trackpad-like surface for zoom, pan, rotate, and scrub gestures.',
+      'GesturePad turns pointer dragging and wheel gestures into a transform state with readouts and change callbacks.'
+    ),
+    props: [
+      {
+        name: 'value / defaultValue',
+        type: 'GesturePadState',
+        defaultValue: '{ x: 0, y: 0, zoom: 1, rotation: 0, scrub: 0 }',
+        possibleValues: 'Object with x, y, zoom, rotation, and scrub.',
+        description: 'Controlled or initial gesture state.'
+      },
+      {
+        name: 'minZoom / maxZoom',
+        type: 'number',
+        defaultValue: '0.4 / 3',
+        possibleValues: 'Any positive zoom range.',
+        description: 'Clamp zoom changes.'
+      },
+      {
+        name: 'onChange',
+        type: '(state, reason) => void',
+        defaultValue: '-',
+        possibleValues: 'Reason is pan, zoom, rotate, scrub, or reset.',
+        description: 'Called after a gesture changes state.'
+      }
+    ]
+  },
+  {
+    ...createBasicDoc(
+      'ActionInspector',
+      'Command palette meets inspector: selected object actions plus editable props.',
+      'ActionInspector combines searchable actions for a selected target with editable property controls in one compact panel.'
+    ),
+    props: [
+      {
+        name: 'target',
+        type: 'ActionInspectorTarget',
+        defaultValue: '-',
+        possibleValues: '{ id, label, description, meta, icon }.',
+        description: 'Selected object being inspected.'
+      },
+      {
+        name: 'actions',
+        type: 'ActionInspectorAction[]',
+        defaultValue: '[]',
+        possibleValues: 'Array of actions with optional tone and icon.',
+        description: 'Commands shown in the searchable action list.'
+      },
+      {
+        name: 'props',
+        type: 'ActionInspectorProp[]',
+        defaultValue: '[]',
+        possibleValues: 'Editable text, number, boolean, and select props.',
+        description: 'Properties rendered in the inspector side.'
       }
     ]
   },
@@ -5555,7 +5648,7 @@ function getInspectorDrawerValue(sections: InspectorDrawerSection[], fieldId: st
 }
 
 function getComponentGroup(name: string) {
-  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'CompareStack', 'DataCardGrid', 'DataLens', 'DensityController', 'LayoutSwitcher', 'MiniMapNavigator', 'DockBar', 'TimelineScrubber'].includes(name)) {
+  if (['GlassBox', 'ColorPicker', 'ColorStudio', 'CodeViewer', 'CompareStack', 'DataCardGrid', 'DataLens', 'DensityController', 'GesturePad', 'KeyboardHintOverlay', 'LayoutSwitcher', 'MiniMapNavigator', 'DockBar', 'TimelineScrubber'].includes(name)) {
     return 'Display'
   }
 
@@ -5575,7 +5668,7 @@ function getComponentGroup(name: string) {
     return 'Input'
   }
 
-  if (['CommandPalette', 'CommandTimeline', 'SpotlightSearch', 'FloatingToolbar', 'FileDropZone', 'DropComposer', 'EntityPicker', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
+  if (['ActionInspector', 'CommandPalette', 'CommandTimeline', 'SpotlightSearch', 'FloatingToolbar', 'FileDropZone', 'DropComposer', 'EntityPicker', 'InspectorDrawer', 'InspectorPanel', 'KanbanBoard', 'SmartTooltip', 'ToastCenter', 'TourGuide'].includes(name)) {
     return 'Input'
   }
 
@@ -7060,6 +7153,133 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'KeyboardHintOverlay') {
+      const hints = [
+        { id: 'search', label: 'Search', shortcut: '/', description: 'Focus command search', x: 18, y: 18 },
+        { id: 'new', label: 'New task', shortcut: 'N', description: 'Create selected item', x: 72, y: 24 },
+        { id: 'archive', label: 'Archive', shortcut: 'E', description: 'Move to archive', x: 36, y: 68 },
+        { id: 'inspect', label: 'Inspect', shortcut: 'I', description: 'Open right inspector', x: 78, y: 72 }
+      ]
+
+      return (
+        <Box sx={{ p: 3, bgcolor: 'background.default' }}>
+          <Paper variant="outlined" sx={{ p: 1.5, mb: 2, borderRadius: 1, bgcolor: 'background.paper' }}>
+            <Typography fontWeight={950}>How it works</Typography>
+            <Typography variant="body2" color="text.secondary">
+              Wrap any UI, pass positioned hints with x/y percentages, then hold the chosen key to reveal shortcut bubbles. This preview is open by default so the hints are visible.
+            </Typography>
+          </Paper>
+          <KeyboardHintOverlay hints={hints} defaultOpen sx={{ minHeight: 420, borderRadius: 1 }}>
+            <Paper variant="outlined" sx={{ minHeight: 420, p: 2, borderRadius: 1, bgcolor: 'background.paper' }}>
+              <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+                <Typography variant="h6" fontWeight={950}>Launch workspace</Typography>
+                <Button variant="contained">New task</Button>
+              </Stack>
+              <Box sx={{ mt: 2, display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 1.5 }}>
+                {['Brief', 'Design', 'Build', 'Ship'].map((item) => (
+                  <Paper key={item} variant="outlined" sx={{ p: 2, borderRadius: 1, minHeight: 110 }}>
+                    <Typography fontWeight={900}>{item}</Typography>
+                    <Typography variant="body2" color="text.secondary">Hold ? to reveal contextual shortcuts.</Typography>
+                  </Paper>
+                ))}
+              </Box>
+            </Paper>
+          </KeyboardHintOverlay>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'GesturePad') {
+      return (
+        <Box sx={{ p: 3, bgcolor: 'background.default' }}>
+          <GesturePad sx={{ minHeight: 430 }}>
+            <Paper variant="outlined" sx={{ width: 190, height: 120, p: 2, borderRadius: 1, display: 'grid', placeItems: 'center', bgcolor: 'background.paper' }}>
+              <Stack spacing={0.5} alignItems="center">
+                <Typography fontWeight={950}>Preview layer</Typography>
+                <Typography variant="caption" color="text.secondary">Wheel, drag, shift-wheel</Typography>
+              </Stack>
+            </Paper>
+          </GesturePad>
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'ActionInspector') {
+      const targets = [
+        { id: 'launch-card', label: 'Launch checklist', description: 'Roadmap card', meta: 'Ready', icon: <RocketLaunchOutlinedIcon fontSize="small" /> },
+        { id: 'brief-file', label: 'Launch brief.pdf', description: 'Customer narrative', meta: 'File', icon: <FolderOutlinedIcon fontSize="small" /> },
+        { id: 'metric-board', label: 'Metrics board', description: 'Executive dashboard', meta: 'Board', icon: <AccountTreeOutlinedIcon fontSize="small" /> }
+      ]
+      const getActions = (target: { id: string }) => {
+        if (target.id === 'brief-file') {
+          return [
+            { id: 'preview', label: 'Preview file', tone: 'primary' as const },
+            { id: 'download', label: 'Download' },
+            { id: 'replace', label: 'Replace file', tone: 'warning' as const },
+            { id: 'delete', label: 'Delete file', tone: 'danger' as const }
+          ]
+        }
+
+        if (target.id === 'metric-board') {
+          return [
+            { id: 'open', label: 'Open board', tone: 'primary' as const },
+            { id: 'refresh', label: 'Refresh metrics', tone: 'success' as const },
+            { id: 'share', label: 'Share dashboard' },
+            { id: 'archive', label: 'Archive board', tone: 'warning' as const }
+          ]
+        }
+
+        return [
+          { id: 'open', label: 'Open card', tone: 'primary' as const },
+          { id: 'duplicate', label: 'Duplicate card' },
+          { id: 'assign', label: 'Assign owner', tone: 'success' as const },
+          { id: 'archive', label: 'Archive card', tone: 'warning' as const },
+          { id: 'delete', label: 'Delete card', tone: 'danger' as const }
+        ]
+      }
+      const getProps = (target: { id: string }) => {
+        if (target.id === 'brief-file') {
+          return [
+            { id: 'name', label: 'Name', value: 'Launch brief.pdf', type: 'text' as const },
+            { id: 'owner', label: 'Owner', value: 'Micky', type: 'text' as const },
+            { id: 'locked', label: 'Locked', value: true, type: 'boolean' as const }
+          ]
+        }
+
+        if (target.id === 'metric-board') {
+          return [
+            { id: 'title', label: 'Title', value: 'Metrics board', type: 'text' as const },
+            { id: 'refresh', label: 'Refresh', value: 'Daily', type: 'select' as const, options: [{ label: 'Hourly', value: 'Hourly' }, { label: 'Daily', value: 'Daily' }, { label: 'Weekly', value: 'Weekly' }] },
+            { id: 'widgets', label: 'Widgets', value: 8, type: 'number' as const }
+          ]
+        }
+
+        return [
+          { id: 'title', label: 'Title', value: 'Launch checklist', type: 'text' as const },
+          { id: 'priority', label: 'Priority', value: 'High', type: 'select' as const, options: [{ label: 'Low', value: 'Low' }, { label: 'Medium', value: 'Medium' }, { label: 'High', value: 'High' }] },
+          { id: 'estimate', label: 'Estimate', value: 6, type: 'number' as const, description: 'Hours' },
+          { id: 'blocked', label: 'Blocked', value: false, type: 'boolean' as const }
+        ]
+      }
+
+      return (
+        <Box sx={{ p: 3, bgcolor: 'background.default' }}>
+          <Paper variant="outlined" sx={{ p: 1.5, mb: 2, borderRadius: 1 }}>
+            <Typography fontWeight={950}>What it does</Typography>
+            <Typography variant="body2" color="text.secondary">
+              Pick an object on the left. The right side changes to actions and editable properties for that exact object.
+            </Typography>
+          </Paper>
+          <ActionInspector
+            targets={targets}
+            getActions={getActions}
+            getProps={getProps}
+            sx={{ maxWidth: 920, mx: 'auto' }}
+          />
+        </Box>
+      )
+    }
+
     if (selectedComponent.name === 'MiniMapNavigator') {
       const sections = [
         { id: 'brief', label: 'Brief', targetId: 'mini-map-brief', color: '#2563eb', description: 'Opening context and goals' },
@@ -7183,6 +7403,21 @@ export function ComponentDocs() {
         renderVariantCard('Compact', <DensityController defaultValue="compact" showReset={false}><Typography>Dense rows for high-volume tools.</Typography></DensityController>),
         renderVariantCard('Cozy', <DensityController defaultValue="cozy" showReset={false}><Typography>Balanced default for daily work.</Typography></DensityController>),
         renderVariantCard('Spacious', <DensityController defaultValue="spacious" showReset={false}><Typography>Touch-friendly breathing room.</Typography></DensityController>)
+      ],
+      KeyboardHintOverlay: [
+        renderVariantCard('Open', <KeyboardHintOverlay defaultOpen hints={[{ id: 'a', label: 'Search', shortcut: '/', x: 32, y: 42 }, { id: 'b', label: 'Create', shortcut: 'N', x: 70, y: 58 }]} sx={{ minHeight: 150 }}><Paper variant="outlined" sx={{ height: 150, p: 2 }}>Shortcut surface</Paper></KeyboardHintOverlay>),
+        renderVariantCard('No Dim', <KeyboardHintOverlay defaultOpen dim={false} hints={[{ id: 'a', label: 'Save', shortcut: 'S', x: 50, y: 50 }]} sx={{ minHeight: 150 }}><Paper variant="outlined" sx={{ height: 150, p: 2 }}>No dim layer</Paper></KeyboardHintOverlay>),
+        renderVariantCard('Hold Key', <KeyboardHintOverlay holdKey="h" hints={[{ id: 'a', label: 'Help', shortcut: 'H', x: 50, y: 50 }]} sx={{ minHeight: 150 }}><Paper variant="outlined" sx={{ height: 150, p: 2 }}>Hold H</Paper></KeyboardHintOverlay>)
+      ],
+      GesturePad: [
+        renderVariantCard('Default', <GesturePad sx={{ minHeight: 180 }} />),
+        renderVariantCard('Zoomed', <GesturePad defaultValue={{ x: 20, y: -8, zoom: 1.35, rotation: 8, scrub: 4 }} sx={{ minHeight: 180 }} />),
+        renderVariantCard('Custom Child', <GesturePad showReadout={false} sx={{ minHeight: 180 }}><Paper variant="outlined" sx={{ width: 130, height: 90, display: 'grid', placeItems: 'center' }}>Layer</Paper></GesturePad>)
+      ],
+      ActionInspector: [
+        renderVariantCard('Card', <ActionInspector target={{ id: 'card', label: 'Launch card', meta: 'Todo' }} actions={[{ id: 'open', label: 'Open', tone: 'primary' }, { id: 'copy', label: 'Copy' }]} props={[{ id: 'title', label: 'Title', value: 'Launch card' }]} />),
+        renderVariantCard('Danger', <ActionInspector target={{ id: 'file', label: 'brief.pdf', meta: 'File' }} actions={[{ id: 'download', label: 'Download' }, { id: 'delete', label: 'Delete', tone: 'danger' }]} props={[{ id: 'locked', label: 'Locked', value: true, type: 'boolean' }]} />),
+        renderVariantCard('Empty Props', <ActionInspector target={{ id: 'project', label: 'Atlas', meta: 'Project' }} actions={[{ id: 'pin', label: 'Pin', tone: 'primary' }]} />)
       ],
       MiniMapNavigator: [
         renderVariantCard('Page', <MiniMapNavigator height={170} showLabels={false} items={[{ id: 'a', label: 'Intro', top: 0, height: 240, color: '#2563eb' }, { id: 'b', label: 'API', top: 280, height: 360, color: '#059669' }, { id: 'c', label: 'Examples', top: 720, height: 300, color: '#f59e0b' }]} />),
@@ -7467,7 +7702,7 @@ export function ComponentDocs() {
         <CommandPalette
           variant="tree"
           dense
-          items={componentDocs.map((component) => ({
+          items={[...componentDocs].sort((first, second) => first.name.localeCompare(second.name)).map((component) => ({
             id: component.name,
             label: component.name,
             group: getComponentGroup(component.name),
