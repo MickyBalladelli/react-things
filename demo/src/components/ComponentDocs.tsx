@@ -43,6 +43,7 @@ import {
   DropComposer,
   DraggableBox,
   EntityPicker,
+  FieldComposer,
   FileDropZone,
   FocusRing,
   FloatingToolbar,
@@ -61,6 +62,7 @@ import {
   PresenceCursors,
   ResizableDashboard,
   ResizableFrame,
+  RuleBuilder,
   SelectionBox,
   SmartBreadcrumbs,
   SmartTooltip,
@@ -3492,6 +3494,80 @@ export function Example() {
       }
     ]
   },
+  {
+    name: 'RuleBuilder',
+    summary: 'No-code condition builder with if, and, or groups, validation, and readable output.',
+    description: 'RuleBuilder lets users compose nested conditions and groups without code, validates missing fields or values, and generates readable rule text.',
+    props: [
+      { name: 'fields', type: 'RuleBuilderField[]', defaultValue: '-', possibleValues: 'Array of { id, label, type, options }.', description: 'Available fields for rule conditions.' },
+      { name: 'value / defaultValue', type: 'RuleBuilderGroup', defaultValue: 'One empty condition', possibleValues: 'Nested group with combinator and rules.', description: 'Controlled or initial rule tree.' },
+      { name: 'maxDepth', type: 'number', defaultValue: '3', possibleValues: 'Any positive group nesting depth.', description: 'Maximum nested group depth.' },
+      { name: 'onChange', type: '(group, readable, errors) => void', defaultValue: '-', possibleValues: 'Callback receiving next tree, readable text, and validation errors.', description: 'Reports rule changes.' }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { RuleBuilder } from '@mickyballadelli/react-things'
+
+const fields = [
+  { id: 'status', label: 'Status', type: 'select', options: [{ label: 'Active', value: 'active' }] },
+  { id: 'score', label: 'Score', type: 'number' }
+]
+
+export function Example() {
+  return <RuleBuilder fields={fields} />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { RuleBuilder, type RuleBuilderField } from '@mickyballadelli/react-things'
+
+const fields: RuleBuilderField[] = [
+  { id: 'plan', label: 'Plan', type: 'text' },
+  { id: 'seats', label: 'Seats', type: 'number' }
+]
+
+export function Example() {
+  return <RuleBuilder fields={fields} maxDepth={2} />
+}`
+      }
+    ]
+  },
+  {
+    name: 'FieldComposer',
+    summary: 'Schema form builder with drag fields, validation preview, and generated JSON.',
+    description: 'FieldComposer lets users add and reorder form fields, edit labels and names, preview validation, and inspect generated JSON schema.',
+    props: [
+      { name: 'fields / defaultFields', type: 'FieldComposerField[]', defaultValue: 'Text, email, select', possibleValues: 'Array of { id, label, name, type, required, placeholder, options, min, max }.', description: 'Controlled or initial form fields.' },
+      { name: 'onChange', type: '(fields, schema, errors) => void', defaultValue: '-', possibleValues: 'Callback receiving fields, generated JSON schema, and validation errors.', description: 'Reports field edits and reorder changes.' }
+    ],
+    samples: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { FieldComposer } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return <FieldComposer />
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { FieldComposer, type FieldComposerField } from '@mickyballadelli/react-things'
+
+const fields: FieldComposerField[] = [
+  { id: 'email', label: 'Email', name: 'email', type: 'email', required: true }
+]
+
+export function Example() {
+  return <FieldComposer defaultFields={fields} />
+}`
+      }
+    ]
+  },
   createBasicDoc(
     'BeforeAfterSlider',
     'Compare two panes with draggable slider.',
@@ -4906,6 +4982,19 @@ const compareStackLayers = [
   }
 ]
 
+const ruleBuilderFields = [
+  { id: 'plan', label: 'Plan', type: 'select' as const, options: [{ label: 'Free', value: 'free' }, { label: 'Pro', value: 'pro' }, { label: 'Enterprise', value: 'enterprise' }] },
+  { id: 'seats', label: 'Seats', type: 'number' as const },
+  { id: 'region', label: 'Region', type: 'select' as const, options: [{ label: 'US', value: 'us' }, { label: 'EU', value: 'eu' }, { label: 'APAC', value: 'apac' }] },
+  { id: 'owner', label: 'Owner', type: 'text' as const }
+]
+
+const fieldComposerFields = [
+  { id: 'name', label: 'Full name', name: 'full_name', type: 'text' as const, required: true, placeholder: 'Ada Lovelace' },
+  { id: 'email', label: 'Email', name: 'email', type: 'email' as const, required: true, placeholder: 'ada@example.com' },
+  { id: 'plan', label: 'Plan', name: 'plan', type: 'select' as const, required: true, options: ['Free', 'Pro', 'Enterprise'] }
+]
+
 const dataCardGridMetrics: DataCardGridMetric[] = [
   {
     id: 'revenue',
@@ -5481,7 +5570,7 @@ function getComponentGroup(name: string) {
     return 'Display'
   }
 
-  if (['FlowBuilder'].includes(name)) {
+  if (['FlowBuilder', 'FieldComposer', 'RuleBuilder'].includes(name)) {
     return 'Input'
   }
 
@@ -5861,6 +5950,22 @@ export function ComponentDocs() {
             onConnectionsChange={setFlowBuilderConnections}
             sx={{ minHeight: 500, border: 1, borderColor: 'divider', borderRadius: 1 }}
           />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'RuleBuilder') {
+      return (
+        <Box sx={{ minHeight: 560, p: 3, bgcolor: '#f8fafc' }}>
+          <RuleBuilder fields={ruleBuilderFields} sx={{ maxWidth: 900, mx: 'auto' }} />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'FieldComposer') {
+      return (
+        <Box sx={{ minHeight: 620, p: 3, bgcolor: '#f8fafc' }}>
+          <FieldComposer defaultFields={fieldComposerFields} sx={{ maxWidth: 1040, mx: 'auto' }} />
         </Box>
       )
     }
@@ -7133,6 +7238,16 @@ export function ComponentDocs() {
         renderVariantCard('Typed Flow', <FlowBuilder nodes={defaultFlowBuilderNodes.slice(0, 3)} connections={defaultFlowBuilderConnections.slice(0, 2)} sx={{ minHeight: 260 }} />),
         renderVariantCard('Invalid Edge', <FlowBuilder nodes={defaultFlowBuilderNodes.slice(0, 3)} connections={[...defaultFlowBuilderConnections.slice(0, 1), { id: 'bad', fromNodeId: 'trigger', fromPortId: 'event', toNodeId: 'email', toPortId: 'profile', type: 'event' }]} sx={{ minHeight: 260 }} />),
         renderVariantCard('No Grid', <FlowBuilder showGrid={false} nodes={defaultFlowBuilderNodes} connections={defaultFlowBuilderConnections} sx={{ minHeight: 260 }} />)
+      ],
+      RuleBuilder: [
+        renderVariantCard('Simple', <RuleBuilder fields={ruleBuilderFields.slice(0, 2)} maxDepth={1} />),
+        renderVariantCard('Nested', <RuleBuilder fields={ruleBuilderFields} maxDepth={3} />),
+        renderVariantCard('Segments', <RuleBuilder fields={ruleBuilderFields.slice(1)} title="Audience rule" />)
+      ],
+      FieldComposer: [
+        renderVariantCard('Default', <FieldComposer defaultFields={fieldComposerFields.slice(0, 2)} />),
+        renderVariantCard('Select', <FieldComposer defaultFields={fieldComposerFields.slice(2)} />),
+        renderVariantCard('Empty', <FieldComposer defaultFields={[]} />)
       ],
       BeforeAfterSlider: [
         renderVariantCard('50/50', <BeforeAfterSlider sx={{ minHeight: 140 }} before={<Box sx={{ height: '100%', bgcolor: '#2563eb' }} />} after={<Box sx={{ height: '100%', bgcolor: '#f59e0b' }} />} />),

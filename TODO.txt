@@ -4,12 +4,6 @@ Hold a key to reveal contextual shortcuts over UI.
 GesturePad
 Trackpad-like surface for zoom, pan, rotate, scrub gestures.
 
-RuleBuilder
-No-code condition builder: if/and/or groups, validation, readable output.
-
-FieldComposer
-Schema form builder with drag fields, validation preview, generated JSON.
-
 DensityController
 User-facing compact/cozy/spacious layout controller with persistence.
 
