@@ -79,6 +79,7 @@ import {
   TourGuide
 } from '@mickyballadelli/react-things'
 import type { BulkActionBarAction, ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, DropComposerItem, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, LayoutSwitcherItem, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, SmartBreadcrumbItem, SpotlightSearchItem, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
+import { DemoHome } from './DemoHome'
 import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
@@ -5819,9 +5820,11 @@ function createInitialSampleCode(glassConfig: GlassBoxConfig, focusRingConfig: F
 
 export function ComponentDocs() {
   const initialComponentName = new URLSearchParams(window.location.search).get('component')
-  const initialComponent = componentDocs.find((component) => component.name === initialComponentName) ?? componentDocs[0]
-  const [selectedComponentName, setSelectedComponentName] = useState(initialComponent.name)
-  const selectedComponent = componentDocs.find((component) => component.name === selectedComponentName) ?? componentDocs[0]
+  const initialComponent = componentDocs.find((component) => component.name === initialComponentName) ?? null
+  const [selectedComponentName, setSelectedComponentName] = useState<string | null>(initialComponent?.name ?? null)
+  const selectedComponent = selectedComponentName
+    ? componentDocs.find((component) => component.name === selectedComponentName) ?? null
+    : null
   const [glassBoxConfig, setGlassBoxConfig] = useState(defaultGlassBoxConfig)
   const [focusRingConfig, setFocusRingConfig] = useState<FocusRingConfig>({ pulseSize: 34 })
   const [sampleCode, setSampleCode] = useState<Record<string, string>>(createInitialSampleCode(defaultGlassBoxConfig, { pulseSize: 34 }))
@@ -5897,6 +5900,7 @@ export function ComponentDocs() {
   const floatingToolbarButtonRef = useRef<HTMLButtonElement | null>(null)
   const floatingToolbarBottomButtonRef = useRef<HTMLButtonElement | null>(null)
   const miniMapPreviewRef = useRef<HTMLDivElement | null>(null)
+  const mainPaneRef = useRef<HTMLDivElement | null>(null)
   const [floatingToolbarRect, setFloatingToolbarRect] = useState<DOMRect | null>(null)
   const [floatingToolbarElementOpen, setFloatingToolbarElementOpen] = useState(false)
   const [floatingToolbarBottomOpen, setFloatingToolbarBottomOpen] = useState(false)
@@ -5912,25 +5916,33 @@ export function ComponentDocs() {
   const [tourGuideOpen, setTourGuideOpen] = useState(false)
   const [tourGuideDone, setTourGuideDone] = useState(false)
 
-  const selectedSamples = selectedComponent.name === 'GlassBox'
+  const selectedSamples = selectedComponent?.name === 'GlassBox'
     ? [
       { label: 'JavaScript', language: 'javascript', initialCode: sampleCode['GlassBox:JavaScript'] },
       { label: 'TypeScript', language: 'typescript', initialCode: sampleCode['GlassBox:TypeScript'] }
     ]
-    : selectedComponent.name === 'FocusRing'
+    : selectedComponent?.name === 'FocusRing'
       ? [
         { label: 'JavaScript', language: 'javascript', initialCode: sampleCode['FocusRing:JavaScript'] },
         { label: 'TypeScript', language: 'typescript', initialCode: sampleCode['FocusRing:TypeScript'] }
       ]
-    : selectedComponent.samples
+    : selectedComponent?.samples ?? []
 
   useEffect(() => {
     const nextUrl = new URL(window.location.href)
-    nextUrl.searchParams.set('component', selectedComponent.name)
+    if (selectedComponent) {
+      nextUrl.searchParams.set('component', selectedComponent.name)
+    } else {
+      nextUrl.searchParams.delete('component')
+    }
     window.history.replaceState(null, '', nextUrl)
-  }, [selectedComponent.name])
+  }, [selectedComponent?.name])
 
   function updateSample(nextCode: string, sampleLabel: string) {
+    if (!selectedComponent) {
+      return
+    }
+
     const sampleKey = `${selectedComponent.name}:${sampleLabel}`
 
     if (selectedComponent.name === 'FocusRing') {
@@ -5965,7 +5977,27 @@ export function ComponentDocs() {
     })
   }
 
+  function scrollMainPaneToTop() {
+    mainPaneRef.current?.scrollTo({ top: 0, left: 0 })
+  }
+
+  function selectComponent(componentName: string) {
+    setSelectedComponentName(componentName)
+    setSelectedSampleLabel(sampleTabs[0])
+    scrollMainPaneToTop()
+  }
+
+  function selectHome() {
+    setSelectedComponentName(null)
+    setSelectedSampleLabel(sampleTabs[0])
+    scrollMainPaneToTop()
+  }
+
   function renderPreview() {
+    if (!selectedComponent) {
+      return null
+    }
+
     if (selectedComponent.name === 'MagneticCard') {
       return (
         <Box sx={{ minHeight: 340, display: 'grid', placeItems: 'center', bgcolor: 'background.default' }}>
@@ -7369,6 +7401,10 @@ export function ComponentDocs() {
   }
 
   function renderVariants() {
+    if (!selectedComponent) {
+      return null
+    }
+
     const common = {
       Simple: <Typography color="text.secondary">Smallest useful setup.</Typography>,
       Rich: <Typography color="text.secondary">More props, stronger styling.</Typography>,
@@ -7699,6 +7735,15 @@ export function ComponentDocs() {
           Components
         </Typography>
 
+        <Button
+          fullWidth
+          variant={selectedComponent ? 'outlined' : 'contained'}
+          sx={{ mb: 1.5, justifyContent: 'flex-start' }}
+          onClick={selectHome}
+        >
+          Home
+        </Button>
+
         <CommandPalette
           variant="tree"
           dense
@@ -7709,139 +7754,149 @@ export function ComponentDocs() {
             description: component.summary,
             keywords: [component.summary, component.description]
           }))}
-          selectedId={selectedComponent.name}
+          selectedId={selectedComponent?.name}
           placeholder="Search components"
           defaultExpandedGroups={['Display', 'Layout', 'Input', 'Navigation', 'Effects']}
           descriptionDisplay="tooltip"
           sx={{ gap: 1.25 }}
-          onSelect={(item) => {
-            setSelectedComponentName(item.id)
-            setSelectedSampleLabel(sampleTabs[0])
-          }}
+          onSelect={(item) => selectComponent(item.id)}
         />
       </Box>
 
-      <Box component="main" sx={{ p: { xs: 2, md: 4 }, minWidth: 0, minHeight: 0, overflow: 'auto' }}>
-        <Stack spacing={3}>
-          <Box>
-            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
-              <Typography variant="h3" component="h2" fontWeight={850}>
-                {selectedComponent.name}
+      <Box ref={mainPaneRef} component="main" sx={{ p: { xs: 2, md: 4 }, minWidth: 0, minHeight: 0, overflow: 'auto' }}>
+        {selectedComponent ? (
+          <Stack spacing={3}>
+            <Box>
+              <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+                <Typography variant="h3" component="h2" fontWeight={850}>
+                  {selectedComponent.name}
+                </Typography>
+                <Chip label="component" size="small" />
+              </Stack>
+              <Typography color="text.secondary" sx={{ mt: 1 }}>
+                {selectedComponent.summary}
               </Typography>
-              <Chip label="component" size="small" />
-            </Stack>
-            <Typography color="text.secondary" sx={{ mt: 1 }}>
-              {selectedComponent.summary}
-            </Typography>
-            <Typography sx={{ mt: 1.5, maxWidth: 820 }}>
-              {selectedComponent.description}
-            </Typography>
-          </Box>
-
-          <Paper variant="outlined" sx={{ overflow: 'hidden', borderRadius: 1 }}>
-            {renderPreview()}
-          </Paper>
-
-          <Box>
-            <Typography variant="h5" component="h3" fontWeight={800}>
-              Variants
-            </Typography>
-            <Box
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: '1fr',
-                gap: 2,
-                mt: 1.5
-              }}
-            >
-              {renderVariants()}
+              <Typography sx={{ mt: 1.5, maxWidth: 820 }}>
+                {selectedComponent.description}
+              </Typography>
             </Box>
-          </Box>
 
-          <Box>
-            <Typography variant="h5" component="h3" fontWeight={800}>
-              Code Samples
-            </Typography>
-            <Paper variant="outlined" sx={{ mt: 1.5, borderRadius: 1, overflow: 'hidden' }}>
-              <Tabs
-                value={selectedSampleLabel}
-                onChange={(_, nextSampleLabel: string) => setSelectedSampleLabel(nextSampleLabel)}
-                sx={{ borderBottom: 1, borderColor: 'divider' }}
-              >
-                {selectedSamples.map((sample) => (
-                  <Tab key={sample.label} label={sample.label} value={sample.label} />
-                ))}
-              </Tabs>
-
-              <Box sx={{ p: 2 }}>
-                {selectedSamples.map((sample) => {
-                  const sampleKey = `${selectedComponent.name}:${sample.label}`
-
-                  return (
-                    <Box
-                      key={sample.label}
-                      role="tabpanel"
-                      hidden={selectedSampleLabel !== sample.label}
-                    >
-                      {selectedSampleLabel === sample.label ? (
-                        <CodeViewer
-                          label={sample.label}
-                          language={sample.language}
-                          value={sampleCode[sampleKey] ?? sample.initialCode ?? ''}
-                          onChange={(nextCode) => updateSample(nextCode, sample.label)}
-                        />
-                      ) : null}
-                    </Box>
-                  )
-                })}
-              </Box>
+            <Paper variant="outlined" sx={{ overflow: 'hidden', borderRadius: 1 }}>
+              {renderPreview()}
             </Paper>
-          </Box>
 
-          <Divider />
+            <Box>
+              <Typography variant="h5" component="h3" fontWeight={800}>
+                Variants
+              </Typography>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr',
+                  gap: 2,
+                  mt: 1.5
+                }}
+              >
+                {renderVariants()}
+              </Box>
+            </Box>
 
-          <Box>
-            <Typography variant="h5" component="h3" fontWeight={800}>
-              Props
-            </Typography>
-            <TableContainer component={Paper} variant="outlined" sx={{ mt: 1.5, borderRadius: 1 }}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Type</TableCell>
-                    <TableCell>Default</TableCell>
-                    <TableCell>Possible Values</TableCell>
-                    <TableCell>Explanation</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {selectedComponent.props.map((prop) => (
-                    <TableRow key={prop.name}>
-                      <TableCell>
-                        <Typography component="code" fontFamily="monospace">
-                          {prop.name}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography component="code" fontFamily="monospace">
-                          {prop.type}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography component="code" fontFamily="monospace">
-                          {prop.defaultValue}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>{prop.possibleValues}</TableCell>
-                      <TableCell>{prop.description}</TableCell>
-                    </TableRow>
+            <Box>
+              <Typography variant="h5" component="h3" fontWeight={800}>
+                Code Samples
+              </Typography>
+              <Paper variant="outlined" sx={{ mt: 1.5, borderRadius: 1, overflow: 'hidden' }}>
+                <Tabs
+                  value={selectedSampleLabel}
+                  onChange={(_, nextSampleLabel: string) => setSelectedSampleLabel(nextSampleLabel)}
+                  sx={{ borderBottom: 1, borderColor: 'divider' }}
+                >
+                  {selectedSamples.map((sample) => (
+                    <Tab key={sample.label} label={sample.label} value={sample.label} />
                   ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
-        </Stack>
+                </Tabs>
+
+                <Box sx={{ p: 2 }}>
+                  {selectedSamples.map((sample) => {
+                    const sampleKey = `${selectedComponent.name}:${sample.label}`
+
+                    return (
+                      <Box
+                        key={sample.label}
+                        role="tabpanel"
+                        hidden={selectedSampleLabel !== sample.label}
+                      >
+                        {selectedSampleLabel === sample.label ? (
+                          <CodeViewer
+                            label={sample.label}
+                            language={sample.language}
+                            value={sampleCode[sampleKey] ?? sample.initialCode ?? ''}
+                            onChange={(nextCode) => updateSample(nextCode, sample.label)}
+                          />
+                        ) : null}
+                      </Box>
+                    )
+                  })}
+                </Box>
+              </Paper>
+            </Box>
+
+            <Divider />
+
+            <Box>
+              <Typography variant="h5" component="h3" fontWeight={800}>
+                Props
+              </Typography>
+              <TableContainer component={Paper} variant="outlined" sx={{ mt: 1.5, borderRadius: 1 }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Type</TableCell>
+                      <TableCell>Default</TableCell>
+                      <TableCell>Possible Values</TableCell>
+                      <TableCell>Explanation</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {selectedComponent.props.map((prop) => (
+                      <TableRow key={prop.name}>
+                        <TableCell>
+                          <Typography component="code" fontFamily="monospace">
+                            {prop.name}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography component="code" fontFamily="monospace">
+                            {prop.type}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography component="code" fontFamily="monospace">
+                            {prop.defaultValue}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>{prop.possibleValues}</TableCell>
+                        <TableCell>{prop.description}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          </Stack>
+        ) : (
+          <DemoHome
+            version={__REACT_THINGS_VERSION__}
+            components={componentDocs.map((component) => ({
+              name: component.name,
+              summary: component.summary,
+              description: component.description,
+              group: getComponentGroup(component.name)
+            }))}
+            onSelectComponent={selectComponent}
+          />
+        )}
       </Box>
     </Box>
   )
