@@ -1,11 +1,28 @@
-KeyboardHintOverlay
-Hold a key to reveal contextual shortcuts over UI.
+# TODO
 
-GesturePad
-Trackpad-like surface for zoom, pan, rotate, scrub gestures.
+## Demo App Improvements
+- Add interactive prop editor/playground to ComponentDocs for live tweaking
+- Implement component search/filter in DemoHome with keyboard shortcuts
+- Add mobile-responsive layout and touch-friendly previews
+- Persist and sync theme mode with system preference
+- Include usage metrics or "copy import" buttons per component
+- Add live code sandbox integration (e.g., CodeSandbox/Vite playground links)
+- Expand examples with more real-world use cases and edge cases
 
-DensityController
-User-facing compact/cozy/spacious layout controller with persistence.
+## Component Library Improvements (@mickyballadelli/react-things)
+- Add unit/integration tests (Vitest + React Testing Library) for all components
+- Improve accessibility (ARIA labels, keyboard navigation, focus management) across interactive components
+- Add JSDoc + Storybook stories for documentation and visual regression
+- Optimize performance: virtualize long lists in DataLens, KanbanBoard, CommandPalette
+- Standardize error handling/loading states in data-driven components (DataLens, DiffViewer, FlowBuilder)
+- Enhance TypeScript generics and strict null checks; reduce any usage
+- Ensure consistent theming, dark mode, and density support everywhere
+- Add bundle size analysis and tree-shaking verification
+- Implement controlled/uncontrolled patterns consistently where applicable
+- Add animation/performance guards (reduce motion respect) for motion-heavy components (DraggableBox, InfiniteCanvas, MorphMenu)
 
-ActionInspector
-Command palette meets inspector: selected object actions + editable props.
+## Cross-cutting
+- Set up CI (lint, typecheck, tests, build) on PRs
+- Add changeset/changelog automation for releases
+- Create comprehensive README with component gallery and installation guide
+- Explore React 19 features (use, actions) where beneficial
