@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box'
 import { alpha } from '@mui/material/styles'
 import type { BoxProps } from '@mui/material/Box'
-import { useId } from 'react'
+import { useId, forwardRef } from 'react'
 
 /**
  * GlassBox renders a translucent frosted-glass container.
@@ -21,7 +21,7 @@ function clampTransparency(value: number) {
   return Math.min(Math.max(value, 0), 1)
 }
 
-export function GlassBox({
+export const GlassBox = forwardRef<HTMLDivElement, GlassBoxProps>(function GlassBox({
   transparency = 0.36,
   fill = 0.72,
   liquidColor = '#39b8ff',
@@ -31,7 +31,7 @@ export function GlassBox({
   children,
   sx,
   ...props
-}: GlassBoxProps) {
+}, ref) {
   const rawFilterId = useId()
   const filterId = `glass-liquid-${rawFilterId.replace(/:/g, '')}`
   const liquidAlpha = 1 - clampTransparency(transparency)
@@ -165,4 +165,4 @@ export function GlassBox({
       </Box>
     </Box>
   )
-}
+})
