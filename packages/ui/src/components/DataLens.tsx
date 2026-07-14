@@ -166,6 +166,8 @@ export function DataLens<Row extends object = Record<string, unknown>>({
   initialSort,
   emptyState = 'No rows match',
   dense = false,
+  loading = false,
+  error,
   onRowSelect,
   sx,
   ...props
