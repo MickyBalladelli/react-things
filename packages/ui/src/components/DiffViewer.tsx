@@ -45,6 +45,9 @@ export type DiffViewerProps = {
   onDecisionChange?: (change: DiffViewerChange) => void
   renderComment?: (comment: DiffViewerComment) => ReactNode
   sx?: BoxProps['sx']
+  loading?: boolean
+  error?: ReactNode
+  emptyState?: ReactNode
 }
 
 type LineToken = {

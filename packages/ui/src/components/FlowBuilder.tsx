@@ -70,6 +70,9 @@ export type FlowBuilderProps = Omit<BoxProps, 'onChange'> & {
   onConnectionsChange?: (connections: FlowBuilderConnection[]) => void
   onNodeSelect?: (node: FlowBuilderNode | null) => void
   onConnectionSelect?: (connection: FlowBuilderConnection | null) => void
+  loading?: boolean
+  error?: ReactNode
+  emptyState?: ReactNode
 }
 
 const defaultPortTypes = ['event', 'data', 'success', 'error']
