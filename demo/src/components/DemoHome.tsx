@@ -6,11 +6,13 @@ import {
   Box,
   Button,
   Chip,
+  InputBase,
   Paper,
   Stack,
   Typography
 } from '@mui/material'
 import { alpha, useTheme } from '@mui/material/styles'
+import { useEffect, useMemo, useState } from 'react'
 
 export type DemoHomeComponent = {
   name: string
@@ -44,7 +46,34 @@ function groupComponents(components: DemoHomeComponent[]) {
 
 export function DemoHome({ components, version, onSelectComponent }: DemoHomeProps) {
   const theme = useTheme()
-  const groupedComponents = groupComponents([...components].sort((first, second) => first.name.localeCompare(second.name)))
+  const [query, setQuery] = useState('')
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        const input = document.getElementById('demo-home-search') as HTMLInputElement | null
+        input?.focus()
+        input?.select()
+      }
+      if (e.key === 'Escape' && document.activeElement?.id === 'demo-home-search') {
+        setQuery('')
+        ;(document.activeElement as HTMLInputElement).blur()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (!q) return components
+    return components.filter((c) =>
+      c.name.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q) || c.description.toLowerCase().includes(q)
+    )
+  }, [components, query])
+
+  const groupedComponents = groupComponents([...filtered].sort((first, second) => first.name.localeCompare(second.name)))
   const groupNames = Object.keys(groupedComponents).sort()
   const featuredComponents = ['ActionInspector', 'FlowBuilder', 'DiffViewer', 'MiniMapNavigator']
     .map((name) => components.find((component) => component.name === name))
@@ -140,9 +169,18 @@ export function DemoHome({ components, version, onSelectComponent }: DemoHomePro
             Component Map
           </Typography>
           <Chip label="dense summary" size="small" />
+          <Paper variant="outlined" sx={{ ml: 'auto', px: 1.5, py: 0.25, borderRadius: 1, display: 'flex', alignItems: 'center', minWidth: 260 }}>
+            <InputBase
+              id="demo-home-search"
+              placeholder="Search components…  ⌘K"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              sx={{ flex: 1, fontSize: 14 }}
+            />
+          </Paper>
         </Stack>
         <Typography color="text.secondary" sx={{ mt: 1, maxWidth: 820 }}>
-          Quick scan of everything in the kit. Click a row to open its live docs.
+          Quick scan of everything in the kit. Click a row to open its live docs. Press ⌘K to focus search.
         </Typography>
       </Box>
 
@@ -213,7 +251,7 @@ export function DemoHome({ components, version, onSelectComponent }: DemoHomePro
           Good First Looks
         </Typography>
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(4, minmax(0, 1fr))' }, gap: 1.5, mt: 2 }}>
-          {featuredComponents.map((component) => (
+          {(query ? filtered.slice(0, 4) : featuredComponents).map((component) => (
             <Button
               key={component.name}
               variant="outlined"
