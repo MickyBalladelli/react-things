@@ -10,6 +10,7 @@ import {
   type DataLensColumn,
   type DataLensProps
 } from '@mickyballadelli/react-things'
+import { use, useActionState } from 'react'
 
 const props: ComponentExampleProps = {
   title: 'TypeScript example'
@@ -64,5 +65,29 @@ export function DiffViewerLargeChangeTs() {
       before="function old() { return 1 }"
       after="function newFn() { return 42; /* edge case comment */ }"
     />
+  )
+}
+
+// React 19 use + useActionState example (demo only)
+async function fetchData() {
+  return { message: 'React 19 data loaded' }
+}
+
+function submitAction(prev: string, formData: FormData) {
+  return `Submitted: ${formData.get('name')}`
+}
+
+export function React19Demo() {
+  const data = use(fetchData())
+  const [result, formAction] = useActionState(submitAction, '')
+  return (
+    <div>
+      <p>{data.message}</p>
+      <form action={formAction}>
+        <input name="name" />
+        <button type="submit">Submit</button>
+      </form>
+      {result && <p>{result}</p>}
+    </div>
   )
 }
