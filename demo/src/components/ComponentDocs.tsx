@@ -4,6 +4,7 @@ import {
   Button,
   Chip,
   Divider,
+  Drawer,
   IconButton,
   Paper,
   Stack,
@@ -18,6 +19,7 @@ import {
   Tooltip,
   Typography
 } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { alpha } from '@mui/material/styles'
@@ -5835,6 +5837,8 @@ export function ComponentDocs() {
     ? componentDocs.find((component) => component.name === selectedComponentName) ?? null
     : null
   const [playgroundState, setPlaygroundState] = useState<Record<string, Record<string, unknown>>>({})
+  const [copyCount, setCopyCount] = useState<Record<string, number>>({})
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [glassBoxConfig, setGlassBoxConfig] = useState(defaultGlassBoxConfig)
   const [focusRingConfig, setFocusRingConfig] = useState<FocusRingConfig>({ pulseSize: 34 })
   const [sampleCode, setSampleCode] = useState<Record<string, string>>(createInitialSampleCode(defaultGlassBoxConfig, { pulseSize: 34 }))
@@ -7713,10 +7717,20 @@ export function ComponentDocs() {
           bgcolor: 'background.paper',
           p: 2,
           minHeight: 0,
-          overflow: 'auto'
+          overflow: 'auto',
+          display: { xs: 'none', md: 'block' }
         }}
       >
         <Stack direction="row" spacing={1.25} alignItems="center">
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open navigation"
+            onClick={() => setMobileNavOpen(true)}
+            sx={{ display: { md: 'none' }, mr: 1 }}
+          >
+            <MenuIcon />
+          </IconButton>
           <Box
             component="img"
             src="/react-things-icon.png"
@@ -7753,7 +7767,7 @@ export function ComponentDocs() {
         <Button
           fullWidth
           variant={selectedComponent ? 'outlined' : 'contained'}
-          sx={{ mb: 1.5, justifyContent: 'flex-start' }}
+          sx={{ mb: 1.5, justifyContent: 'flex-start', minHeight: 44 }}
           onClick={selectHome}
         >
           Home
@@ -7762,21 +7776,40 @@ export function ComponentDocs() {
         <CommandPalette
           variant="tree"
           dense
-          items={[...componentDocs].sort((first, second) => first.name.localeCompare(second.name)).map((component) => ({
-            id: component.name,
-            label: component.name,
-            group: getComponentGroup(component.name),
-            description: component.summary,
-            keywords: [component.summary, component.description]
-          }))}
-          selectedId={selectedComponent?.name}
-          placeholder="Search components"
-          defaultExpandedGroups={['Display', 'Layout', 'Input', 'Navigation', 'Effects']}
-          descriptionDisplay="tooltip"
-          sx={{ gap: 1.25 }}
-          onSelect={(item) => selectComponent(item.id)}
+          items={[...componentDocs].sort((first, second) => first.name.localeCompare(second.name)).map((component) => ({ id: component.name, label: component.name, group: getComponentGroup(component.name) }))}
+          selectedId={selectedComponent?.name ?? undefined}
+          descriptionDisplay="none"
+          onSelect={(item) => {
+            selectComponent(item.id)
+            setMobileNavOpen(false)
+          }}
+          sx={{ flex: 1, minHeight: 0, overflow: 'auto' }}
         />
       </Box>
+
+      <Drawer
+        open={mobileNavOpen}
+        onClose={() => setMobileNavOpen(false)}
+        ModalProps={{ keepMounted: true }}
+        sx={{ display: { md: 'none' } }}
+      >
+        <Box sx={{ width: 280, p: 2, height: '100%', overflow: 'auto' }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+            Components
+          </Typography>
+          <CommandPalette
+            variant="tree"
+            dense
+            items={[...componentDocs].sort((first, second) => first.name.localeCompare(second.name)).map((component) => ({ id: component.name, label: component.name, group: getComponentGroup(component.name) }))}
+            selectedId={selectedComponent?.name ?? undefined}
+            descriptionDisplay="none"
+            onSelect={(item) => {
+              selectComponent(item.id)
+              setMobileNavOpen(false)
+            }}
+          />
+        </Box>
+      </Drawer>
 
       <Box ref={mainPaneRef} component="main" sx={{ p: { xs: 2, md: 4 }, minWidth: 0, minHeight: 0, overflow: 'auto' }}>
         {selectedComponent ? (
@@ -7793,11 +7826,15 @@ export function ComponentDocs() {
                     onClick={() => {
                       const importStatement = `import { ${selectedComponent.name} } from '@mickyballadelli/react-things'`
                       navigator.clipboard.writeText(importStatement)
+                      setCopyCount((prev) => ({ ...prev, [selectedComponent.name]: (prev[selectedComponent.name] ?? 0) + 1 }))
                     }}
                   >
                     <ContentCopyIcon fontSize="small" />
                   </IconButton>
                 </Tooltip>
+                {copyCount[selectedComponent.name] ? (
+                  <Chip label={`${copyCount[selectedComponent.name]} copied`} size="small" color="success" variant="outlined" />
+                ) : null}
                 <Chip label={`${selectedComponent.samples.length} samples`} size="small" variant="outlined" />
               </Stack>
               <Typography color="text.secondary" sx={{ mt: 1 }}>
@@ -7843,7 +7880,7 @@ export function ComponentDocs() {
                             />
                           ) : prop.control === 'select' && prop.options ? (
                             <select
-                              value={String(currentValue)}
+                              value={String(currentValue ?? '')}
                               onChange={(e) => update(e.target.value)}
                             >
                               {prop.options.map((opt) => (
@@ -7855,14 +7892,14 @@ export function ComponentDocs() {
                           ) : prop.control === 'number' ? (
                             <input
                               type="number"
-                              value={Number(currentValue)}
+                              value={Number(currentValue ?? 0)}
                               onChange={(e) => update(Number(e.target.value))}
                               style={{ fontFamily: 'monospace' }}
                             />
                           ) : (
                             <input
                               type="text"
-                              value={String(currentValue)}
+                              value={String(currentValue ?? '')}
                               onChange={(e) => update(e.target.value)}
                               style={{ fontFamily: 'monospace' }}
                             />
