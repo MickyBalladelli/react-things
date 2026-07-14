@@ -1,4 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
