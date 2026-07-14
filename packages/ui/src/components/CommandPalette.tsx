@@ -125,6 +125,9 @@ export function CommandPalette({
         selected={selected}
         dense={dense}
         onClick={() => selectItem(item)}
+        role="option"
+        aria-selected={selected}
+        tabIndex={0}
         sx={(theme) => ({
           borderRadius: 1,
           alignItems: showInlineDescription ? 'flex-start' : 'center',
@@ -290,32 +293,17 @@ export function CommandPalette({
             boxShadow: '0 8px 18px rgba(15, 23, 42, 0.06)'
           }}
         >
-          <InputBase
-            fullWidth
-            value={query}
-            placeholder={placeholder}
-            onChange={(event) => {
-              setQuery(event.target.value)
-              setActiveIndex(0)
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'ArrowDown') {
-                event.preventDefault()
-                setActiveIndex((currentIndex) => Math.min(currentIndex + 1, flatItems.length - 1))
-              }
-
-              if (event.key === 'ArrowUp') {
-                event.preventDefault()
-                setActiveIndex((currentIndex) => Math.max(currentIndex - 1, 0))
-              }
-
-              if (event.key === 'Enter' && flatItems[activeIndex]) {
-                event.preventDefault()
-                selectItem(flatItems[activeIndex])
-              }
-            }}
-            sx={{ fontSize: 14 }}
-          />
+        <InputBase
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value)
+            setActiveIndex(0)
+          }}
+          placeholder={placeholder}
+          fullWidth
+          inputProps={{ 'aria-label': placeholder }}
+          sx={{ fontSize: dense ? 13 : 14 }}
+        />
         </Box>
       ) : null}
 
