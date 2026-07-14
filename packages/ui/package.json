@@ -1,6 +1,6 @@
 {
   "name": "@mickyballadelli/react-things",
-  "version": "0.4.15",
+  "version": "0.4.16",
   "description": "Reusable React components from React Things.",
   "type": "module",
   "main": "./dist/react-things-ui.cjs",
