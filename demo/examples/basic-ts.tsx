@@ -1,8 +1,14 @@
 import {
   ComponentExample,
   GlassBox,
+  KanbanBoard,
+  DataLens,
+  DiffViewer,
   type ComponentExampleProps,
-  type GlassBoxProps
+  type GlassBoxProps,
+  type KanbanColumn,
+  type DataLensColumn,
+  type DataLensProps
 } from '@mickyballadelli/react-things'
 
 const props: ComponentExampleProps = {
@@ -27,5 +33,36 @@ export function GlassBoxTsExample() {
     <GlassBox {...glassBoxProps}>
       Typed usage.
     </GlassBox>
+  )
+}
+
+const kanbanColumns: KanbanColumn[] = [
+  { id: 'todo', title: 'To Do', items: [{ id: 't1', title: 'Design login' }] },
+  { id: 'doing', title: 'In Progress', items: [{ id: 'd1', title: 'API integration' }] }
+]
+
+export function KanbanRealWorldTs() {
+  return <KanbanBoard columns={kanbanColumns} onChange={() => {}} />
+}
+
+const lensColumns: DataLensColumn[] = [{ id: 'name', label: 'Name' }]
+const lensRows: Array<{ name: string }> = []
+
+export function DataLensEdgeCaseTs() {
+  return (
+    <DataLens
+      columns={lensColumns}
+      rows={lensRows}
+      emptyState={<div>No results – try broadening filters</div>}
+    />
+  )
+}
+
+export function DiffViewerLargeChangeTs() {
+  return (
+    <DiffViewer
+      before="function old() { return 1 }"
+      after="function newFn() { return 42; /* edge case comment */ }"
+    />
   )
 }

@@ -4,6 +4,7 @@ import {
   Button,
   Chip,
   Divider,
+  IconButton,
   Paper,
   Stack,
   Table,
@@ -14,8 +15,11 @@ import {
   TableRow,
   Tab,
   Tabs,
+  Tooltip,
   Typography
 } from '@mui/material'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { alpha } from '@mui/material/styles'
 import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined'
 import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined'
@@ -7777,6 +7781,18 @@ export function ComponentDocs() {
                   {selectedComponent.name}
                 </Typography>
                 <Chip label="component" size="small" />
+                <Tooltip title="Copy import">
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      const importStatement = `import { ${selectedComponent.name} } from '@mickyballadelli/react-things'`
+                      navigator.clipboard.writeText(importStatement)
+                    }}
+                  >
+                    <ContentCopyIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+                <Chip label={`${selectedComponent.samples.length} samples`} size="small" variant="outlined" />
               </Stack>
               <Typography color="text.secondary" sx={{ mt: 1 }}>
                 {selectedComponent.summary}
@@ -7858,16 +7874,33 @@ export function ComponentDocs() {
               <Typography variant="h5" component="h3" fontWeight={800}>
                 Code Samples
               </Typography>
-              <Paper variant="outlined" sx={{ mt: 1.5, borderRadius: 1, overflow: 'hidden' }}>
-                <Tabs
-                  value={selectedSampleLabel}
-                  onChange={(_, nextSampleLabel: string) => setSelectedSampleLabel(nextSampleLabel)}
-                  sx={{ borderBottom: 1, borderColor: 'divider' }}
-                >
-                  {selectedSamples.map((sample) => (
-                    <Tab key={sample.label} label={sample.label} value={sample.label} />
-                  ))}
-                </Tabs>
+                <Paper variant="outlined" sx={{ mt: 1.5, borderRadius: 1, overflow: 'hidden' }}>
+                  <Stack direction="row" alignItems="center" sx={{ borderBottom: 1, borderColor: 'divider', px: 1 }}>
+                    <Tabs
+                      value={selectedSampleLabel}
+                      onChange={(_, nextSampleLabel: string) => setSelectedSampleLabel(nextSampleLabel)}
+                    >
+                      {selectedSamples.map((sample) => (
+                        <Tab key={sample.label} label={sample.label} value={sample.label} />
+                      ))}
+                    </Tabs>
+                    <Box sx={{ ml: 'auto' }}>
+                      <Tooltip title="Open in StackBlitz">
+                        <IconButton
+                          size="small"
+                          onClick={() => {
+                            const sampleKey = `${selectedComponent.name}:${selectedSampleLabel}`
+                            const code = sampleCode[sampleKey] ?? selectedSamples.find(s => s.label === selectedSampleLabel)?.initialCode ?? ''
+                            const importLine = `import { ${selectedComponent.name} } from '@mickyballadelli/react-things'`
+                            navigator.clipboard.writeText(`${importLine}\n\n${code}`)
+                            window.open('https://stackblitz.com/fork/vite-react-ts', '_blank')
+                          }}
+                        >
+                          <OpenInNewIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </Stack>
 
                 <Box sx={{ p: 2 }}>
                   {selectedSamples.map((sample) => {

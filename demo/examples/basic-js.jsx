@@ -1,4 +1,4 @@
-import { ComponentExample, GlassBox } from '@mickyballadelli/react-things'
+import { ComponentExample, GlassBox, KanbanBoard, DataLens, DiffViewer } from '@mickyballadelli/react-things'
 
 export function BasicJsExample() {
   return (
@@ -13,5 +13,32 @@ export function GlassBoxJsExample() {
     <GlassBox transparency={0.45} liquidColor="#38d6a5">
       Plain JS usage.
     </GlassBox>
+  )
+}
+
+export function KanbanRealWorldJs() {
+  const columns = [
+    { id: 'todo', title: 'To Do', items: [{ id: 't1', title: 'Design login' }] },
+    { id: 'doing', title: 'In Progress', items: [{ id: 'd1', title: 'API integration' }] }
+  ]
+  return <KanbanBoard columns={columns} onChange={() => {}} />
+}
+
+export function DataLensEdgeCaseJs() {
+  return (
+    <DataLens
+      columns={[{ id: 'name', label: 'Name' }]}
+      rows={[]}
+      emptyState={<div>No results – try broadening filters</div>}
+    />
+  )
+}
+
+export function DiffViewerLargeChangeJs() {
+  return (
+    <DiffViewer
+      before="function old() { return 1 }"
+      after="function newFn() { return 42; /* edge case comment */ }"
+    />
   )
 }
