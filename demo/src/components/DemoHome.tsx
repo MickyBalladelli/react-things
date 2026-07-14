@@ -108,6 +108,9 @@ export function DemoHome({ components, version, onSelectComponent }: DemoHomePro
             <Typography variant="h2" component="h2" fontWeight={900} sx={{ mt: 2, fontSize: { xs: 40, md: 56 }, lineHeight: 1 }}>
               React Things
             </Typography>
+            <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 0.5 }}>
+              by Micky Balladelli
+            </Typography>
 
             <Typography variant="h5" color="text.secondary" sx={{ mt: 2, maxWidth: 760, lineHeight: 1.35 }}>
               A growing kit of polished React UI components for dense product tools, creative editors, dashboards, and workflow apps.

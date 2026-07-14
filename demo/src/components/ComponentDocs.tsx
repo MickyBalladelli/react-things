@@ -7729,9 +7729,14 @@ export function ComponentDocs() {
               borderColor: 'divider'
             }}
           />
-          <Typography variant="h6" component="h1" fontWeight={850} sx={{ whiteSpace: 'nowrap', fontSize: 18 }}>
-            React Things
-          </Typography>
+          <Stack spacing={0}>
+            <Typography variant="h6" component="h1" fontWeight={850} sx={{ whiteSpace: 'nowrap', fontSize: 18 }}>
+              React Things
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: 'nowrap' }}>
+              by Micky Balladelli
+            </Typography>
+          </Stack>
         </Stack>
         <Typography
           variant="caption"
