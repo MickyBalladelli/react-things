@@ -16,3 +16,5 @@ You run: bonsai . --max-tokens 12000 --level 2 --output file --output-file /tmp/
 You inspect: /tmp/bonsai.xml
 Then answer from that context.
 ```
+update the version at each request where code change happened. version segments go up to 99.
+Display the new version
