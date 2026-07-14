@@ -1,4 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 import Box from '@mui/material/Box'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import Fade from '@mui/material/Fade'

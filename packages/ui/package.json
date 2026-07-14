@@ -1,6 +1,6 @@
 {
   "name": "@mickyballadelli/react-things",
-  "version": "0.4.6",
+  "version": "0.4.13",
   "description": "Reusable React components from React Things.",
   "type": "module",
   "main": "./dist/react-things-ui.cjs",
@@ -51,6 +51,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "rollup-plugin-visualizer": "^5.14.0"
   }
 }

@@ -1,4 +1,8 @@
 import { useMemo, useRef, useState } from 'react'
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'

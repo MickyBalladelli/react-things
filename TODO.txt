@@ -22,7 +22,6 @@
 - Add animation/performance guards (reduce motion respect) for motion-heavy components (DraggableBox, InfiniteCanvas, MorphMenu)
 
 ## Cross-cutting
-- Set up CI (lint, typecheck, tests, build) on PRs
 - Add changeset/changelog automation for releases
 - Create comprehensive README with component gallery and installation guide
 - Explore React 19 features (use, actions) where beneficial

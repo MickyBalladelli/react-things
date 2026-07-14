@@ -56,6 +56,8 @@ export type DataLensProps<Row extends object = Record<string, unknown>> = Omit<B
   initialSort?: DataLensSort
   emptyState?: ReactNode
   dense?: boolean
+  loading?: boolean
+  error?: ReactNode
   onRowSelect?: (row: Row) => void
 }
 
@@ -259,7 +261,9 @@ export function DataLens<Row extends object = Record<string, unknown>>({
         </Stack>
       </Stack>
 
-      {filterableColumns.length ? (
+      {loading && <Box sx={{ p: 4, textAlign: 'center', color: 'text.secondary' }}>Loading…</Box>}
+      {error && <Box sx={{ p: 3, color: 'error.main' }}>{error}</Box>}
+      {!loading && !error && filterableColumns.length ? (
         <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mb: 1.5 }}>
           {filterableColumns.map((column) => (
             <Select
