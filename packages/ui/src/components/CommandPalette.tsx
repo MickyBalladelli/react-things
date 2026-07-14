@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef } from 'react'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import Box from '@mui/material/Box'
 import Collapse from '@mui/material/Collapse'
 import InputBase from '@mui/material/InputBase'
@@ -196,13 +197,31 @@ export function CommandPalette({
     )
   }
 
+  const parentRef = useRef<HTMLDivElement>(null)
+  const rowVirtualizer = useVirtualizer({
+    count: filteredItems.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => (dense ? 36 : 44),
+    overscan: 5
+  })
+
   function renderList() {
     if (!filteredItems.length) {
       return <Box sx={{ px: 2, py: 4, textAlign: 'center', color: 'text.secondary' }}>{emptyText}</Box>
     }
 
     if (!visibleGroups.length) {
-      return filteredItems.map((item) => renderItem(item))
+      return (
+        <div ref={parentRef} style={{ height: 400, overflow: 'auto' }}>
+          <div style={{ height: `${rowVirtualizer.getTotalSize()}px`, position: 'relative' }}>
+            {rowVirtualizer.getVirtualItems().map((virtualItem: { key: React.Key; size: number; start: number; index: number }) => (
+              <div key={virtualItem.key} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: `${virtualItem.size}px`, transform: `translateY(${virtualItem.start}px)` }}>
+                {renderItem(filteredItems[virtualItem.index])}
+              </div>
+            ))}
+          </div>
+        </div>
+      )
     }
 
     return visibleGroups.map((group) => (

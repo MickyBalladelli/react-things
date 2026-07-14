@@ -1,6 +1,6 @@
 {
   "name": "@mickyballadelli/react-things",
-  "version": "0.4.21",
+  "version": "0.4.23",
   "description": "Reusable React components from React Things.",
   "type": "module",
   "main": "./dist/react-things-ui.cjs",
@@ -34,14 +34,16 @@
   "publishConfig": {
     "access": "public"
   },
+  "dependencies": {
+    "@tanstack/react-virtual": "^3.13.6"
+  },
   "peerDependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "@tanstack/react-virtual": "^3.13.6"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@emotion/react": "^11.14.0",
