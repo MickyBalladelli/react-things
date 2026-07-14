@@ -5834,6 +5834,7 @@ export function ComponentDocs() {
   const selectedComponent = selectedComponentName
     ? componentDocs.find((component) => component.name === selectedComponentName) ?? null
     : null
+  const [playgroundState, setPlaygroundState] = useState<Record<string, Record<string, unknown>>>({})
   const [glassBoxConfig, setGlassBoxConfig] = useState(defaultGlassBoxConfig)
   const [focusRingConfig, setFocusRingConfig] = useState<FocusRingConfig>({ pulseSize: 34 })
   const [sampleCode, setSampleCode] = useState<Record<string, string>>(createInitialSampleCode(defaultGlassBoxConfig, { pulseSize: 34 }))
@@ -7818,42 +7819,60 @@ export function ComponentDocs() {
                 </Typography>
                 <Paper variant="outlined" sx={{ p: 2, mt: 1.5, borderRadius: 1 }}>
                   <Stack spacing={2}>
-                    {selectedComponent.props.map((prop) => (
-                      <Box key={prop.name} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Typography sx={{ width: 160, flexShrink: 0 }} fontFamily="monospace">
-                          {prop.name}
-                        </Typography>
-                        {prop.control === 'boolean' ? (
-                          <input
-                            type="checkbox"
-                            checked={Boolean((selectedComponent as any)._playground?.[prop.name] ?? prop.defaultValue === 'true')}
-                            onChange={(e) => {
-                              // placeholder wiring - will connect to live state
-                            }}
-                          />
-                        ) : prop.control === 'select' && prop.options ? (
-                          <select
-                            value={String((selectedComponent as any)._playground?.[prop.name] ?? prop.defaultValue)}
-                            onChange={() => {}}
-                          >
-                            {prop.options.map((opt) => (
-                              <option key={String(opt.value)} value={String(opt.value)}>
-                                {opt.label}
-                              </option>
-                            ))}
-                          </select>
-                        ) : (
-                          <input
-                            type={prop.control === 'number' ? 'number' : 'text'}
-                            defaultValue={prop.defaultValue}
-                            style={{ fontFamily: 'monospace' }}
-                          />
-                        )}
-                        <Typography variant="caption" color="text.secondary">
-                          {prop.description}
-                        </Typography>
-                      </Box>
-                    ))}
+                    {selectedComponent.props.map((prop) => {
+                      const currentValue = playgroundState[selectedComponent.name]?.[prop.name] ?? prop.defaultValue
+                      const update = (val: unknown) => {
+                        setPlaygroundState((prev) => ({
+                          ...prev,
+                          [selectedComponent.name]: {
+                            ...(prev[selectedComponent.name] ?? {}),
+                            [prop.name]: val
+                          }
+                        }))
+                      }
+                      return (
+                        <Box key={prop.name} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                          <Typography sx={{ width: 160, flexShrink: 0 }} fontFamily="monospace">
+                            {prop.name}
+                          </Typography>
+                          {prop.control === 'boolean' ? (
+                            <input
+                              type="checkbox"
+                              checked={Boolean(currentValue)}
+                              onChange={(e) => update(e.target.checked)}
+                            />
+                          ) : prop.control === 'select' && prop.options ? (
+                            <select
+                              value={String(currentValue)}
+                              onChange={(e) => update(e.target.value)}
+                            >
+                              {prop.options.map((opt) => (
+                                <option key={String(opt.value)} value={String(opt.value)}>
+                                  {opt.label}
+                                </option>
+                              ))}
+                            </select>
+                          ) : prop.control === 'number' ? (
+                            <input
+                              type="number"
+                              value={Number(currentValue)}
+                              onChange={(e) => update(Number(e.target.value))}
+                              style={{ fontFamily: 'monospace' }}
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              value={String(currentValue)}
+                              onChange={(e) => update(e.target.value)}
+                              style={{ fontFamily: 'monospace' }}
+                            />
+                          )}
+                          <Typography variant="caption" color="text.secondary">
+                            {prop.description}
+                          </Typography>
+                        </Box>
+                      )
+                    })}
                   </Stack>
                 </Paper>
               </Box>
