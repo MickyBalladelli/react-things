@@ -8,7 +8,7 @@ import { useId, forwardRef } from 'react'
  * @example
  * <GlassBox transparency={0.4}>Content</GlassBox>
  */
-export type GlassBoxProps = BoxProps & {
+export type GlassBoxProps = Omit<BoxProps, 'ref'> & {
   transparency?: number
   fill?: number
   liquidColor?: string
