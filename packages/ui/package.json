@@ -1,6 +1,6 @@
 {
   "name": "@mickyballadelli/react-things",
-  "version": "0.4.3",
+  "version": "0.4.6",
   "description": "Reusable React components from React Things.",
   "type": "module",
   "main": "./dist/react-things-ui.cjs",
@@ -40,7 +40,8 @@
     "@mui/icons-material": "^7.0.0",
     "@mui/material": "^7.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "@tanstack/react-virtual": "^3.13.6"
   },
   "devDependencies": {
     "@emotion/react": "^11.14.0",

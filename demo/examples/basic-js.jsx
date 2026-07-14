@@ -18,8 +18,8 @@ export function GlassBoxJsExample() {
 
 export function KanbanRealWorldJs() {
   const columns = [
-    { id: 'todo', title: 'To Do', items: [{ id: 't1', title: 'Design login' }] },
-    { id: 'doing', title: 'In Progress', items: [{ id: 'd1', title: 'API integration' }] }
+    { id: 'todo', title: 'To Do', cards: [{ id: 't1', title: 'Design login' }] },
+    { id: 'doing', title: 'In Progress', cards: [{ id: 'd1', title: 'API integration' }] }
   ]
   return <KanbanBoard columns={columns} onChange={() => {}} />
 }
