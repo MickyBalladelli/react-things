@@ -25,6 +25,9 @@ export type DiffViewerChange = {
   decision: DiffViewerDecision
 }
 
+/**
+ * Side-by-side or unified diff viewer with accept/reject and comments.
+ */
 export type DiffViewerProps = {
   before: string | unknown
   after: string | unknown

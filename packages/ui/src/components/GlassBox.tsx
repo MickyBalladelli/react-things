@@ -3,6 +3,11 @@ import { alpha } from '@mui/material/styles'
 import type { BoxProps } from '@mui/material/Box'
 import { useId } from 'react'
 
+/**
+ * GlassBox renders a translucent frosted-glass container.
+ * @example
+ * <GlassBox transparency={0.4}>Content</GlassBox>
+ */
 export type GlassBoxProps = BoxProps & {
   transparency?: number
   fill?: number

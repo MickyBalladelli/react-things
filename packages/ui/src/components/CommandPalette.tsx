@@ -60,6 +60,9 @@ function uniqueGroups(items: CommandPaletteItem[]) {
   return Array.from(new Set(items.map((item) => item.group).filter(Boolean))) as string[]
 }
 
+/**
+ * Keyboard-first command palette with tree/list variants and live filtering.
+ */
 export function CommandPalette({
   items,
   variant = 'list',
