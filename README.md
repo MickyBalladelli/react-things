@@ -26,6 +26,11 @@ export function Example() {
 
 React and React DOM are peer dependencies.
 
+## Try it online
+
+- [Open in StackBlitz](https://stackblitz.com/fork/github/mickyballadelli/react-things)
+- [Open in CodeSandbox](https://codesandbox.io/s/github/mickyballadelli/react-things)
+
 ## Workspaces
 
 - `packages/ui`: component library

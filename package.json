@@ -17,6 +17,7 @@
     "bump:major": "npm version major -w @mickyballadelli/react-things --no-git-tag-version"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.5",
     "@vitejs/plugin-react": "^5.0.0",
     "esbuild": "^0.25.0",
     "typescript": "^5.9.0",
