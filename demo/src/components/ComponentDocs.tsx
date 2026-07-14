@@ -5836,7 +5836,15 @@ export function ComponentDocs() {
   const selectedComponent = selectedComponentName
     ? componentDocs.find((component) => component.name === selectedComponentName) ?? null
     : null
-  const [playgroundState, setPlaygroundState] = useState<Record<string, Record<string, unknown>>>({})
+  const [playgroundState, setPlaygroundState] = useState<Record<string, Record<string, unknown>>>(() => {
+    if (typeof window === 'undefined') return {}
+    try {
+      const stored = window.localStorage.getItem('react-things-playground')
+      return stored ? JSON.parse(stored) : {}
+    } catch {
+      return {}
+    }
+  })
   const [copyCount, setCopyCount] = useState<Record<string, number>>({})
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [glassBoxConfig, setGlassBoxConfig] = useState(defaultGlassBoxConfig)
@@ -7859,13 +7867,17 @@ export function ComponentDocs() {
                     {selectedComponent.props.map((prop) => {
                       const currentValue = playgroundState[selectedComponent.name]?.[prop.name] ?? prop.defaultValue
                       const update = (val: unknown) => {
-                        setPlaygroundState((prev) => ({
-                          ...prev,
+                        const next = {
+                          ...playgroundState,
                           [selectedComponent.name]: {
-                            ...(prev[selectedComponent.name] ?? {}),
+                            ...(playgroundState[selectedComponent.name] ?? {}),
                             [prop.name]: val
                           }
-                        }))
+                        }
+                        setPlaygroundState(next)
+                        try {
+                          window.localStorage.setItem('react-things-playground', JSON.stringify(next))
+                        } catch {}
                       }
                       return (
                         <Box key={prop.name} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

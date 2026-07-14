@@ -1,6 +1,6 @@
 {
   "name": "@mickyballadelli/react-things",
-  "version": "0.4.19",
+  "version": "0.4.21",
   "description": "Reusable React components from React Things.",
   "type": "module",
   "main": "./dist/react-things-ui.cjs",
@@ -52,6 +52,12 @@
     "@types/react-dom": "^19.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "rollup-plugin-visualizer": "^5.14.0"
+    "rollup-plugin-visualizer": "^5.14.0",
+    "@storybook/react-vite": "^8.6.12",
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/addon-interactions": "^8.6.12",
+    "@storybook/addon-links": "^8.6.12",
+    "@storybook/addon-a11y": "^8.6.12",
+    "storybook": "^8.6.12"
   }
 }
