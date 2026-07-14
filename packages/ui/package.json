@@ -1,6 +1,6 @@
 {
   "name": "@mickyballadelli/react-things",
-  "version": "0.4.26",
+  "version": "0.4.27",
   "description": "Reusable React components from React Things.",
   "type": "module",
   "main": "./dist/react-things-ui.cjs",
@@ -19,7 +19,8 @@
   ],
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "size": "size-limit"
   },
   "keywords": [
     "react",
@@ -60,6 +61,14 @@
     "@storybook/addon-interactions": "^8.6.12",
     "@storybook/addon-links": "^8.6.12",
     "@storybook/addon-a11y": "^8.6.12",
-    "storybook": "^8.6.12"
-  }
+    "storybook": "^8.6.12",
+    "@size-limit/preset-small-lib": "^11.2.0",
+    "size-limit": "^11.2.0"
+  },
+  "size-limit": [
+    {
+      "path": "dist/react-things-ui.js",
+      "limit": "120 kB"
+    }
+  ]
 }
