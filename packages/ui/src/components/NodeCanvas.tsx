@@ -57,6 +57,9 @@ export type NodeCanvasProps = BoxProps & {
   onConnectionsChange?: (connections: NodeCanvasConnection[]) => void
   onNodeMove?: (nodeId: string, position: NodeCanvasPosition) => void
   onNodeSelect?: (node: NodeCanvasNode) => void
+  loading?: boolean
+  error?: ReactNode
+  emptyState?: ReactNode
 }
 
 function snap(value: number, gridSize: number) {

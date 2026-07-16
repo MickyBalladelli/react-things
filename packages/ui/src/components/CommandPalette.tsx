@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef } from 'react'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import Box from '@mui/material/Box'
 import Collapse from '@mui/material/Collapse'
 import InputBase from '@mui/material/InputBase'
@@ -60,6 +61,9 @@ function uniqueGroups(items: CommandPaletteItem[]) {
   return Array.from(new Set(items.map((item) => item.group).filter(Boolean))) as string[]
 }
 
+/**
+ * Keyboard-first command palette with tree/list variants and live filtering.
+ */
 export function CommandPalette({
   items,
   variant = 'list',
@@ -125,6 +129,9 @@ export function CommandPalette({
         selected={selected}
         dense={dense}
         onClick={() => selectItem(item)}
+        role="option"
+        aria-selected={selected}
+        tabIndex={0}
         sx={(theme) => ({
           borderRadius: 1,
           alignItems: showInlineDescription ? 'flex-start' : 'center',
@@ -190,13 +197,31 @@ export function CommandPalette({
     )
   }
 
+  const parentRef = useRef<HTMLDivElement>(null)
+  const rowVirtualizer = useVirtualizer({
+    count: filteredItems.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => (dense ? 36 : 44),
+    overscan: 5
+  })
+
   function renderList() {
     if (!filteredItems.length) {
       return <Box sx={{ px: 2, py: 4, textAlign: 'center', color: 'text.secondary' }}>{emptyText}</Box>
     }
 
     if (!visibleGroups.length) {
-      return filteredItems.map((item) => renderItem(item))
+      return (
+        <div ref={parentRef} style={{ height: 400, overflow: 'auto' }}>
+          <div style={{ height: `${rowVirtualizer.getTotalSize()}px`, position: 'relative' }}>
+            {rowVirtualizer.getVirtualItems().map((virtualItem: { key: React.Key; size: number; start: number; index: number }) => (
+              <div key={virtualItem.key} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: `${virtualItem.size}px`, transform: `translateY(${virtualItem.start}px)` }}>
+                {renderItem(filteredItems[virtualItem.index])}
+              </div>
+            ))}
+          </div>
+        </div>
+      )
     }
 
     return visibleGroups.map((group) => (
@@ -290,32 +315,17 @@ export function CommandPalette({
             boxShadow: '0 8px 18px rgba(15, 23, 42, 0.06)'
           }}
         >
-          <InputBase
-            fullWidth
-            value={query}
-            placeholder={placeholder}
-            onChange={(event) => {
-              setQuery(event.target.value)
-              setActiveIndex(0)
-            }}
-            onKeyDown={(event) => {
-              if (event.key === 'ArrowDown') {
-                event.preventDefault()
-                setActiveIndex((currentIndex) => Math.min(currentIndex + 1, flatItems.length - 1))
-              }
-
-              if (event.key === 'ArrowUp') {
-                event.preventDefault()
-                setActiveIndex((currentIndex) => Math.max(currentIndex - 1, 0))
-              }
-
-              if (event.key === 'Enter' && flatItems[activeIndex]) {
-                event.preventDefault()
-                selectItem(flatItems[activeIndex])
-              }
-            }}
-            sx={{ fontSize: 14 }}
-          />
+        <InputBase
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value)
+            setActiveIndex(0)
+          }}
+          placeholder={placeholder}
+          fullWidth
+          inputProps={{ 'aria-label': placeholder }}
+          sx={{ fontSize: dense ? 13 : 14 }}
+        />
         </Box>
       ) : null}
 

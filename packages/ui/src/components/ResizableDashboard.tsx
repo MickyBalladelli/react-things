@@ -1,4 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
 import OpenWithIcon from '@mui/icons-material/OpenWith'
 import Box from '@mui/material/Box'
@@ -374,7 +378,7 @@ export function ResizableDashboard({
               boxShadow: dragState?.id === item.id
                 ? `0 18px 40px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.42 : 0.18)}`
                 : `0 8px 22px ${alpha(theme.palette.common.black, theme.palette.mode === 'dark' ? 0.32 : 0.08)}`,
-              transition: dragState ? 'none' : 'left 160ms ease, top 160ms ease, width 160ms ease, height 160ms ease, box-shadow 160ms ease',
+              transition: dragState || prefersReducedMotion() ? 'none' : 'left 160ms ease, top 160ms ease, width 160ms ease, height 160ms ease, box-shadow 160ms ease',
               zIndex: dragState?.id === item.id ? 2 : 0
             })}
           >

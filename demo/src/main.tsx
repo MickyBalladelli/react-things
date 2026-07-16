@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined'
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined'
@@ -66,6 +66,17 @@ function createDemoTheme(mode: ThemeMode) {
 function ThemedDemo() {
   const [mode, setMode] = useState<ThemeMode>(readThemeMode)
   const theme = useMemo(() => createDemoTheme(mode), [mode])
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-color-scheme: dark)')
+    function handleChange(e: MediaQueryListEvent) {
+      if (!localStorage.getItem('react-things-demo-theme')) {
+        setMode(e.matches ? 'dark' : 'light')
+      }
+    }
+    media.addEventListener('change', handleChange)
+    return () => media.removeEventListener('change', handleChange)
+  }, [])
 
   function toggleMode() {
     setMode((currentMode) => {

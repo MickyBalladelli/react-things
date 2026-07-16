@@ -3,6 +3,10 @@ import Box from '@mui/material/Box'
 import type { BoxProps } from '@mui/material/Box'
 import type { ReactNode } from 'react'
 
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+
 export type DraggableBoxPosition = {
   x: number
   y: number
@@ -118,6 +122,8 @@ export function DraggableBox({
     })
   }
 
+  const reduced = prefersReducedMotion()
+
   return (
     <Box
       {...props}
@@ -131,9 +137,8 @@ export function DraggableBox({
         ...(Array.isArray(sx) ? sx : sx ? [sx] : [])
       ]}
       onPointerMove={(event) => {
-        if (dragging) {
-          moveToPointer(event.clientX, event.clientY)
-        }
+        if (!dragging) return
+        if (!reduced) moveToPointer(event.clientX, event.clientY)
       }}
       onPointerUp={(event) => {
         setDragging(false)

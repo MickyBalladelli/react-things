@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef } from 'react'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ViewAgendaIcon from '@mui/icons-material/ViewAgenda'
@@ -56,6 +57,8 @@ export type DataLensProps<Row extends object = Record<string, unknown>> = Omit<B
   initialSort?: DataLensSort
   emptyState?: ReactNode
   dense?: boolean
+  loading?: boolean
+  error?: ReactNode
   onRowSelect?: (row: Row) => void
 }
 
@@ -164,6 +167,8 @@ export function DataLens<Row extends object = Record<string, unknown>>({
   initialSort,
   emptyState = 'No rows match',
   dense = false,
+  loading = false,
+  error,
   onRowSelect,
   sx,
   ...props
@@ -259,7 +264,9 @@ export function DataLens<Row extends object = Record<string, unknown>>({
         </Stack>
       </Stack>
 
-      {filterableColumns.length ? (
+      {loading && <Box sx={{ p: 4, textAlign: 'center', color: 'text.secondary' }}>Loading…</Box>}
+      {error && <Box sx={{ p: 3, color: 'error.main' }}>{error}</Box>}
+      {!loading && !error && filterableColumns.length ? (
         <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mb: 1.5 }}>
           {filterableColumns.map((column) => (
             <Select

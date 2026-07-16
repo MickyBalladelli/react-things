@@ -1,6 +1,6 @@
 {
   "name": "@mickyballadelli/react-things",
-  "version": "0.4.0",
+  "version": "0.4.35",
   "description": "Reusable React components from React Things.",
   "type": "module",
   "main": "./dist/react-things-ui.cjs",
@@ -19,7 +19,8 @@
   ],
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "size": "size-limit"
   },
   "keywords": [
     "react",
@@ -33,6 +34,9 @@
   "sideEffects": false,
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@tanstack/react-virtual": "^3.13.6"
   },
   "peerDependencies": {
     "@emotion/react": "^11.14.0",
@@ -50,6 +54,21 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  }
+    "react-dom": "^19.0.0",
+    "rollup-plugin-visualizer": "^5.14.0",
+    "@storybook/react-vite": "^8.6.12",
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/addon-interactions": "^8.6.12",
+    "@storybook/addon-links": "^8.6.12",
+    "@storybook/addon-a11y": "^8.6.12",
+    "storybook": "^8.6.12",
+    "@size-limit/preset-small-lib": "^11.2.0",
+    "size-limit": "^11.2.0"
+  },
+  "size-limit": [
+    {
+      "path": "dist/react-things-ui.js",
+      "limit": "120 kB"
+    }
+  ]
 }

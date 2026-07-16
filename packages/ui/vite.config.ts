@@ -1,28 +1,30 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'node:path'
-
-const externalPackages = [
-  'react',
-  'react-dom',
-  'react/jsx-runtime',
-  '@mui/material',
-  '@mui/icons-material',
-  '@emotion/react',
-  '@emotion/styled'
-]
+import { visualizer } from 'rollup-plugin-visualizer'
 
 export default defineConfig({
   plugins: [react()],
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'ReactThingsUI',
-      fileName: 'react-things-ui',
-      formats: ['es', 'cjs']
+      entry: 'src/index.ts',
+      formats: ['es', 'cjs'],
+      fileName: (format) => `react-things-ui.${format === 'es' ? 'js' : 'cjs'}`
     },
     rollupOptions: {
-      external: (id) => externalPackages.some((packageName) => id === packageName || id.startsWith(`${packageName}/`))
+      external: ['react', 'react-dom', '@mui/material', '@emotion/react', '@emotion/styled', '@mui/icons-material'],
+      plugins: [
+        visualizer({
+          filename: 'dist/stats.html',
+          open: false,
+          gzipSize: true,
+          brotliSize: true
+        })
+      ]
     }
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./vitest.setup.ts']
   }
 })

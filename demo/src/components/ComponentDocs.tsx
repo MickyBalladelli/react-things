@@ -4,6 +4,8 @@ import {
   Button,
   Chip,
   Divider,
+  Drawer,
+  IconButton,
   Paper,
   Stack,
   Table,
@@ -14,8 +16,12 @@ import {
   TableRow,
   Tab,
   Tabs,
+  Tooltip,
   Typography
 } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { alpha } from '@mui/material/styles'
 import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined'
 import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined'
@@ -90,6 +96,11 @@ type PropReference = {
   defaultValue: string
   possibleValues: string
   description: string
+  control?: 'text' | 'number' | 'boolean' | 'select' | 'color'
+  options?: { label: string; value: string | number | boolean }[]
+  min?: number
+  max?: number
+  step?: number
 }
 
 type CodeSample = {
@@ -5825,6 +5836,17 @@ export function ComponentDocs() {
   const selectedComponent = selectedComponentName
     ? componentDocs.find((component) => component.name === selectedComponentName) ?? null
     : null
+  const [playgroundState, setPlaygroundState] = useState<Record<string, Record<string, unknown>>>(() => {
+    if (typeof window === 'undefined') return {}
+    try {
+      const stored = window.localStorage.getItem('react-things-playground')
+      return stored ? JSON.parse(stored) : {}
+    } catch {
+      return {}
+    }
+  })
+  const [copyCount, setCopyCount] = useState<Record<string, number>>({})
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [glassBoxConfig, setGlassBoxConfig] = useState(defaultGlassBoxConfig)
   const [focusRingConfig, setFocusRingConfig] = useState<FocusRingConfig>({ pulseSize: 34 })
   const [sampleCode, setSampleCode] = useState<Record<string, string>>(createInitialSampleCode(defaultGlassBoxConfig, { pulseSize: 34 }))
@@ -7703,10 +7725,20 @@ export function ComponentDocs() {
           bgcolor: 'background.paper',
           p: 2,
           minHeight: 0,
-          overflow: 'auto'
+          overflow: 'auto',
+          display: { xs: 'none', md: 'block' }
         }}
       >
         <Stack direction="row" spacing={1.25} alignItems="center">
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open navigation"
+            onClick={() => setMobileNavOpen(true)}
+            sx={{ display: { md: 'none' }, mr: 1 }}
+          >
+            <MenuIcon />
+          </IconButton>
           <Box
             component="img"
             src="/react-things-icon.png"
@@ -7720,9 +7752,14 @@ export function ComponentDocs() {
               borderColor: 'divider'
             }}
           />
-          <Typography variant="h6" component="h1" fontWeight={850} sx={{ whiteSpace: 'nowrap', fontSize: 18 }}>
-            React Things
-          </Typography>
+          <Stack spacing={0}>
+            <Typography variant="h6" component="h1" fontWeight={850} sx={{ whiteSpace: 'nowrap', fontSize: 18 }}>
+              React Things
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: 'nowrap' }}>
+              by Micky Balladelli
+            </Typography>
+          </Stack>
         </Stack>
         <Typography
           variant="caption"
@@ -7738,7 +7775,7 @@ export function ComponentDocs() {
         <Button
           fullWidth
           variant={selectedComponent ? 'outlined' : 'contained'}
-          sx={{ mb: 1.5, justifyContent: 'flex-start' }}
+          sx={{ mb: 1.5, justifyContent: 'flex-start', minHeight: 44 }}
           onClick={selectHome}
         >
           Home
@@ -7747,21 +7784,40 @@ export function ComponentDocs() {
         <CommandPalette
           variant="tree"
           dense
-          items={[...componentDocs].sort((first, second) => first.name.localeCompare(second.name)).map((component) => ({
-            id: component.name,
-            label: component.name,
-            group: getComponentGroup(component.name),
-            description: component.summary,
-            keywords: [component.summary, component.description]
-          }))}
-          selectedId={selectedComponent?.name}
-          placeholder="Search components"
-          defaultExpandedGroups={['Display', 'Layout', 'Input', 'Navigation', 'Effects']}
-          descriptionDisplay="tooltip"
-          sx={{ gap: 1.25 }}
-          onSelect={(item) => selectComponent(item.id)}
+          items={[...componentDocs].sort((first, second) => first.name.localeCompare(second.name)).map((component) => ({ id: component.name, label: component.name, group: getComponentGroup(component.name) }))}
+          selectedId={selectedComponent?.name ?? undefined}
+          descriptionDisplay="none"
+          onSelect={(item) => {
+            selectComponent(item.id)
+            setMobileNavOpen(false)
+          }}
+          sx={{ flex: 1, minHeight: 0, overflow: 'auto' }}
         />
       </Box>
+
+      <Drawer
+        open={mobileNavOpen}
+        onClose={() => setMobileNavOpen(false)}
+        ModalProps={{ keepMounted: true }}
+        sx={{ display: { md: 'none' } }}
+      >
+        <Box sx={{ width: 280, p: 2, height: '100%', overflow: 'auto' }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+            Components
+          </Typography>
+          <CommandPalette
+            variant="tree"
+            dense
+            items={[...componentDocs].sort((first, second) => first.name.localeCompare(second.name)).map((component) => ({ id: component.name, label: component.name, group: getComponentGroup(component.name) }))}
+            selectedId={selectedComponent?.name ?? undefined}
+            descriptionDisplay="none"
+            onSelect={(item) => {
+              selectComponent(item.id)
+              setMobileNavOpen(false)
+            }}
+          />
+        </Box>
+      </Drawer>
 
       <Box ref={mainPaneRef} component="main" sx={{ p: { xs: 2, md: 4 }, minWidth: 0, minHeight: 0, overflow: 'auto' }}>
         {selectedComponent ? (
@@ -7772,6 +7828,22 @@ export function ComponentDocs() {
                   {selectedComponent.name}
                 </Typography>
                 <Chip label="component" size="small" />
+                <Tooltip title="Copy import">
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      const importStatement = `import { ${selectedComponent.name} } from '@mickyballadelli/react-things'`
+                      navigator.clipboard.writeText(importStatement)
+                      setCopyCount((prev) => ({ ...prev, [selectedComponent.name]: (prev[selectedComponent.name] ?? 0) + 1 }))
+                    }}
+                  >
+                    <ContentCopyIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+                {copyCount[selectedComponent.name] ? (
+                  <Chip label={`${copyCount[selectedComponent.name]} copied`} size="small" color="success" variant="outlined" />
+                ) : null}
+                <Chip label={`${selectedComponent.samples.length} samples`} size="small" variant="outlined" />
               </Stack>
               <Typography color="text.secondary" sx={{ mt: 1 }}>
                 {selectedComponent.summary}
@@ -7784,6 +7856,76 @@ export function ComponentDocs() {
             <Paper variant="outlined" sx={{ overflow: 'hidden', borderRadius: 1 }}>
               {renderPreview()}
             </Paper>
+
+            {selectedComponent.props.length > 0 && (
+              <Box>
+                <Typography variant="h5" component="h3" fontWeight={800}>
+                  Live Prop Playground
+                </Typography>
+                <Paper variant="outlined" sx={{ p: 2, mt: 1.5, borderRadius: 1 }}>
+                  <Stack spacing={2}>
+                    {selectedComponent.props.map((prop) => {
+                      const currentValue = playgroundState[selectedComponent.name]?.[prop.name] ?? prop.defaultValue
+                      const update = (val: unknown) => {
+                        const next = {
+                          ...playgroundState,
+                          [selectedComponent.name]: {
+                            ...(playgroundState[selectedComponent.name] ?? {}),
+                            [prop.name]: val
+                          }
+                        }
+                        setPlaygroundState(next)
+                        try {
+                          window.localStorage.setItem('react-things-playground', JSON.stringify(next))
+                        } catch {}
+                      }
+                      return (
+                        <Box key={prop.name} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                          <Typography sx={{ width: 160, flexShrink: 0 }} fontFamily="monospace">
+                            {prop.name}
+                          </Typography>
+                          {prop.control === 'boolean' ? (
+                            <input
+                              type="checkbox"
+                              checked={Boolean(currentValue)}
+                              onChange={(e) => update(e.target.checked)}
+                            />
+                          ) : prop.control === 'select' && prop.options ? (
+                            <select
+                              value={String(currentValue ?? '')}
+                              onChange={(e) => update(e.target.value)}
+                            >
+                              {prop.options.map((opt) => (
+                                <option key={String(opt.value)} value={String(opt.value)}>
+                                  {opt.label}
+                                </option>
+                              ))}
+                            </select>
+                          ) : prop.control === 'number' ? (
+                            <input
+                              type="number"
+                              value={Number(currentValue ?? 0)}
+                              onChange={(e) => update(Number(e.target.value))}
+                              style={{ fontFamily: 'monospace' }}
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              value={String(currentValue ?? '')}
+                              onChange={(e) => update(e.target.value)}
+                              style={{ fontFamily: 'monospace' }}
+                            />
+                          )}
+                          <Typography variant="caption" color="text.secondary">
+                            {prop.description}
+                          </Typography>
+                        </Box>
+                      )
+                    })}
+                  </Stack>
+                </Paper>
+              </Box>
+            )}
 
             <Box>
               <Typography variant="h5" component="h3" fontWeight={800}>
@@ -7805,16 +7947,33 @@ export function ComponentDocs() {
               <Typography variant="h5" component="h3" fontWeight={800}>
                 Code Samples
               </Typography>
-              <Paper variant="outlined" sx={{ mt: 1.5, borderRadius: 1, overflow: 'hidden' }}>
-                <Tabs
-                  value={selectedSampleLabel}
-                  onChange={(_, nextSampleLabel: string) => setSelectedSampleLabel(nextSampleLabel)}
-                  sx={{ borderBottom: 1, borderColor: 'divider' }}
-                >
-                  {selectedSamples.map((sample) => (
-                    <Tab key={sample.label} label={sample.label} value={sample.label} />
-                  ))}
-                </Tabs>
+                <Paper variant="outlined" sx={{ mt: 1.5, borderRadius: 1, overflow: 'hidden' }}>
+                  <Stack direction="row" alignItems="center" sx={{ borderBottom: 1, borderColor: 'divider', px: 1 }}>
+                    <Tabs
+                      value={selectedSampleLabel}
+                      onChange={(_, nextSampleLabel: string) => setSelectedSampleLabel(nextSampleLabel)}
+                    >
+                      {selectedSamples.map((sample) => (
+                        <Tab key={sample.label} label={sample.label} value={sample.label} />
+                      ))}
+                    </Tabs>
+                    <Box sx={{ ml: 'auto' }}>
+                      <Tooltip title="Open in StackBlitz">
+                        <IconButton
+                          size="small"
+                          onClick={() => {
+                            const sampleKey = `${selectedComponent.name}:${selectedSampleLabel}`
+                            const code = sampleCode[sampleKey] ?? selectedSamples.find(s => s.label === selectedSampleLabel)?.initialCode ?? ''
+                            const importLine = `import { ${selectedComponent.name} } from '@mickyballadelli/react-things'`
+                            navigator.clipboard.writeText(`${importLine}\n\n${code}`)
+                            window.open('https://stackblitz.com/fork/vite-react-ts', '_blank')
+                          }}
+                        >
+                          <OpenInNewIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </Stack>
 
                 <Box sx={{ p: 2 }}>
                   {selectedSamples.map((sample) => {
