@@ -8,6 +8,6 @@ test('loads demo and shows React Things header', async ({ page }) => {
 
 test('can search for a component', async ({ page }) => {
   await page.goto('/')
-  await page.getByPlaceholder(/search components/i).fill('GlassBox')
-  await expect(page.getByText('GlassBox')).toBeVisible()
+  await page.getByPlaceholder(/search components/i).fill('FocusRing')
+  await expect(page.getByText('FocusRing')).toBeVisible()
 })

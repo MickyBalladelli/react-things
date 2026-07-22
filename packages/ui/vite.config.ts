@@ -11,7 +11,7 @@ export default defineConfig({
       fileName: (format) => `react-things-ui.${format === 'es' ? 'js' : 'cjs'}`
     },
     rollupOptions: {
-      external: ['react', 'react-dom', '@mui/material', '@emotion/react', '@emotion/styled', '@mui/icons-material'],
+      external: ['react', 'react-dom', '@mui/material', '@emotion/react', '@emotion/styled', '@mui/icons-material', 'three', '@react-three/fiber', '@react-three/drei', '@react-three/postprocessing'],
       plugins: [
         visualizer({
           filename: 'dist/stats.html',

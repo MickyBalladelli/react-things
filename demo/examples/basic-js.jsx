@@ -1,4 +1,4 @@
-import { ComponentExample, GlassBox, KanbanBoard, DataLens, DiffViewer } from '@mickyballadelli/react-things'
+import { ComponentExample, KanbanBoard, DataLens, DiffViewer } from '@mickyballadelli/react-things'
 
 export function BasicJsExample() {
   return (
@@ -8,13 +8,6 @@ export function BasicJsExample() {
   )
 }
 
-export function GlassBoxJsExample() {
-  return (
-    <GlassBox transparency={0.45} liquidColor="#38d6a5">
-      Plain JS usage.
-    </GlassBox>
-  )
-}
 
 export function KanbanRealWorldJs() {
   const columns = [

@@ -56,7 +56,6 @@ import {
   FocusRing,
   FloatingToolbar,
   FlowBuilder,
-  GlassBox,
   GesturePad,
   InfiniteCanvas,
   InspectorDrawer,
@@ -86,7 +85,6 @@ import {
 } from '@mickyballadelli/react-things'
 import type { BulkActionBarAction, ColorStudioColor, CommandDockItem, DataCardGridMetric, DataLensColumn, DockTab, DropComposerItem, FlowBuilderConnection, FlowBuilderNode, InspectorDrawerFieldValue, InspectorDrawerSection, InspectorPanelField, KanbanColumn, LayoutSwitcherItem, MorphMenuItem, PresenceCursorUser, ResizableDashboardWidget, SmartBreadcrumbItem, SpotlightSearchItem, StatusRailGroup, ToastCenterToast, TourGuideStep } from '@mickyballadelli/react-things'
 import { DemoHome } from './DemoHome'
-import { DraggableGlassBoxPreview } from './DraggableGlassBoxPreview'
 
 declare const __REACT_THINGS_VERSION__: string
 

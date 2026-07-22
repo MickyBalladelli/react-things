@@ -1,11 +1,9 @@
 import {
   ComponentExample,
-  GlassBox,
   KanbanBoard,
   DataLens,
   DiffViewer,
   type ComponentExampleProps,
-  type GlassBoxProps,
   type KanbanColumn,
   type DataLensColumn,
   type DataLensProps
@@ -21,19 +19,6 @@ export function BasicTsExample() {
     <ComponentExample {...props}>
       This is typed usage.
     </ComponentExample>
-  )
-}
-
-const glassBoxProps: GlassBoxProps = {
-  transparency: 0.45,
-  liquidColor: '#38d6a5'
-}
-
-export function GlassBoxTsExample() {
-  return (
-    <GlassBox {...glassBoxProps}>
-      Typed usage.
-    </GlassBox>
   )
 }
 
