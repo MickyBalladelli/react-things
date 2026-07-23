@@ -56,6 +56,7 @@ import {
   FocusRing,
   FloatingToolbar,
   ProgressBar,
+  CubeProgressBar,
   FlowBuilder,
   GlassBox,
   GesturePad,
@@ -1277,6 +1278,42 @@ const props: ProgressBarProps = {
 
 export function Example() {
   return <ProgressBar {...props} />
+}`
+      }
+    ],
+    CubeProgressBar: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { CubeProgressBar } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <CubeProgressBar
+      value={72}
+      label="Upload progress"
+      showValue
+      tone="primary"
+      size={100}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { CubeProgressBar, type CubeProgressBarProps } from '@mickyballadelli/react-things'
+
+const props: CubeProgressBarProps = {
+  value: 72,
+  label: 'Upload progress',
+  showValue: true,
+  tone: 'success',
+  size: 100
+}
+
+export function Example() {
+  return <CubeProgressBar {...props} />
 }`
       }
     ],
@@ -4837,6 +4874,11 @@ export function Example() {
     'Determinate and indeterminate progress bars with tones, sizes, labels, and stripes.',
     'ProgressBar is a horizontal progress indicator for uploads, steps, loading states, file operations, or any task that needs visual completion feedback.'
   ),
+  createBasicDoc(
+    'CubeProgressBar',
+    'A 3D rotating cube progress indicator with tones, determinate/indeterminate variants, and live percentage display.',
+    'CubeProgressBar is a 3D CSS cube that rotates from 0° to 360° as progress fills. Shows the current percentage on the front face, with a pulsing shadow beneath. Supports five color tones and an indeterminate spinning mode.'
+  ),
   {
     name: 'EntityPicker',
     summary: 'Rich picker for users, files, and projects with avatars, recent, pinned, and groups.',
@@ -5734,7 +5776,7 @@ function getComponentGroup(name: string) {
     return 'Effects'
   }
 
-  if (['ProgressBar'].includes(name)) {
+  if (['ProgressBar', 'CubeProgressBar'].includes(name)) {
     return 'Progress Bars'
   }
 
@@ -7457,6 +7499,18 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'CubeProgressBar') {
+      return (
+        <Box sx={{ p: 4, display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'center', bgcolor: 'background.paper' }}>
+          <CubeProgressBar value={78} label="Upload" showValue tone="primary" size={110} />
+          <CubeProgressBar value={55} label="Build" showValue tone="success" size={110} />
+          <CubeProgressBar value={32} label="Disk" showValue tone="warning" size={110} />
+          <CubeProgressBar value={91} label="Deploy" showValue tone="error" size={110} />
+          <CubeProgressBar variant="indeterminate" label="Loading" tone="info" size={110} />
+        </Box>
+      )
+    }
+
     return (
       <DraggableGlassBoxPreview
         transparency={glassBoxConfig.transparency}
@@ -7764,6 +7818,13 @@ export function ComponentDocs() {
         renderVariantCard('Warning Large', <ProgressBar value={42} label="Disk usage" showValue tone="warning" size="lg" />),
         renderVariantCard('Error Small', <ProgressBar value={91} label="Deploy complete" showValue tone="error" size="sm" />),
         renderVariantCard('Indeterminate', <ProgressBar variant="indeterminate" label="Fetching data" tone="info" />)
+      ],
+      CubeProgressBar: [
+        renderVariantCard('Primary 78%', <CubeProgressBar value={78} label="Upload" showValue tone="primary" size={80} />),
+        renderVariantCard('Success 55%', <CubeProgressBar value={55} label="Build" showValue tone="success" size={80} />),
+        renderVariantCard('Warning 32%', <CubeProgressBar value={32} label="Disk" showValue tone="warning" size={80} />),
+        renderVariantCard('Error 91%', <CubeProgressBar value={91} label="Deploy" showValue tone="error" size={80} />),
+        renderVariantCard('Indeterminate', <CubeProgressBar variant="indeterminate" label="Loading" tone="info" size={80} />)
       ]
     }
 

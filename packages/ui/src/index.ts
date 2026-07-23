@@ -104,3 +104,5 @@ export type { KanbanBoardProps, KanbanCard, KanbanColumn } from './components/Ka
 export { KanbanBoard } from './components/KanbanBoard'
 export type { ProgressBarProps, ProgressBarSize, ProgressBarTone, ProgressBarVariant } from './components/ProgressBar'
 export { ProgressBar } from './components/ProgressBar'
+export type { CubeProgressBarProps, CubeProgressBarTone, CubeProgressBarVariant } from './components/CubeProgressBar'
+export { CubeProgressBar } from './components/CubeProgressBar'
