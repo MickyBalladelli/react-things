@@ -57,6 +57,8 @@ import {
   FloatingToolbar,
   ProgressBar,
   CubeProgressBar,
+  CircularProgressBar,
+  MobiusProgressBar,
   FlowBuilder,
   GlassBox,
   GesturePad,
@@ -459,6 +461,80 @@ export function Example() {
       connectionStyle="curved"
     />
   )
+}`
+      }
+    ],
+    MobiusProgressBar: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { MobiusProgressBar } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <MobiusProgressBar
+      value={52}
+      label="Processing"
+      showValue
+      tone="primary"
+      size={180}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { MobiusProgressBar, type MobiusProgressBarProps } from '@mickyballadelli/react-things'
+
+const props: MobiusProgressBarProps = {
+  value: 52,
+  label: 'Processing',
+  showValue: true,
+  tone: 'success',
+  size: 180
+}
+
+export function Example() {
+  return <MobiusProgressBar {...props} />
+}`
+      }
+    ],
+    CircularProgressBar: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { CircularProgressBar } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <CircularProgressBar
+      value={72}
+      label="Upload progress"
+      showValue
+      tone="primary"
+      size={160}
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { CircularProgressBar, type CircularProgressBarProps } from '@mickyballadelli/react-things'
+
+const props: CircularProgressBarProps = {
+  value: 72,
+  label: 'Upload progress',
+  showValue: true,
+  tone: 'success',
+  size: 160,
+  minStrokeWidth: 8,
+  maxStrokeWidth: 28
+}
+
+export function Example() {
+  return <CircularProgressBar {...props} />
 }`
       }
     ],
@@ -4879,6 +4955,16 @@ export function Example() {
     'A 3D rotating cube progress indicator with tones, determinate/indeterminate variants, and live percentage display.',
     'CubeProgressBar is a 3D CSS cube that rotates from 0° to 360° as progress fills. Shows the current percentage on the front face, with a pulsing shadow beneath. Supports five color tones and an indeterminate spinning mode.'
   ),
+  createBasicDoc(
+    'CircularProgressBar',
+    'SVG circular progress with growing stroke width, gradient ring, glow cap, and center percentage.',
+    'CircularProgressBar is a circular SVG progress indicator whose stroke thickness grows from thin to thick as progress increases from 0% to 100%. Features a leading glowing cap dot, outer blur halo, and configurable min/max stroke width for a dramatic "building momentum" effect.'
+  ),
+  createBasicDoc(
+    'MobiusProgressBar',
+    'Animated Möbius strip progress with a glowing ball rolling along the twisted path.',
+    'MobiusProgressBar is a mesmerizing SVG progress indicator shaped like a Möbius strip — a figure-8 with a half-twist. A luminous ball rolls along the path from 0% to 100%, with a gradient trail following behind. The indeterminate variant spins slowly while the ball pulses, creating a hypnotic loading state. Supports five color tones with glow, gradients, and specular highlights.'
+  ),
   {
     name: 'EntityPicker',
     summary: 'Rich picker for users, files, and projects with avatars, recent, pinned, and groups.',
@@ -5776,7 +5862,7 @@ function getComponentGroup(name: string) {
     return 'Effects'
   }
 
-  if (['ProgressBar', 'CubeProgressBar'].includes(name)) {
+  if (['ProgressBar', 'CubeProgressBar', 'CircularProgressBar', 'MobiusProgressBar'].includes(name)) {
     return 'Progress Bars'
   }
 
@@ -7511,6 +7597,30 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'MobiusProgressBar') {
+      return (
+        <Box sx={{ p: 4, display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'center', bgcolor: 'background.paper' }}>
+          <MobiusProgressBar value={25} label="Start" showValue tone="primary" size={180} />
+          <MobiusProgressBar value={50} label="Middle" showValue tone="success" size={180} />
+          <MobiusProgressBar value={75} label="Almost" showValue tone="warning" size={180} />
+          <MobiusProgressBar value={98} label="Done" showValue tone="error" size={180} />
+          <MobiusProgressBar variant="indeterminate" label="Loading" tone="info" size={180} />
+        </Box>
+      )
+    }
+
+    if (selectedComponent.name === 'CircularProgressBar') {
+      return (
+        <Box sx={{ p: 4, display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'center', bgcolor: 'background.paper' }}>
+          <CircularProgressBar value={22} label="Start" showValue tone="primary" size={140} />
+          <CircularProgressBar value={48} label="Build" showValue tone="success" size={140} />
+          <CircularProgressBar value={73} label="Review" showValue tone="warning" size={140} />
+          <CircularProgressBar value={94} label="Ship" showValue tone="error" size={140} />
+          <CircularProgressBar variant="indeterminate" label="Loading" tone="info" size={140} />
+        </Box>
+      )
+    }
+
     return (
       <DraggableGlassBoxPreview
         transparency={glassBoxConfig.transparency}
@@ -7825,6 +7935,20 @@ export function ComponentDocs() {
         renderVariantCard('Warning 32%', <CubeProgressBar value={32} label="Disk" showValue tone="warning" size={80} />),
         renderVariantCard('Error 91%', <CubeProgressBar value={91} label="Deploy" showValue tone="error" size={80} />),
         renderVariantCard('Indeterminate', <CubeProgressBar variant="indeterminate" label="Loading" tone="info" size={80} />)
+      ],
+      MobiusProgressBar: [
+        renderVariantCard('Start 25%', <MobiusProgressBar value={25} label="Start" showValue tone="primary" size={110} />),
+        renderVariantCard('Halfway 50%', <MobiusProgressBar value={50} label="Middle" showValue tone="success" size={110} />),
+        renderVariantCard('Almost 75%', <MobiusProgressBar value={75} label="Almost" showValue tone="warning" size={110} />),
+        renderVariantCard('Done 98%', <MobiusProgressBar value={98} label="Done" showValue tone="error" size={110} />),
+        renderVariantCard('Indeterminate', <MobiusProgressBar variant="indeterminate" label="Loading" tone="info" size={110} />)
+      ],
+      CircularProgressBar: [
+        renderVariantCard('Thin start 22%', <CircularProgressBar value={22} label="Start" showValue tone="primary" size={100} />),
+        renderVariantCard('Growing 48%', <CircularProgressBar value={48} label="Build" showValue tone="success" size={100} />),
+        renderVariantCard('Thick 73%', <CircularProgressBar value={73} label="Review" showValue tone="warning" size={100} />),
+        renderVariantCard('Full 94%', <CircularProgressBar value={94} label="Ship" showValue tone="error" size={100} />),
+        renderVariantCard('Indeterminate', <CircularProgressBar variant="indeterminate" label="Loading" tone="info" size={100} />)
       ]
     }
 

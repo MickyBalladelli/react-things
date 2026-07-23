@@ -5,11 +5,13 @@
     "emitDeclarationOnly": true,
     "declarationDir": "dist"
   },
-  "include": ["src"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": [
     "**/*.test.*",
     "**/*.spec.*",
     "**/*.stories.*",
-    "src/stories"
+    "src/stories/**",
+    "**/__tests__/**",
+    "**/__mocks__/**"
   ]
 }
