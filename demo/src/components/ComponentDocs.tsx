@@ -478,6 +478,8 @@ export function Example() {
       showValue
       tone="primary"
       size={180}
+      spinning={false}
+      angle={-31.5}
     />
   )
 }`
@@ -492,7 +494,9 @@ const props: MobiusProgressBarProps = {
   label: 'Processing',
   showValue: true,
   tone: 'success',
-  size: 180
+  size: 180,
+  spinning: true,
+  angle: 20
 }
 
 export function Example() {
@@ -4960,11 +4964,98 @@ export function Example() {
     'SVG circular progress with growing stroke width, gradient ring, glow cap, and center percentage.',
     'CircularProgressBar is a circular SVG progress indicator whose stroke thickness grows from thin to thick as progress increases from 0% to 100%. Features a leading glowing cap dot, outer blur halo, and configurable min/max stroke width for a dramatic "building momentum" effect.'
   ),
-  createBasicDoc(
-    'MobiusProgressBar',
-    'Animated Möbius strip progress with a glowing ball rolling along the twisted path.',
-    'MobiusProgressBar is a mesmerizing SVG progress indicator shaped like a Möbius strip — a figure-8 with a half-twist. A luminous ball rolls along the path from 0% to 100%, with a gradient trail following behind. The indeterminate variant spins slowly while the ball pulses, creating a hypnotic loading state. Supports five color tones with glow, gradients, and specular highlights.'
-  ),
+  {
+    name: 'MobiusProgressBar',
+    summary: '3D Möbius strip progress with an energy wave; optional spinning or fixed angle.',
+    description: 'MobiusProgressBar is a parametric SVG Möbius strip. Progress lights the band while a glowing energy ribbon travels the centerline. Set spinning to continuously rotate the strip, or leave it off and use angle (degrees) for a fixed view. Supports determinate and indeterminate variants and five color tones.',
+    props: [
+      {
+        name: 'value',
+        type: 'number',
+        defaultValue: '0',
+        possibleValues: 'Any number between min and max.',
+        description: 'Current progress value (determinate mode).'
+      },
+      {
+        name: 'min',
+        type: 'number',
+        defaultValue: '0',
+        possibleValues: 'Number.',
+        description: 'Minimum of the progress range.'
+      },
+      {
+        name: 'max',
+        type: 'number',
+        defaultValue: '100',
+        possibleValues: 'Number greater than min.',
+        description: 'Maximum of the progress range.'
+      },
+      {
+        name: 'variant',
+        type: "'determinate' | 'indeterminate'",
+        defaultValue: "'determinate'",
+        possibleValues: 'determinate, indeterminate',
+        description: 'Determinate follows value; indeterminate runs a continuous energy wave.'
+      },
+      {
+        name: 'tone',
+        type: "'primary' | 'success' | 'warning' | 'error' | 'info'",
+        defaultValue: "'primary'",
+        possibleValues: 'primary, success, warning, error, info',
+        description: 'Color palette for the strip and energy trail.'
+      },
+      {
+        name: 'label',
+        type: 'ReactNode',
+        defaultValue: 'undefined',
+        possibleValues: 'String or React node.',
+        description: 'Optional label shown above the strip.'
+      },
+      {
+        name: 'showValue',
+        type: 'boolean',
+        defaultValue: 'false',
+        possibleValues: 'true, false',
+        description: 'Shows the percentage when variant is determinate.'
+      },
+      {
+        name: 'size',
+        type: 'number',
+        defaultValue: '340',
+        possibleValues: 'Pixel size of the square viewport.',
+        description: 'Width and height of the SVG scene.'
+      },
+      {
+        name: 'thickness',
+        type: 'number',
+        defaultValue: '36',
+        possibleValues: 'Positive number.',
+        description: 'Band width of the Möbius strip.'
+      },
+      {
+        name: 'animated',
+        type: 'boolean',
+        defaultValue: 'true',
+        possibleValues: 'true, false',
+        description: 'Enables energy-wave and spin animations (respects reduced motion).'
+      },
+      {
+        name: 'spinning',
+        type: 'boolean',
+        defaultValue: 'false',
+        possibleValues: 'true, false',
+        description: 'When true, the strip continuously rotates around Y. When false, orientation is fixed by angle.'
+      },
+      {
+        name: 'angle',
+        type: 'number',
+        defaultValue: '-31.5',
+        possibleValues: 'Degrees (any number).',
+        description: 'Fixed Y rotation in degrees when spinning is false. Also used as the spin base offset when spinning is true.'
+      }
+    ],
+    samples: getBasicSamples('MobiusProgressBar')
+  },
   {
     name: 'EntityPicker',
     summary: 'Rich picker for users, files, and projects with avatars, recent, pinned, and groups.',
@@ -7600,11 +7691,10 @@ export function ComponentDocs() {
     if (selectedComponent.name === 'MobiusProgressBar') {
       return (
         <Box sx={{ p: 4, display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'center', bgcolor: 'background.paper' }}>
-          <MobiusProgressBar value={25} label="Start" showValue tone="primary" size={180} />
-          <MobiusProgressBar value={50} label="Middle" showValue tone="success" size={180} />
-          <MobiusProgressBar value={75} label="Almost" showValue tone="warning" size={180} />
-          <MobiusProgressBar value={98} label="Done" showValue tone="error" size={180} />
-          <MobiusProgressBar variant="indeterminate" label="Loading" tone="info" size={180} />
+          <MobiusProgressBar value={50} label="Fixed" showValue tone="primary" size={180} angle={-31.5} />
+          <MobiusProgressBar value={75} label="Angle 20°" showValue tone="success" size={180} angle={20} />
+          <MobiusProgressBar value={60} label="Spinning" showValue tone="warning" size={180} spinning />
+          <MobiusProgressBar variant="indeterminate" label="Loading" tone="info" size={180} spinning />
         </Box>
       )
     }
@@ -7937,11 +8027,10 @@ export function ComponentDocs() {
         renderVariantCard('Indeterminate', <CubeProgressBar variant="indeterminate" label="Loading" tone="info" size={80} />)
       ],
       MobiusProgressBar: [
-        renderVariantCard('Start 25%', <MobiusProgressBar value={25} label="Start" showValue tone="primary" size={110} />),
-        renderVariantCard('Halfway 50%', <MobiusProgressBar value={50} label="Middle" showValue tone="success" size={110} />),
-        renderVariantCard('Almost 75%', <MobiusProgressBar value={75} label="Almost" showValue tone="warning" size={110} />),
-        renderVariantCard('Done 98%', <MobiusProgressBar value={98} label="Done" showValue tone="error" size={110} />),
-        renderVariantCard('Indeterminate', <MobiusProgressBar variant="indeterminate" label="Loading" tone="info" size={110} />)
+        renderVariantCard('Fixed angle', <MobiusProgressBar value={50} label="Fixed" showValue tone="primary" size={110} angle={-31.5} />),
+        renderVariantCard('Angle 45°', <MobiusProgressBar value={70} label="45°" showValue tone="success" size={110} angle={45} />),
+        renderVariantCard('Spinning', <MobiusProgressBar value={60} label="Spin" showValue tone="warning" size={110} spinning />),
+        renderVariantCard('Indeterminate spin', <MobiusProgressBar variant="indeterminate" label="Loading" tone="info" size={110} spinning />)
       ],
       CircularProgressBar: [
         renderVariantCard('Thin start 22%', <CircularProgressBar value={22} label="Start" showValue tone="primary" size={100} />),

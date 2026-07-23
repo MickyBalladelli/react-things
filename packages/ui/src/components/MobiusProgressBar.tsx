@@ -18,7 +18,10 @@ export type MobiusProgressBarProps = Omit<BoxProps, 'ref'> & {
   size?: number
   thickness?: number
   animated?: boolean
-  spin?: boolean
+  /** When true, the strip slowly rotates. When false, orientation is fixed by `angle`. */
+  spinning?: boolean
+  /** Fixed Y rotation in degrees when `spinning` is false. Default -31.5°. */
+  angle?: number
 }
 
 type Vec3 = { x: number; y: number; z: number }
@@ -165,7 +168,8 @@ export const MobiusProgressBar = forwardRef<HTMLDivElement, MobiusProgressBarPro
   size = 340,
   thickness = 36,
   animated = true,
-  spin = true,
+  spinning = false,
+  angle = -31.5,
   sx,
   ...props
 }, ref) {
@@ -173,9 +177,16 @@ export const MobiusProgressBar = forwardRef<HTMLDivElement, MobiusProgressBarPro
   const reduced = prefersReducedMotion()
   const shouldAnimate = animated && !reduced
   const isIndeterminate = variant === 'indeterminate'
+  const fixedAngleRad = (angle * Math.PI) / 180
 
   const [loopAngle, setLoopAngle] = useState(0)
-  const [spinAngle, setSpinAngle] = useState(0)
+  const [spinAngle, setSpinAngle] = useState(fixedAngleRad)
+
+  useEffect(() => {
+    if (!spinning) {
+      setSpinAngle(fixedAngleRad)
+    }
+  }, [fixedAngleRad, spinning])
 
   useEffect(() => {
     if (!shouldAnimate) return
@@ -186,15 +197,15 @@ export const MobiusProgressBar = forwardRef<HTMLDivElement, MobiusProgressBarPro
       const t = (now - start) / 1000
       // Energy wave loops the strip
       setLoopAngle((t * Math.PI * 2) / (isIndeterminate ? 2.4 : 3.6))
-      if (spin) {
-        setSpinAngle((t * Math.PI * 2) / 16)
+      if (spinning) {
+        setSpinAngle(fixedAngleRad + (t * Math.PI * 2) / 16)
       }
       raf = requestAnimationFrame(tick)
     }
 
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [isIndeterminate, shouldAnimate, spin])
+  }, [fixedAngleRad, isIndeterminate, shouldAnimate, spinning])
 
   const percent = isIndeterminate
     ? 0
@@ -214,7 +225,7 @@ export const MobiusProgressBar = forwardRef<HTMLDivElement, MobiusProgressBarPro
   const vSteps = 8
   const cameraZ = size * 1.35
   const rotX = -0.72
-  const rotY = spin ? spinAngle : -0.55
+  const rotY = spinning ? spinAngle : fixedAngleRad
   const lightDir = normalize({ x: 0.35, y: -0.75, z: 0.55 })
 
   const trailLength = isIndeterminate ? 0.55 : 0.35
