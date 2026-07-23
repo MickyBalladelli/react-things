@@ -102,3 +102,5 @@ export type { LayoutSwitcherColumn, LayoutSwitcherItem, LayoutSwitcherProps, Lay
 export { LayoutSwitcher } from './components/LayoutSwitcher'
 export type { KanbanBoardProps, KanbanCard, KanbanColumn } from './components/KanbanBoard'
 export { KanbanBoard } from './components/KanbanBoard'
+export type { ProgressBarProps, ProgressBarSize, ProgressBarTone, ProgressBarVariant } from './components/ProgressBar'
+export { ProgressBar } from './components/ProgressBar'

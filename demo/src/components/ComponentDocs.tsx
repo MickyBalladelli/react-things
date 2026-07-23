@@ -55,6 +55,7 @@ import {
   FileDropZone,
   FocusRing,
   FloatingToolbar,
+  ProgressBar,
   FlowBuilder,
   GlassBox,
   GesturePad,
@@ -1240,6 +1241,42 @@ export function Example() {
       <TourGuide steps={steps} open={open} onOpenChange={setOpen} onComplete={() => setOpen(false)} />
     </>
   )
+}`
+      }
+    ],
+    ProgressBar: [
+      {
+        label: 'JavaScript',
+        language: 'javascript',
+        initialCode: `import { ProgressBar } from '@mickyballadelli/react-things'
+
+export function Example() {
+  return (
+    <ProgressBar
+      value={72}
+      label="Upload progress"
+      showValue
+      tone="success"
+    />
+  )
+}`
+      },
+      {
+        label: 'TypeScript',
+        language: 'typescript',
+        initialCode: `import { ProgressBar, type ProgressBarProps } from '@mickyballadelli/react-things'
+
+const props: ProgressBarProps = {
+  value: 72,
+  label: 'Upload progress',
+  showValue: true,
+  tone: 'primary',
+  size: 'md',
+  striped: true
+}
+
+export function Example() {
+  return <ProgressBar {...props} />
 }`
       }
     ],
@@ -4795,6 +4832,11 @@ export function Example() {
       }
     ]
   },
+  createBasicDoc(
+    'ProgressBar',
+    'Determinate and indeterminate progress bars with tones, sizes, labels, and stripes.',
+    'ProgressBar is a horizontal progress indicator for uploads, steps, loading states, file operations, or any task that needs visual completion feedback.'
+  ),
   {
     name: 'EntityPicker',
     summary: 'Rich picker for users, files, and projects with avatars, recent, pinned, and groups.',
@@ -5690,6 +5732,10 @@ function getComponentGroup(name: string) {
 
   if (['FocusRing'].includes(name)) {
     return 'Effects'
+  }
+
+  if (['ProgressBar'].includes(name)) {
+    return 'Progress Bars'
   }
 
   return 'Effects'
@@ -7399,6 +7445,18 @@ export function ComponentDocs() {
       )
     }
 
+    if (selectedComponent.name === 'ProgressBar') {
+      return (
+        <Box sx={{ p: 4, maxWidth: 560, display: 'grid', gap: 3, bgcolor: 'background.paper' }}>
+          <ProgressBar value={78} label="Upload progress" showValue tone="primary" />
+          <ProgressBar value={64} label="Build stage" showValue tone="success" striped />
+          <ProgressBar value={42} label="Disk usage" showValue tone="warning" size="lg" />
+          <ProgressBar value={91} label="Deploy complete" showValue tone="error" size="sm" />
+          <ProgressBar variant="indeterminate" label="Fetching data" tone="info" />
+        </Box>
+      )
+    }
+
     return (
       <DraggableGlassBoxPreview
         transparency={glassBoxConfig.transparency}
@@ -7699,6 +7757,13 @@ export function ComponentDocs() {
         renderVariantCard('Compact', <KanbanBoard title="Sprint" columns={kanbanColumns.slice(0, 2)} onChange={(nextColumns) => setKanbanColumns([...nextColumns, ...kanbanColumns.slice(2)])} density="compact" />),
         renderVariantCard('No Column Drag', <KanbanBoard title="Fixed lanes" defaultColumns={defaultKanbanColumns.slice(0, 2)} allowColumnDrag={false} />),
         renderVariantCard('Full Board', <KanbanBoard title="Editable workflow" columns={kanbanColumns} onChange={setKanbanColumns} />)
+      ],
+      ProgressBar: [
+        renderVariantCard('Primary 78%', <ProgressBar value={78} label="Upload progress" showValue tone="primary" />),
+        renderVariantCard('Success Striped', <ProgressBar value={64} label="Build stage" showValue tone="success" striped />),
+        renderVariantCard('Warning Large', <ProgressBar value={42} label="Disk usage" showValue tone="warning" size="lg" />),
+        renderVariantCard('Error Small', <ProgressBar value={91} label="Deploy complete" showValue tone="error" size="sm" />),
+        renderVariantCard('Indeterminate', <ProgressBar variant="indeterminate" label="Fetching data" tone="info" />)
       ]
     }
 
